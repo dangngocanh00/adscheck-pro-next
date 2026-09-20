@@ -1,0 +1,147 @@
+/* Ads Save "Configured state" — renders instead of the empty state once
+   >=1 configuration exists (see ads-save-page.tsx's branch). Reuses
+   `.ads-save-workspace-panel`/`.ads-save-workspace-header` from
+   ads-save-workspace.css (same header markup) — only the content below
+   the header is new, scoped, isolated class names. */
+
+.ads-save-warning-banner {
+  flex: none;
+  margin: 14px 22px 0;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-radius: 12px;
+  background: #fdf6dd;
+  color: #6b5a12;
+  box-shadow: inset 0 0 0 1px rgba(190, 160, 40, .18);
+}
+.ads-save-warning-banner svg { flex: none; color: #c99a1d; }
+.ads-save-warning-banner p { flex: 1; min-width: 0; margin: 0; font-size: 12px; line-height: 1.5; }
+.ads-save-warning-banner button {
+  flex: none;
+  height: 26px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(190, 160, 40, .16);
+  color: #6b5a12;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.ads-save-warning-banner button:hover { background: rgba(190, 160, 40, .24); }
+
+/* Cards occupy only the upper part of the workspace — no flex:1/stretch
+   here, so the remaining space below stays the plain mint background
+   already painted by `.ads-main-panel`. */
+.ads-save-configured-body { flex: none; padding: 16px 22px 22px; overflow: visible; }
+
+.ads-save-configured-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+
+.ads-save-add-config-card {
+  min-height: 280px;
+  padding: 28px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  text-align: center;
+  border: 1.5px dashed var(--cv-brand-border-strong, #7bce93);
+  border-radius: 20px;
+  background: #fff;
+  cursor: pointer;
+}
+.ads-save-add-config-card:hover { background: var(--cv-brand-soft, #EFF6FF); }
+.ads-save-add-config-card .ads-save-empty-illustration { margin-bottom: 10px; }
+.ads-save-add-config-cta { display: inline-flex; align-items: center; gap: 6px; color: var(--cv-brand-primary-hover, #0a7a34); font-size: 14.5px; font-weight: 700; }
+.ads-save-add-config-card p { max-width: 300px; margin: 6px 0 0; color: #5c6b60; font-size: 12.5px; line-height: 1.55; }
+
+.ads-save-config-card {
+  min-height: 280px;
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 1px 0 rgba(9, 74, 26, .05);
+}
+
+.ads-save-config-card-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.ads-save-config-status { display: inline-flex; align-items: center; gap: 6px; color: #0a7a34; font-size: 12.5px; font-weight: 600; }
+.ads-save-config-status i { width: 7px; height: 7px; border-radius: 50%; background: #10c12e; }
+.ads-save-config-status.is-off { color: #7c8a7f; }
+.ads-save-config-status.is-off i { background: #b7c4b9; }
+
+.ads-save-config-card-actions { display: flex; align-items: center; gap: 10px; }
+.ads-save-config-toggle { position: relative; flex: none; width: 34px; height: 20px; }
+.ads-save-config-toggle input { position: absolute; inset: 0; margin: 0; opacity: 0; cursor: pointer; }
+.ads-save-config-toggle span { position: absolute; inset: 0; border-radius: 999px; background: #d4e5d7; transition: background .15s; }
+.ads-save-config-toggle span::before { content: ""; position: absolute; top: 3px; left: 3px; width: 14px; height: 14px; border-radius: 999px; background: #fff; transition: transform .15s; }
+.ads-save-config-toggle input:checked + span { background: var(--cv-brand-primary, #0d9f39); }
+.ads-save-config-toggle input:checked + span::before { transform: translateX(14px); }
+
+.ads-save-config-menu { position: relative; }
+.ads-save-config-menu-trigger { width: 26px; height: 26px; display: grid; place-items: center; border: 0; border-radius: 50%; background: transparent; color: #5c6b60; cursor: pointer; }
+.ads-save-config-menu-trigger:hover { background: var(--cv-brand-soft, #EFF6FF); }
+.ads-save-config-menu-dropdown {
+  position: absolute;
+  z-index: 5;
+  right: 0;
+  top: calc(100% + 6px);
+  /* Wide enough that "Chỉnh sửa cấu hình" (the longest label) never
+     wraps — sized from content via `width:max-content` with a floor/
+     ceiling so short labels don't force an oversized menu either. */
+  width: max-content;
+  min-width: 200px;
+  max-width: 260px;
+  margin: 0;
+  padding: 6px;
+  list-style: none;
+  border: 1px solid var(--cv-brand-border, #bfe6cb);
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, .1);
+}
+.ads-save-config-menu-dropdown li + li { margin-top: 2px; }
+.ads-save-config-menu-dropdown button {
+  width: 100%;
+  height: 36px;
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 0;
+  border-radius: 9px;
+  background: none;
+  color: #17281b;
+  text-align: left;
+  font-size: 13px;
+  white-space: nowrap;
+  cursor: pointer;
+}
+/* Fixed icon box (independent of each lucide icon's own glyph shape) so
+   every row's label starts at the exact same X position. */
+.ads-save-config-menu-dropdown button svg { flex: none; width: 15px; height: 15px; color: #5c6b60; }
+.ads-save-config-menu-dropdown button:hover { background: var(--cv-brand-soft, #EFF6FF); }
+.ads-save-config-menu-dropdown button.is-danger { color: #17281b; }
+.ads-save-config-menu-dropdown button.is-danger svg { color: #5c6b60; }
+
+.ads-save-config-card-name { margin: 0; color: #17281b; font-size: 15px; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.ads-save-config-info-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+.ads-save-config-info-block { padding: 10px; display: flex; flex-direction: column; gap: 5px; border-radius: 12px; background: #f5f7f5; }
+.ads-save-config-info-icon { width: 22px; height: 22px; display: grid; place-items: center; border-radius: 8px; background: var(--cv-brand-icon-badge-bg, #e3f3e7); color: var(--cv-brand-primary-hover, #0a7a34); }
+.ads-save-config-info-block small { color: #7c8a7f; font-size: 11px; }
+.ads-save-config-info-block strong { color: #17281b; font-size: 12.5px; font-weight: 650; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.ads-save-config-card-footer { margin-top: auto; display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 12px; }
+.ads-save-config-card-footer > span { color: #7c8a7f; }
+.ads-save-config-history-link { border: 0; background: none; padding: 0; color: #2f6fed; font-size: 12px; font-weight: 600; cursor: pointer; }
+.ads-save-config-history-link:hover { text-decoration: underline; }
+
+@media (max-width: 720px) {
+  .ads-save-configured-grid { grid-template-columns: 1fr; }
+}

@@ -1,0 +1,316 @@
+.ads-extended-payment-page {
+  position: relative;
+  height: 100%;
+  min-height: 100%;
+  padding: 0;
+  overflow: hidden;
+  background: var(--cv-ext-page-bg, #dcecdf);
+  color: #121713;
+  --extended-green: var(--cv-brand-icon, #0cbd42);
+  --extended-soft: var(--cv-modal-mint-2, #eef8f0);
+  --extended-line: #d6e3d8;
+  --extended-muted: #68726a;
+}
+
+.ads-extended-layout { height: 100%; display: grid; grid-template-columns: minmax(0, 3.22fr) minmax(360px, 1fr); gap: 2px; }
+.ads-extended-settings-panel,
+.ads-extended-preview-panel { min-width: 0; min-height: 0; overflow: hidden; border: 1px solid var(--cv-ext-panel-border, #cbdacd); border-radius: 18px; background: var(--cv-ext-panel-bg, rgba(241, 249, 243, .97)); }
+.ads-extended-page-heading,
+.ads-extended-preview-heading { height: 58px; padding: 0 20px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid var(--extended-line); }
+.ads-extended-page-heading h1,
+.ads-extended-preview-heading h2 { margin: 0; color: #121713; font-size: 16px; font-weight: 650; letter-spacing: -.015em; }
+.ads-extended-heading-icon,
+.ads-extended-preview-heading > span { display: grid; width: 20px; height: 20px; place-items: center; color: var(--cv-ext-icon-1, #36a841); }
+.ads-extended-settings-scroll { height: calc(100% - 58px); padding: 16px; display: grid; align-content: start; gap: 15px; overflow: auto; scrollbar-width: thin; scrollbar-color: var(--cv-ext-scrollbar, #bbd0bf) transparent; }
+.ads-extended-card { min-width: 0; padding: 17px; border: 1px solid #e1e9e2; border-radius: 19px; background: #fff; }
+.ads-extended-card h2 { margin: 0 0 15px; display: flex; align-items: center; gap: 8px; color: #111713; font-size: 15px; font-weight: 650; }
+.ads-extended-card h2 > svg { color: var(--cv-ext-icon-2, #42ae45); }
+.ads-extended-mini-mark { width: 16px; height: 16px; border-radius: 6px 10px 7px 3px; background: linear-gradient(140deg, var(--cv-ext-mini-mark-1, #4ab74d), var(--cv-ext-mini-mark-2, #a1dd73)); transform: skew(-7deg); }
+
+.ads-extended-general-grid { display: grid; grid-template-columns: .95fr 1.25fr 1.25fr 1.3fr 1.2fr; gap: 13px; align-items: end; }
+.ads-extended-control-group { min-width: 0; display: grid; gap: 8px; color: #1c241e; font-size: 13px; }
+.ads-extended-control-group > span:first-child { overflow: hidden; font-weight: 500; text-overflow: ellipsis; white-space: nowrap; }
+.ads-extended-switch-row,
+.ads-extended-segment,
+.ads-extended-select,
+.ads-extended-custom-rate { min-height: 39px; border-radius: 999px; background: #f4f5f4; }
+.ads-extended-switch-row { padding: 0 11px 0 13px; position: relative; display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
+.ads-extended-switch-row b { color: var(--cv-ext-brand-text, #08762d); font-size: 12px; font-weight: 650; }
+.ads-extended-switch-row input { position: absolute; opacity: 0; pointer-events: none; }
+.ads-extended-switch-row i { width: 34px; height: 20px; padding: 2px; display: flex; justify-content: flex-start; border-radius: 999px; background: #bfc8c0; transition: background-color 180ms ease-out; }
+.ads-extended-switch-row i span { width: 16px; height: 16px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(20, 48, 27, .22); transition: transform 180ms ease-out; }
+.ads-extended-switch-row input:checked + i { background: var(--cv-ext-toggle-on, #39a940); }
+.ads-extended-switch-row input:checked + i span { transform: translateX(14px); }
+.ads-extended-switch-row input:focus-visible + i { outline: 3px solid var(--cv-ext-brand-border, #087c34); outline-offset: 2px; box-shadow: 0 0 0 5px #fff; }
+.ads-extended-segment { padding: 2px; display: grid; grid-template-columns: 1fr 1fr; }
+.ads-extended-segment button { min-width: 0; min-height: 35px; padding: 0 10px; border: 0; border-radius: 999px; background: transparent; color: #515a53; font-size: 12px; cursor: pointer; transition: color 180ms ease-out, background-color 180ms ease-out, box-shadow 180ms ease-out; }
+.ads-extended-segment button.is-selected { color: var(--cv-ext-brand-text, #08762d); background: #fff; box-shadow: inset 0 0 0 1px var(--cv-ext-brand-border, #087c34); }
+.ads-extended-currency-segment button:first-child::before { content: '✦'; margin-right: 5px; }
+.ads-extended-select,
+.ads-extended-custom-rate { min-width: 0; padding: 0 11px; display: flex; align-items: center; gap: 7px; color: #242b26; }
+.ads-extended-select select,
+.ads-extended-custom-rate input { min-width: 0; width: 100%; height: 39px; padding: 0; border: 0; outline: 0; appearance: none; background: transparent; color: inherit; font: inherit; font-size: 12px; }
+.ads-extended-select > svg:last-child { flex: none; margin-left: auto; color: #a1aaa3; }
+.ads-extended-custom-rate svg { flex: none; color: var(--cv-ext-icon-3, #37a546); }
+.ads-extended-custom-rate b { color: #59645b; font-size: 10px; }
+.ads-extended-rate-error { padding-left: 8px; color: #b42318; font-size: 10px; line-height: 1.35; }
+
+.ads-extended-control-label-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.ads-extended-edit-link { width: auto; height: auto; padding: 0; display: inline-flex; align-items: center; gap: 4px; border: 0; background: transparent; color: #2563eb; font-size: 11px; font-weight: 600; cursor: pointer; }
+.ads-extended-edit-link:hover { text-decoration: underline; }
+
+/* Extended Payment Round 1 Part #5/#7 — one shared dropdown used by both
+   "Ngôn ngữ hiển thị" and "Đổi hiển thị tiền tệ thành". */
+.ads-extended-dropdown { position: relative; }
+.ads-extended-dropdown-trigger { width: 100%; cursor: pointer; }
+.ads-extended-dropdown-trigger span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ads-extended-dropdown-menu {
+  position: absolute;
+  z-index: 6;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  max-height: 240px;
+  margin: 0;
+  padding: 6px;
+  list-style: none;
+  overflow: auto;
+  border: 1px solid var(--extended-green);
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 14px 32px rgba(9, 62, 26, .16);
+}
+.ads-extended-dropdown-menu li + li { margin-top: 2px; }
+.ads-extended-dropdown-menu button { width: 100%; min-height: 36px; padding: 0 10px; display: flex; align-items: center; gap: 8px; border: 0; border-radius: 9px; background: transparent; color: #242b26; font-size: 12px; text-align: left; cursor: pointer; }
+.ads-extended-dropdown-menu button:hover { background: var(--extended-soft); }
+.ads-extended-dropdown-menu button.is-selected { color: var(--cv-ext-brand-text, #08762d); font-weight: 600; background: var(--extended-soft); }
+.ads-extended-dropdown-menu button span:first-of-type { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ads-extended-dropdown-check { flex: none; color: var(--extended-green); }
+
+.ads-extended-fields { min-height: 346px; }
+.ads-extended-fields-grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 14px; }
+.ads-extended-field-option { min-width: 0; min-height: 63px; padding: 8px 13px; position: relative; display: grid; grid-template-columns: 36px minmax(0, 1fr); align-items: center; gap: 10px; border: 1px solid var(--cv-ext-field-border, #138b35); border-radius: 16px; background: #fff; color: var(--cv-ext-brand-text, #08762d); text-align: left; cursor: pointer; transition: transform 180ms ease-out, background-color 180ms ease-out, box-shadow 180ms ease-out; }
+.ads-extended-field-option:hover { transform: translateY(-1px); box-shadow: 0 7px 18px rgba(29, 78, 216, .12); }
+.ads-extended-field-option:not(.is-selected) { border-color: #d8e3da; color: #59645b; background: #f7f8f7; }
+.ads-extended-field-option > span { width: 36px; height: 36px; display: grid; place-items: center; border-radius: 12px; color: var(--cv-ext-icon-4, #4caf47); background: var(--cv-ext-icon-badge-bg, #eff9f0); }
+.ads-extended-field-option b { min-width: 0; overflow: hidden; font-size: 12px; font-weight: 550; text-overflow: ellipsis; white-space: nowrap; }
+.ads-extended-field-check { position: absolute; right: 8px; top: 6px; color: var(--cv-ext-check, #1bae3d); opacity: 0; }
+.ads-extended-field-option:focus-visible .ads-extended-field-check,
+.ads-extended-field-option:hover .ads-extended-field-check { opacity: 1; }
+
+.ads-extended-signature { min-height: 220px; }
+.ads-extended-editor { overflow: visible; border-radius: 14px; background: #f5f6f5; }
+.ads-extended-editor-toolbar { min-height: 46px; padding: 0 10px; position: relative; display: flex; align-items: center; gap: 2px; border-bottom: 1px solid #e2e8e3; }
+.ads-extended-editor-toolbar button { width: 38px; height: 38px; flex: none; display: grid; place-items: center; border: 0; border-radius: 9px; background: transparent; color: #252d27; cursor: pointer; }
+.ads-extended-editor-toolbar button:hover,
+.ads-extended-editor-toolbar button[aria-pressed='true'],
+.ads-extended-editor-toolbar button[aria-expanded='true'] { color: var(--cv-ext-brand-text, #08762d); background: var(--cv-ext-toolbar-active-bg, #e7f5e8); }
+.ads-extended-save-status { margin-left: auto; overflow: hidden; color: #4f6254; font-size: 10px; text-overflow: ellipsis; white-space: nowrap; }
+.ads-extended-editor-toolbar .ads-extended-save-button { width: auto; min-width: 62px; padding: 0 9px; display: flex; gap: 5px; color: var(--cv-ext-save-text, #176c2b); }
+.ads-extended-editor-toolbar .ads-extended-save-button:disabled { cursor: not-allowed; opacity: .48; }
+.ads-extended-editor-surface { width: 100%; min-height: 108px; padding: 13px 16px; outline: 0; background: transparent; color: #263029; font-size: 13px; line-height: 1.6; }
+.ads-extended-editor-surface a { color: var(--cv-ext-brand-text, #08762d); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 2px; }
+.ads-extended-editor-surface:empty::before { content: 'Nhập chữ ký của bạn…'; color: #9aa6a0; }
+
+.ads-extended-toolbar-popover-anchor { position: relative; display: inline-flex; }
+.ads-extended-color-popover,
+.ads-extended-link-popover {
+  position: absolute;
+  z-index: 6;
+  top: 44px;
+  left: 0;
+  padding: 10px;
+  border: 1px solid #d3e2d6;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 14px 32px rgba(9, 62, 26, .16);
+  overflow: hidden;
+}
+/* Extended Payment Round 2 Part #9 — the popover's own width used to be
+   narrower than 5 fixed-24px swatches + their gaps actually need (168px
+   available vs 152px+padding required), so the last column spilled past
+   the right edge. Swatches are now `width:100%` of their OWN 1fr grid
+   track (never a fixed px value competing with the grid math) and the
+   popover is sized with real breathing room, so no combination of
+   rounding can overflow — `overflow:hidden` above is a boundary
+   safety-net on top of that, not a substitute for it. */
+.ads-extended-color-popover { width: 196px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+.ads-extended-color-swatch { width: 100%; aspect-ratio: 1 / 1; border: 1px solid rgba(0, 0, 0, .08); border-radius: 50%; cursor: pointer; }
+.ads-extended-color-swatch:hover { transform: scale(1.12); }
+.ads-extended-link-popover { width: 240px; display: grid; gap: 8px; }
+.ads-extended-link-popover label { color: #4f6254; font-size: 11px; font-weight: 550; }
+.ads-extended-link-popover input { width: 100%; height: 34px; padding: 0 10px; border: 1px solid #d3e2d6; border-radius: 9px; color: #263029; font-size: 12px; }
+.ads-extended-link-popover input:focus-visible { outline: 2px solid var(--extended-green); outline-offset: 1px; }
+.ads-extended-link-actions { display: flex; justify-content: flex-end; gap: 8px; }
+.ads-extended-link-actions button { width: auto; height: 30px; padding: 0 12px; border-radius: 999px; font-size: 12px; font-weight: 600; }
+.ads-extended-link-remove { color: #b42318; background: #fdeeee; }
+.ads-extended-link-save { color: #fff; background: var(--extended-green); }
+
+.ads-extended-preview-panel { padding: 0 15px 15px; display: flex; flex-direction: column; }
+.ads-extended-preview-heading { margin: 0 -15px; flex: 0 0 58px; }
+.ads-extended-preview-shell { min-height: 0; margin-top: 12px; padding: 7px; position: relative; flex: 1; display: flex; flex-direction: column; overflow: hidden; border-radius: 17px; background: linear-gradient(160deg, var(--cv-ext-shell-1, #038f3e), var(--cv-ext-shell-2, #005f2d) 48%, var(--cv-ext-shell-3, #073d24)); box-shadow: inset 0 0 0 1px var(--cv-ext-shell-ring, rgba(2, 91, 38, .7)); }
+.ads-extended-preview-brand { min-height: 50px; padding: 0 10px; position: relative; display: flex; align-items: center; gap: 9px; color: #fff; background: radial-gradient(circle at 85% 0, var(--cv-ext-brand-glow, rgba(51, 255, 147, .38)), transparent 32%); }
+/* Extended Payment Round 2 Part #8/#8.1 — Share/Home/Settings/Collapse
+   header-chrome cluster, right-aligned in the SAME brand row (Thanh
+   Action mode only). Compact circular dark-translucent-green buttons,
+   white icons, does not increase the header's own height. */
+.ads-extended-brand-controls { margin-left: auto; display: flex; align-items: center; gap: 5px; }
+.ads-extended-brand-button { width: 26px; height: 26px; flex: none; display: grid; place-items: center; gap: 1px; border: 0; border-radius: 999px; background: var(--cv-ext-dark-control-bg, rgba(4, 40, 20, .38)); color: #fff; cursor: pointer; }
+.ads-extended-brand-button:hover { background: rgba(11, 31, 58, .55); }
+.ads-extended-share-menu { position: relative; }
+/* Extended Payment Round 3 — root cause: `.ads-extended-brand-button`'s
+   base rule is `display: grid`, so this trigger's two children (Share
+   icon + chevron) fell into grid's default implicit ROW auto-flow —
+   i.e. stacked into two separate rows — and the previous attempt to fix
+   it set `flex-direction: row`, a property `display: grid` ignores
+   entirely. This overrides `display` itself to a real row flex, so the
+   icon and chevron sit side by side on one line. */
+.ads-extended-share-trigger { width: 38px; display: inline-flex; flex-direction: row; align-items: center; justify-content: center; gap: 3px; }
+.ads-extended-share-dropdown {
+  position: absolute;
+  z-index: 6;
+  top: calc(100% + 6px);
+  right: 0;
+  width: 180px;
+  margin: 0;
+  padding: 6px;
+  list-style: none;
+  border: 1px solid #d3e2d6;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 14px 32px rgba(9, 62, 26, .2);
+}
+.ads-extended-share-dropdown button { width: 100%; min-height: 34px; padding: 0 10px; border: 0; border-radius: 8px; background: transparent; color: #242b26; font-size: 12px; text-align: left; cursor: pointer; }
+.ads-extended-share-dropdown button:hover { background: var(--extended-soft); color: var(--cv-ext-brand-text, #08762d); }
+.ads-extended-preview-logo { width: 31px; height: 31px; flex: none; object-fit: contain; }
+.ads-extended-preview-brand strong,
+.ads-extended-preview-brand small { display: block; }
+.ads-extended-preview-brand strong { font-size: 12px; }
+.ads-extended-preview-brand small { color: rgba(255, 255, 255, .72); font-size: 8px; }
+.ads-extended-preview-list { min-height: 0; padding: 5px 0; flex: 1; overflow: auto; border: 3px solid rgba(255, 255, 255, .82); border-radius: 14px 14px 10px 10px; background: #fff; scrollbar-width: thin; scrollbar-color: var(--cv-ext-scrollbar-2, #a8c8ae) transparent; }
+.ads-extended-preview-data { margin: 0; }
+.ads-extended-preview-data > div { min-height: 43px; padding: 0 11px; display: grid; grid-template-columns: 12px 18px minmax(0, 1fr) auto; align-items: center; gap: 8px; border-bottom: 1px dashed #d9e3db; color: #59615b; font-size: 12px; }
+.ads-extended-preview-data > div > svg:first-child { color: #c0c7c1; }
+.ads-extended-preview-data > div > svg:nth-child(2) { color: var(--cv-ext-icon-5, #4bb544); }
+.ads-extended-preview-list dt,
+.ads-extended-preview-list dd { margin: 0; }
+.ads-extended-preview-list dd { max-width: 175px; overflow: hidden; color: #131814; font-size: 11px; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; }
+.ads-extended-preview-list dd.is-success { color: #067e2a; }
+.ads-extended-preview-list blockquote { margin: 8px 12px; padding: 8px; border-left: 2px solid var(--cv-ext-blockquote-border, #4ab74d); color: #58625a; font-size: 10px; }
+.ads-extended-link-style { color: var(--cv-ext-brand-text, #08762d); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 2px; }
+.ads-extended-preview-empty { margin: 0; min-height: 160px; display: grid; place-items: center; color: #59645b; font-size: 11px; text-align: center; }
+.ads-extended-agency-card { min-height: 60px; margin-top: 6px; padding: 8px 10px; display: flex; align-items: center; gap: 9px; border-radius: 10px; background: #fff; }
+.ads-extended-agency-logo { width: 30px; height: 30px; flex: none; object-fit: contain; }
+.ads-extended-agency-card strong,
+.ads-extended-agency-card small { display: block; }
+.ads-extended-agency-card strong { font-size: 11px; }
+.ads-extended-agency-card strong b { margin-left: 5px; padding: 2px 5px; border-radius: 5px; background: #ffe287; font-size: 8px; }
+.ads-extended-agency-card small { margin-top: 2px; color: #59645b; font-size: 9px; }
+.ads-extended-preview-shell > footer { min-height: 32px; margin-top: 5px; padding: 0 10px; display: flex; align-items: center; justify-content: space-between; border-radius: 9px; background: #fff; color: #566159; font-size: 8px; }
+.ads-extended-footer-logo { width: 20px; height: 20px; flex: none; object-fit: contain; }
+.ads-extended-preview-disabled { position: absolute; inset: 57px 7px 7px; z-index: 2; display: grid; place-content: center; justify-items: center; gap: 7px; border-radius: 12px; background: var(--cv-ext-disabled-overlay-bg, rgba(238, 248, 240, .92)); color: var(--cv-ext-disabled-text, #3e5e45); }
+.ads-extended-preview-disabled span { font-size: 10px; }
+/* Extended Payment Round 1 Part #4 — "Thanh Action" mode: two large,
+   roughly-equal-width pill actions directly below the Ads Check V8
+   header (real in-flow row, not an absolute overlay near the bottom like
+   the earlier single-pill version this replaces). */
+.ads-extended-action-bar { margin: 8px 0 10px; padding: 0 2px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.ads-extended-action-bar button {
+  min-height: 44px;
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 0;
+  border-radius: 999px;
+  background: #fff;
+  color: #0d2b16;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(4, 60, 24, .14);
+  transition: transform 160ms ease-out;
+}
+.ads-extended-action-bar button:hover { transform: translateY(-1px); }
+.ads-extended-action-bar-icon { width: 26px; height: 26px; flex: none; display: grid; place-items: center; border-radius: 50%; color: #fff; background: var(--extended-green); }
+
+/* Extended Payment Round 1 Part #6 — reuses the shared
+   `.ads-advanced-filter-backdrop` (fixed, dimmed, centered, Category-B/
+   non-backdrop-dismissible via AdsProModalBackdrop) instead of a parallel
+   modal framework. */
+.ads-extended-rate-modal { width: min(480px, 92vw); max-height: min(640px, 86vh); display: flex; flex-direction: column; border-radius: 18px; background: #fff; box-shadow: 0 30px 70px var(--cv-ext-modal-shadow, rgba(4, 40, 18, .28)); }
+.ads-extended-rate-modal > header { min-height: 56px; padding: 0 16px; display: flex; align-items: center; gap: 9px; border-bottom: 1px solid #e4ece6; }
+.ads-extended-rate-modal-icon { width: 26px; height: 26px; display: grid; place-items: center; border-radius: 9px; color: #fff; background: var(--extended-green); }
+.ads-extended-rate-modal > header h2 { flex: 1; min-width: 0; margin: 0; color: #121713; font-size: 15px; font-weight: 650; }
+.ads-extended-rate-reset { width: auto; height: auto; padding: 0; border: 0; background: transparent; color: #2563eb; font-size: 12px; font-weight: 600; cursor: pointer; }
+.ads-extended-rate-reset:hover { text-decoration: underline; }
+.ads-extended-rate-close { width: 30px; height: 30px; flex: none; display: grid; place-items: center; border: 0; border-radius: 50%; background: #f2f4f2; color: #4b5563; cursor: pointer; }
+/* Extended Payment Round 2 Part #10 — root cause: this row had only a
+   `height` (used as its flex-basis) with NO `min-height`/`flex-none`
+   floor, unlike its header/footer siblings (which use `min-height` and
+   so never shrink below their content size). Under the modal's own
+   `max-height` constraint, flex-shrink (default 1 on every child without
+   an explicit floor) squeezed this ONE row down toward its own tiny
+   min-content size — collapsing it to a near-1px sliver — while
+   header/footer stayed protected. `flex: none` removes it from the
+   shrink calculation entirely; the currency list (`flex: 1`) remains the
+   only region that actually gives up space. */
+.ads-extended-rate-search { flex: none; margin: 14px 16px 0; padding: 0 14px; display: flex; align-items: center; gap: 8px; min-height: 42px; border: 1px solid #e1e9e2; border-radius: 999px; background: #f7f8f7; color: #5f6a62; }
+.ads-extended-rate-search svg { flex: none; }
+.ads-extended-rate-search input { flex: 1; min-width: 0; height: 100%; border: 0; outline: 0; background: transparent; color: #242b26; font-size: 12px; }
+.ads-extended-rate-context { flex: none; margin: 10px 16px 0; color: #59645b; font-size: 11px; }
+.ads-extended-rate-list { min-height: 0; margin: 8px 0 0; padding: 4px 16px 12px; list-style: none; flex: 1; overflow: auto; }
+.ads-extended-rate-list li { min-height: 46px; padding: 4px 6px; display: flex; align-items: center; justify-content: space-between; gap: 10px; border-radius: 12px; }
+.ads-extended-rate-list li.is-active { box-shadow: inset 0 0 0 1.5px var(--extended-green); background: var(--cv-ext-rate-active-bg, #f3fbf4); }
+.ads-extended-rate-code { min-width: 0; flex: 1; display: flex; align-items: baseline; gap: 8px; border: 0; background: transparent; text-align: left; cursor: pointer; }
+.ads-extended-rate-code b { color: #121713; font-size: 13px; font-weight: 700; }
+.ads-extended-rate-code small { min-width: 0; overflow: hidden; color: #838d85; font-size: 11px; text-overflow: ellipsis; white-space: nowrap; }
+.ads-extended-rate-input { flex: none; width: 128px; }
+.ads-extended-rate-input input { width: 100%; height: 34px; padding: 0 10px; border: 1px solid #e1e9e2; border-radius: 9px; color: #242b26; font-size: 12px; text-align: right; }
+.ads-extended-rate-input input:focus-visible { outline: 2px solid var(--extended-green); outline-offset: 1px; }
+.ads-extended-rate-input input[aria-invalid='true'] { border-color: #dc2626; }
+.ads-extended-rate-input input:disabled { color: #9aa6a0; background: #f7f8f7; }
+.ads-extended-rate-empty { padding: 24px 0; color: #838d85; font-size: 12px; text-align: center; }
+.ads-extended-rate-modal > footer { min-height: 60px; padding: 0 16px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid #e4ece6; }
+.ads-extended-rate-cancel { width: auto; height: 38px; padding: 0 16px; border: 1px solid #d8e3da; border-radius: 999px; background: #fff; color: #454d47; font-size: 12px; font-weight: 600; cursor: pointer; }
+.ads-extended-rate-save { width: auto; height: 42px; padding: 0 20px; border: 0; border-radius: 999px; background: var(--extended-green); color: #fff; font-size: 13px; font-weight: 700; cursor: pointer; }
+
+@media (max-width: 1450px) {
+  .ads-extended-layout { grid-template-columns: minmax(0, 2.65fr) minmax(340px, 1fr); }
+  .ads-extended-fields-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .ads-extended-general-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+@media (max-width: 1000px) {
+  .ads-extended-payment-page { height: auto; overflow: visible; }
+  .ads-extended-layout { height: auto; grid-template-columns: 1fr; }
+  .ads-extended-settings-panel,
+  .ads-extended-preview-panel { overflow: visible; }
+  .ads-extended-settings-scroll { height: auto; overflow: visible; }
+  .ads-extended-preview-panel { min-height: 680px; }
+}
+
+@media (max-width: 767px) {
+  .ads-extended-layout { gap: 8px; }
+  .ads-extended-settings-panel,
+  .ads-extended-preview-panel { border-radius: 15px; }
+  .ads-extended-settings-scroll { padding: 10px; gap: 10px; }
+  .ads-extended-card { padding: 14px; border-radius: 15px; }
+  .ads-extended-general-grid { grid-template-columns: 1fr; }
+  .ads-extended-control-group > span:first-child { white-space: normal; }
+  .ads-extended-fields-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .ads-extended-field-option { min-height: 58px; padding: 7px 9px; grid-template-columns: 31px minmax(0, 1fr); gap: 7px; }
+  .ads-extended-field-option > span { width: 31px; height: 31px; }
+  .ads-extended-field-option b { white-space: normal; }
+  .ads-extended-save-status { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  .ads-extended-editor-toolbar { flex-wrap: wrap; padding: 5px; }
+  .ads-extended-editor-toolbar button { width: 44px; height: 44px; }
+  .ads-extended-editor-toolbar .ads-extended-save-button { margin-left: auto; }
+  .ads-extended-preview-panel { min-height: 720px; padding-inline: 10px; }
+  .ads-extended-preview-heading { margin-inline: -10px; }
+  .ads-extended-preview-list dd { max-width: 128px; }
+}
+
+@media (max-width: 420px) {
+  .ads-extended-fields-grid { grid-template-columns: 1fr; }
+}

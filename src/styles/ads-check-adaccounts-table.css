@@ -1,0 +1,314 @@
+.ads-pro-table-shell {
+  min-height: 0;
+  flex: 1;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #fff;
+}
+
+.ads-pro-table-scroll { min-height: 0; flex: 1; overflow: auto; scrollbar-color: #cbd5cd transparent; }
+.ads-pro-table-scroll::-webkit-scrollbar { width: 8px; height: 8px; }
+.ads-pro-table-scroll::-webkit-scrollbar-track { background: transparent; }
+.ads-pro-table-scroll::-webkit-scrollbar-thumb { border-radius: 999px; background: #d1d9d3; }
+.ads-pro-table { width: 100%; min-width: 700px; border-collapse: collapse; table-layout: fixed; color: #121713; font-size: 12px; }
+.ads-pro-table.is-via { min-width: 1080px; }
+.ads-pro-table.is-empty { max-width: none; }
+/* Shared Grid Border Mode — vertical `border-right` is now unconditional
+   here (default "grid on" look, same as border-bottom), consistently on
+   BOTH th and td — not header-only like the old short pseudo-divider this
+   replaces (see the removed `th:not(:last-child):after` rule below). The
+   grid-lines UI-setting OFF state zeroes both border-bottom and
+   border-right together (ads-check-adaccounts-via-audit.css), and the
+   summary row's own border-top/border-right consume the exact same
+   data-ac-grid-lines attribute — one shared on/off switch, not a second
+   Summary-specific one. */
+.ads-pro-table th,
+.ads-pro-table td { padding: 0 8px; border-bottom: 1px solid var(--pro-line, rgba(23, 93, 69, .08)); border-right: 1px solid var(--pro-line, rgba(23, 93, 69, .08)); text-align: left; vertical-align: middle; }
+.ads-pro-table th { height: 40px; position: sticky; z-index: 2; top: 0; background: #fff; color: #69716b; font-size: 10.5px; font-weight: 600; white-space: nowrap; }
+/* Summary Cell Alignment Correction — `is-numeric` is a shared, tab-
+   agnostic alignment marker: any column whose resolved dataType is
+   number/currency gets this class (TKQC/BM's own columnCellClass, and
+   now generic Page/Pixel's own frozenClass too), and this ONE unscoped
+   rule right-aligns it consistently everywhere that class appears —
+   header, body, AND the summary row (see this same class's `justify-
+   content: flex-end` override in ads-check-adaccounts-tkqc-table.css). */
+.ads-pro-table td.is-numeric,
+.ads-pro-table th.is-numeric { text-align: right; }
+.ads-pro-table td.is-numeric { font-variant-numeric: tabular-nums; }
+/* Pixel #2 correction — Người dùng/TKQC/Đối tác (`is-stat-centered`,
+   assigned alongside `is-numeric` in ads-check-pro-generic-table.tsx's own
+   `frozenClass`) are plain lazy-reveal counts, not currency — centered
+   instead of right-aligned so the Eye icon, the revealed number, and the
+   footer total (its own override lives in
+   ads-check-adaccounts-tkqc-table.css, next to `is-numeric`'s) all sit on
+   the same vertical axis. Header `<th>` is deliberately left alone (see
+   that file's own comment) — its flex `.ads-sort-label` layout already
+   reads as balanced regardless of text-align. */
+.ads-pro-table td.is-numeric.is-stat-centered { text-align: center; }
+/* User-frozen columns (Correction Batch 2 Part D5) — shared across every
+   table variant (VIA/TKQC/BM/Page/Pixel, Part A). Sticky with a proper
+   cumulative multi-column left offset supplied per-cell via inline style
+   (see useColumnConfig's frozenOffsets in ads-check-pro-column-config.ts),
+   not a single fixed value. */
+.ads-pro-table th.is-frozen,
+.ads-pro-table td.is-frozen {
+  position: sticky;
+  z-index: 3;
+  background: #fff;
+}
+.ads-pro-table tr.is-selected td.is-frozen { background: #EFF6FF; }
+/* BM Round 1 Final Correction #2 — checkbox is a PERMANENT frozen system
+   column on all 5 tabs, left:0, never part of the configurable freeze
+   mechanism above. Generalized here from a rule that used to be scoped to
+   `.is-tkqc-full` only (ads-check-adaccounts-tkqc-table.css) — that
+   scoping meant VIA/BM/Page/Pixel's checkbox column carried the class but
+   was never actually sticky. z-index 4 (above `.is-frozen`'s 3) so the
+   checkbox always paints over a frozen data column scrolling underneath
+   it at offset 0. */
+.ads-pro-table th.is-sticky-checkbox,
+.ads-pro-table td.is-sticky-checkbox {
+  position: sticky;
+  left: 0;
+  z-index: 4;
+  background: #fff;
+}
+.ads-pro-table tr.is-selected td.is-sticky-checkbox { background: #EFF6FF; }
+.ads-pro-table tbody tr:hover:not(.is-selected) td.is-sticky-checkbox { background: #F0F7FF; }
+/* BM Round 1 Shared Rule #6 — the frozen/scrollable boundary shadow lives
+   ONLY on the LAST frozen column (whichever one is currently closest to
+   the scrollable region), not on every frozen cell's own right edge (the
+   old per-cell hairline above). Soft, layered depth shadow — never a hard
+   border — so normal columns visually read as scrolling BENEATH the
+   frozen layer. `is-frozen-boundary` is computed per-table from
+   useColumnConfig's `lastFrozenKey` and moves automatically when freeze/
+   unfreeze changes which column is last. */
+.ads-pro-table th.is-frozen-boundary,
+.ads-pro-table td.is-frozen-boundary {
+  box-shadow: 6px 0 10px -6px rgba(15, 40, 22, .22);
+}
+/* STT's own locked-handle icon (Shared Rule #3) replaces the normal drag
+   handle — same slot/sizing, just non-interactive and visually muted. */
+.ads-column-locked-handle { display: inline-flex; flex: none; color: #8b938d; }
+.ads-pro-table td { height: 42px; overflow: hidden; color: #151a16; text-overflow: ellipsis; white-space: nowrap; }
+.ads-pro-table tbody tr:hover:not(.is-selected) td { background: #F0F7FF; }
+.ads-pro-table tr.is-selected td { background: #EFF6FF; }
+.ads-pro-table th:first-child,
+.ads-pro-table td:first-child { width: 44px; text-align: center; }
+/* Shared Summary Geometry Correction — this `is-empty th:first-child:56px`
+   override (BM's table alone carries `.is-empty`) conflicted with the
+   colgroup's own 44px checkbox column width used by every other checkbox
+   reference (td, summary span) for the SAME table — a real leading-offset
+   mismatch, not a guessed one. Removed; 44px (CHECKBOX_COLUMN_WIDTH in
+   ads-check-pro-column-config.ts) is the one correct value everywhere. */
+/* Legacy fixed nth-child widths — only for a VIA table without Correction
+   Batch 2 Part V's reorderable column set. .is-via-columns sizes every
+   column from its own <colgroup> instead, same pattern as .is-tkqc-full. */
+.ads-pro-table.is-via:not(.is-via-columns) th:nth-child(2) { width: 48px; }
+.ads-pro-table.is-via:not(.is-via-columns) th:nth-child(3) { width: 110px; }
+.ads-pro-table.is-via:not(.is-via-columns) th:nth-child(4) { width: 160px; }
+.ads-pro-table.is-via:not(.is-via-columns) th:nth-child(5) { width: 130px; }
+.ads-pro-table.is-via:not(.is-via-columns) th:nth-child(6) { width: 120px; }
+.ads-pro-table.is-via:not(.is-via-columns) th:nth-child(7) { width: 135px; }
+.ads-pro-table.is-via:not(.is-via-columns) th:nth-child(8) { width: 95px; }
+.ads-pro-table.is-via:not(.is-via-columns) th:nth-child(9) { width: 150px; text-align: center; }
+.ads-pro-table.is-via:not(.is-via-columns) th:nth-child(10) { width: 80px; text-align: center; }
+
+/* Legacy 7-column TKQC widths — only for a plain .is-ad-account table
+   without the Batch Update Part D full schema. The 31-column table
+   (.is-tkqc-full) sizes every column from its own <colgroup> instead (see
+   ads-check-adaccounts-tkqc-table.css) since a fixed nth-child scheme can't
+   express that many distinct widths. */
+.ads-pro-table.is-ad-account:not(.is-tkqc-full) th:nth-child(2) { width: 58px; }
+.ads-pro-table.is-ad-account:not(.is-tkqc-full) th:nth-child(3) { width: 130px; }
+.ads-pro-table.is-ad-account:not(.is-tkqc-full) th:nth-child(4) { width: 170px; }
+.ads-pro-table.is-ad-account:not(.is-tkqc-full) th:nth-child(5) { width: 180px; }
+.ads-pro-table.is-ad-account:not(.is-tkqc-full) th:nth-child(n + 6) { width: 120px; text-align: right; }
+.ads-pro-table.is-ad-account:not(.is-tkqc-full) td:nth-child(n + 6) { text-align: right; font-variant-numeric: tabular-nums; }
+.ads-pro-table.is-ad-account td strong,
+.ads-pro-table.is-ad-account td small { display: block; overflow: hidden; text-overflow: ellipsis; }
+.ads-pro-table.is-ad-account td small { margin-top: 2px; color: #8b938d; font-size: 10px; }
+.ads-pro-restricted-accounts { min-width: 700px; border-bottom: 1px solid var(--pro-line, rgba(23, 93, 69, .08)); background: #fff; color: #343b36; font-size: 12px; }
+.ads-pro-restricted-accounts summary { min-height: 45px; padding: 0 16px 0 58px; display: flex; align-items: center; gap: 8px; cursor: pointer; font-weight: 600; }
+.ads-pro-restricted-accounts summary small { margin-left: auto; color: #879089; font-weight: 500; }
+.ads-pro-restricted-accounts ul { margin: 0; padding: 0; list-style: none; }
+.ads-pro-restricted-accounts li { min-height: 48px; padding: 7px 16px 7px 58px; display: flex; align-items: center; gap: 22px; border-top: 1px solid #edf2ee; }
+.ads-pro-restricted-accounts li > span:last-child { display: grid; gap: 2px; }
+.ads-pro-restricted-accounts li small { color: #879089; }
+.ads-pro-table input[type="checkbox"],
+.ads-pro-mobile-cards input[type="checkbox"] { width: 15px; height: 15px; margin: 0; accent-color: var(--cv-checkbox-accent-2, #51c65e); cursor: pointer; }
+.ads-sort-label { display: flex; align-items: center; justify-content: space-between; gap: 5px; overflow: hidden; }
+.ads-pro-status { display: inline-flex; align-items: center; gap: 6px; color: #343b36; white-space: nowrap; }
+.ads-pro-status i { width: 7px; height: 7px; flex: none; border-radius: 50%; background: #10c12e; }
+.ads-pro-status.is-offline i,
+.ads-pro-status.is-restricted i { background: #ec5161; }
+.ads-pro-status.is-active { color: #0aa241; }
+.ads-pro-person { display: flex; align-items: center; gap: 7px; overflow: hidden; text-overflow: ellipsis; }
+.ads-pro-person i { width: 19px; height: 19px; flex: none; display: grid; place-items: center; border-radius: 50%; background: linear-gradient(135deg, #deebe0, #a8ceb0); color: #34533b; font-size: 8px; font-style: normal; }
+.ads-pro-history { display: flex; align-items: center; gap: 5px; }
+.ads-pro-history svg { flex: none; width: 11px; height: 11px; color: #8b938d; }
+.ads-pro-cell-action { min-width: 26px; min-height: 26px; display: inline-grid; place-items: center; border: 0; border-radius: 50%; background: #fff; color: #0a48ff; cursor: pointer; }
+.ads-pro-cell-action svg { width: 13px; height: 13px; }
+.ads-pro-cell-action.is-tag { color: #2fcf54; }
+.ads-pro-cell-action.is-note { max-width: 138px; border-radius: 7px; }
+.ads-pro-cell-action.is-note span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ads-pro-cell-action.is-delete { color: #121713; box-shadow: 0 7px 20px rgba(23, 56, 31, .07); }
+.ads-pro-table td:nth-last-child(-n + 2) { text-align: center; }
+.is-tabular { font-variant-numeric: tabular-nums; }
+
+.ads-pro-empty-state { min-height: calc(100% - 47px); display: grid; place-content: center; justify-items: center; gap: 9px; color: #9ba39d; font-size: 12px; }
+.ads-pro-empty-state strong { color: #858d87; font-size: 13px; font-weight: 500; }
+.ads-pro-empty-illustration { width: 126px; height: 96px; margin-bottom: 5px; position: relative; display: grid; place-items: center; border-radius: 52% 48% 46% 54%; color: #f1a931; background: radial-gradient(circle at 62% 28%, #c8ffc8 0 5%, transparent 6%), linear-gradient(155deg, #d8f9dc, #f5fff5); }
+.ads-pro-empty-illustration::before { content: ''; position: absolute; width: 70px; height: 42px; border: 3px solid #67df74; border-radius: 7px; background: repeating-linear-gradient(#eaffeb 0 8px, #c9f2cd 8px 10px); }
+.ads-pro-empty-illustration::after { content: '×'; width: 25px; height: 25px; position: absolute; left: 17px; top: 41px; display: grid; place-items: center; border-radius: 50%; background: #ff6875; color: #fff; font-size: 20px; font-weight: 700; line-height: 1; box-shadow: 0 2px 6px rgba(157, 43, 55, .16); }
+.ads-pro-empty-illustration svg { z-index: 1; transform: translate(31px, 23px); }
+
+.ads-pro-table-footer { height: 38px; padding: 0 0 0 12px; flex: none; display: flex; align-items: center; gap: 16px; overflow: hidden; border-top: 1px solid var(--pro-line, rgba(23, 93, 69, .08)); background: #fff; color: #777f79; font-size: 11px; }
+.ads-pro-table-footer label,
+.ads-pro-table-footer > span {
+  height: 28px;
+  padding: 0 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 999px;
+  background: var(--pro-mint, #edf8ef);
+}
+.ads-pro-table-footer > span { padding: 0 4px; gap: 2px; }
+.ads-pro-table-footer select { height: 28px; border: 0; background: transparent; color: inherit; font: inherit; }
+.ads-pro-table-footer button { width: 24px; height: 24px; display: grid; place-items: center; border: 0; border-radius: 999px; background: transparent; color: #8d9690; }
+.ads-pro-table-footer button svg { width: 13px; height: 13px; }
+.ads-pro-table-footer strong { flex: none; color: #454d47; font-weight: 500; white-space: nowrap; }
+.ads-pro-footer-totals { min-width: 520px; height: 100%; margin-left: auto; display: grid; grid-template-columns: repeat(4, 130px); }
+.ads-pro-footer-totals i { display: grid; place-items: center; border-left: 1px solid var(--pro-line, rgba(23, 93, 69, .08)); color: #4e5750; font-style: normal; }
+
+.ads-pro-selection-bar { min-height: 46px; padding: 5px 9px; position: absolute; z-index: 12; left: 50%; bottom: 46px; max-width: calc(100% - 24px); display: flex; align-items: center; gap: 4px; border: 1px solid rgba(42, 136, 62, .12); border-radius: 999px; background: rgba(255, 255, 255, .98); color: #505852; box-shadow: 0 8px 24px rgba(21, 89, 39, .11); transform: translateX(-50%); white-space: nowrap; }
+.ads-pro-selection-bar button { min-height: 34px; padding: 0 10px; display: inline-flex; align-items: center; gap: 6px; border: 0; border-radius: 999px; background: transparent; color: #4f5751; cursor: pointer; }
+.ads-pro-selection-bar .ads-pro-selection-summary { padding-left: 8px; color: #465149; }
+.ads-pro-selection-summary > svg { color: #00a32e; }
+.ads-pro-selection-summary strong { color: #00a32e; font-weight: 700; }
+.ads-pro-selection-summary i { color: #778078; font-style: normal; font-weight: 500; }
+.ads-pro-selection-divider { width: 1px; height: 24px; flex: none; background: #e0e9e2; }
+.ads-pro-selection-bar button:hover { background: #EFF6FF; }
+
+.ads-move-folder-layer { position: fixed; z-index: 150; inset: 0; display: grid; place-items: center; padding: 18px; background: rgba(0, 24, 8, .45); backdrop-filter: blur(5px); }
+.ads-move-folder-dialog, .ads-remove-folder-dialog { width: min(520px, 100%); overflow: hidden; border: 1px solid #b9d9c0; border-radius: 24px; background: #fff; color: #1b281e; box-shadow: 0 28px 80px rgba(0, 28, 9, .28); }
+.ads-move-folder-dialog > header { min-height: 72px; padding: 16px 20px; display: flex; align-items: center; gap: 11px; border-bottom: 1px solid #e4ece6; }
+.ads-move-folder-dialog > header > span { width: 38px; height: 38px; display: grid; place-items: center; border-radius: 12px; background: #e5f6e9; color: #00a32e; }
+.ads-move-folder-dialog h2, .ads-remove-folder-dialog h2 { margin: 0; flex: 1; font-size: 18px; }
+.ads-move-folder-dialog > header > button { width: 34px; height: 34px; display: grid; place-items: center; border: 0; border-radius: 999px; background: #f0f5f1; color: #58625a; }
+.ads-move-folder-search { height: 42px; margin: 16px 20px 8px; padding: 0 13px; display: flex; align-items: center; gap: 8px; border-radius: 999px; background: #f2f5f3; color: #7b867e; }
+.ads-move-folder-search input { min-width: 0; flex: 1; border: 0; outline: 0; background: transparent; color: #1b281e; font: inherit; }
+.ads-move-folder-list { max-height: 250px; padding: 4px 20px; overflow-y: auto; }
+.ads-move-folder-list > button { width: 100%; min-height: 46px; padding: 0 12px; display: flex; align-items: center; gap: 10px; border: 1px solid transparent; border-radius: 12px; background: transparent; color: #354039; text-align: left; }
+.ads-move-folder-list > button span { flex: 1; }
+.ads-move-folder-list > button small { color: #8a948c; }
+.ads-move-folder-list > button.is-selected { border-color: var(--cv-brand-border, #BFDBFE); background: var(--cv-brand-soft, #EFF6FF); color: var(--cv-brand-primary-hover, #1D4ED8); }
+.ads-move-folder-list > p { margin: 24px 0; color: #8a948c; text-align: center; }
+.ads-move-folder-create { min-height: 42px; margin: 4px 20px 12px; padding: 0 10px; display: inline-flex; align-items: center; gap: 7px; border: 0; background: transparent; color: #00a32e; font-weight: 600; }
+.ads-move-folder-create-inline { min-height: 42px; margin: 4px 20px 12px; padding: 4px 7px 4px 11px; display: flex; align-items: center; gap: 7px; border: 1px solid #9ed6aa; border-radius: 12px; background: #f4fbf5; color: #00a32e; }
+.ads-move-folder-create-inline input { min-width: 0; flex: 1; border: 0; outline: 0; background: transparent; color: #1b281e; font: inherit; }
+.ads-move-folder-create-inline button { width: 32px; height: 32px; flex: none; display: grid; place-items: center; border: 0; border-radius: 999px; background: #e4f5e8; color: #00952a; }
+.ads-move-folder-create-inline button:last-child { background: #eef2ef; color: #657068; }
+.ads-move-folder-create-inline button:disabled { opacity: .4; }
+.ads-move-folder-dialog > footer, .ads-remove-folder-dialog > footer { padding: 14px 20px; display: flex; justify-content: flex-end; gap: 10px; border-top: 1px solid #e4ece6; }
+.ads-move-folder-dialog > footer button, .ads-remove-folder-dialog > footer button { min-width: 100px; min-height: 42px; padding: 0 18px; border: 1px solid #d6e1d8; border-radius: 999px; background: #fff; color: #566159; }
+.ads-move-folder-dialog > footer .is-primary { border-color: #65c676; background: linear-gradient(180deg, #59d16f, #35b64f); color: #fff; }
+.ads-move-folder-dialog > footer .is-primary:disabled { opacity: .45; }
+.ads-remove-folder-dialog { padding-top: 22px; }
+.ads-remove-folder-dialog h2, .ads-remove-folder-dialog p { margin: 0 22px 10px; }
+.ads-remove-folder-dialog p { color: #657068; }
+.ads-remove-folder-dialog > footer .is-danger { border-color: #e65b62; background: #e65b62; color: #fff; }
+.ads-pro-mobile-cards { display: none; }
+.ads-pro-search-empty { position: absolute; z-index: 3; inset: 47px 0 42px; display: grid; place-content: center; justify-items: center; gap: 7px; background: rgba(255, 255, 255, .97); color: #879089; font-size: 12px; text-align: center; }
+.ads-pro-search-empty svg { color: #4cc764; }
+.ads-pro-search-empty strong { color: #59635b; font-size: 14px; }
+
+.ads-pro-local-dialog-layer { position: fixed; z-index: 120; inset: 0; display: grid; place-items: center; padding: 18px; background: rgba(0, 17, 5, .58); backdrop-filter: blur(6px); }
+.ads-pro-local-dialog { width: min(430px, 100%); padding: 25px; position: relative; border: 1px solid #a9d6b0; border-radius: 22px; background: #f9fffa; color: #1a271d; box-shadow: 0 24px 70px rgba(0, 24, 8, .3); }
+.ads-pro-local-dialog > span { width: 46px; height: 46px; display: grid; place-items: center; border-radius: 14px; background: #e3f6e6; color: #258e38; }
+.ads-pro-local-dialog > span.is-danger { background: #fff0f0; color: #cb4545; }
+.ads-pro-local-dialog h2 { margin: 15px 34px 0 0; font-size: 20px; }
+.ads-pro-local-dialog p { margin: 9px 0 0; color: #68726a; font-size: 13px; line-height: 1.55; }
+.ads-pro-local-dialog label { margin-top: 17px; display: grid; gap: 7px; color: #566159; font-size: 12px; }
+.ads-pro-local-dialog textarea { min-height: 108px; padding: 11px; resize: vertical; border: 1px solid #cadbcd; border-radius: 11px; outline: 0; background: #fff; color: #172019; font: inherit; font-size: 14px; }
+.ads-pro-local-dialog-close { width: 40px; height: 40px; position: absolute; right: 13px; top: 13px; display: grid; place-items: center; border: 0; border-radius: 50%; background: #eef5ef; color: #58625a; cursor: pointer; }
+.ads-pro-local-dialog footer { margin-top: 20px; display: flex; justify-content: flex-end; gap: 8px; }
+.ads-pro-local-dialog footer button,
+.ads-pro-local-dialog footer a { min-height: 42px; padding: 0 15px; display: inline-flex; align-items: center; border: 1px solid #cadbcd; border-radius: 10px; background: #fff; color: #475249; text-decoration: none; cursor: pointer; }
+.ads-pro-local-dialog footer button.is-primary,
+.ads-pro-local-dialog footer a.is-primary { border-color: #38aa49; background: #38aa49; color: #fff; }
+.ads-pro-local-dialog footer button.is-danger { border-color: #d84a4a; background: #d84a4a; color: #fff; }
+
+/* Workflow Mode dialog — production's own light Function Store family
+   (width/radio-card layout traced from .workflow-mode-dialog in
+   references/remotes/adaccounts/436.e5c83aa9.js), reusing the same
+   .ads-pro-local-dialog-layer overlay as the other local dialogs. */
+.ads-workflow-mode-dialog { width: min(560px, 100%); max-height: calc(100dvh - 2rem); display: flex; flex-direction: column; overflow: hidden; border: 1px solid #a9d6b0; border-radius: 22px; background: #f9fffa; color: #1a271d; box-shadow: 0 24px 70px rgba(0, 24, 8, .3); }
+.ads-workflow-mode-dialog > header { padding: 16px 18px; display: flex; align-items: center; gap: 8px; flex: none; border-bottom: 1px solid #e2eee3; color: #258e38; }
+.ads-workflow-mode-dialog > header h2 { margin: 0; flex: 1; color: #1a271d; font-size: 14px; font-weight: 500; }
+.ads-workflow-mode-dialog-close { width: 30px; height: 30px; display: grid; place-items: center; border: 0; border-radius: 50%; background: transparent; color: #58625a; cursor: pointer; }
+.ads-workflow-mode-dialog-close:hover { background: #EFF6FF; }
+.ads-workflow-mode-body { min-height: 0; padding: 16px 18px 4px; display: flex; gap: 16px; overflow-y: auto; }
+.ads-workflow-mode-options { flex: 1; min-width: 0; display: grid; gap: 10px; }
+.ads-workflow-mode-option { padding: 13px 14px; display: grid; gap: 6px; border: 1.5px solid #dce8de; border-radius: 16px; background: #fff; cursor: pointer; }
+.ads-workflow-mode-option.is-selected { border-color: var(--cv-brand-border, #BFDBFE); background: var(--cv-brand-soft, #EFF6FF); }
+.ads-workflow-mode-option > div { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+.ads-workflow-mode-option-title { margin: 0; color: #1a271d; font-size: 13px; }
+.ads-workflow-mode-option.is-selected .ads-workflow-mode-option-title { font-weight: 600; }
+.ads-workflow-mode-option-desc { margin: 0; color: #68726a; font-size: 12px; line-height: 1.5; }
+.ads-workflow-mode-option input[type="radio"] { flex: none; width: 16px; height: 16px; accent-color: var(--cv-checkbox-accent-3, #38aa49); }
+.ads-workflow-mode-preview { width: 168px; flex: none; padding: 12px; display: grid; align-content: start; gap: 8px; border-radius: 16px; background: #eafbee; }
+.ads-workflow-mode-preview-row { height: 34px; border-radius: 10px; background: #fff; box-shadow: 0 1px 0 rgba(0, 0, 0, .04); }
+.ads-workflow-mode-preview-row.is-single { height: 90px; }
+.ads-workflow-mode-dialog > footer { margin-top: 0; padding: 14px 18px; flex: none; display: flex; justify-content: flex-end; gap: 8px; border-top: 1px solid #e2eee3; }
+.ads-workflow-mode-dialog > footer button { min-height: 38px; padding: 0 16px; border: 1px solid #cadbcd; border-radius: 999px; background: #fff; color: #475249; cursor: pointer; }
+.ads-workflow-mode-dialog > footer button.is-primary { border-color: #38aa49; background: #38aa49; color: #fff; }
+
+@media (max-width: 560px) {
+  .ads-workflow-mode-body { flex-direction: column; }
+  .ads-workflow-mode-preview { width: 100%; }
+}
+
+/* Page Round 1 Part #1 — "Trạng thái" is dot + text only, no pill/badge/
+   background (explicitly distinct from the shared `.ads-pro-status`
+   badge convention used elsewhere) — small round dot, compact, left
+   aligned. Traced production status set: Live (green), Die (red), and a
+   hidden-page state (neutral/dark), from PageTable's own status filter
+   catalog. */
+.ads-page-status { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+.ads-page-status i { width: 7px; height: 7px; flex: none; border-radius: 50%; }
+.ads-page-status.is-live i { background: #10c12e; }
+.ads-page-status.is-live { color: #0aa241; }
+.ads-page-status.is-die i { background: #ec5161; }
+.ads-page-status.is-die { color: #d63b34; }
+.ads-page-status.is-hidden i { background: #6b756f; }
+.ads-page-status.is-hidden { color: #5a6b60; }
+/* Pixel #1 — same dot+text shell, exact label "Dead" (own 2-state set,
+   distinct from Page's "Die"); same red/pink as Page's is-die. */
+.ads-page-status.is-dead i { background: #ec5161; }
+.ads-page-status.is-dead { color: #d63b34; }
+
+/* Page Round 1 Part #5 / Page Correction — "Loại" and "Page hủy đăng" are
+   plain, centered, dark text only (no badge/pill/dot/icon). */
+.ads-page-type-cell { display: block; text-align: center; }
+
+/* Pixel #2 — small circular Eye trigger centered in the cell, same subtle
+   light-bg/shadow visual language as the toolbar's .ads-pro-icon-button
+   (see ads-check-adaccounts-workspace.css), scaled down for in-cell use. */
+.ads-pixel-lazy-reveal {
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  margin: 0 auto;
+  border: 0;
+  border-radius: 50%;
+  background: #fff;
+  color: #111b14;
+  box-shadow: 0 1px 2px rgba(15, 60, 25, .08);
+  cursor: pointer;
+}
+.ads-pixel-lazy-reveal:hover { color: var(--cv-brand-primary-hover, #1D4ED8); background: var(--cv-brand-soft, #EFF6FF); }
+.ads-pixel-lazy-reveal:disabled { cursor: default; opacity: .8; }

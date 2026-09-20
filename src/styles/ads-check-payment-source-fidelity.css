@@ -1,0 +1,166 @@
+/* Source-fidelity layer for the light mint payment surfaces used by Ads Check V8. */
+.ads-payment-page {
+  --payment-green: var(--cv-brand-primary, #2563EB);
+  --payment-green-strong: var(--cv-brand-primary-hover, #1D4ED8);
+  --payment-muted: #68736a;
+  --payment-border: #d8e5da;
+  --payment-panel: #fff;
+  padding: 2px;
+  color: #101712;
+  background: #dfeee1;
+}
+
+.ads-payment-layout {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 2px;
+  max-width: none;
+  min-height: calc(100dvh - 70px);
+}
+
+.ads-payment-settings-panel,
+.ads-payment-preview-card,
+.ads-billing-plan-builder,
+.ads-billing-summary {
+  border: 1px solid #cbdace;
+  border-radius: 18px;
+  background: rgba(248, 252, 248, .95);
+  box-shadow: none;
+}
+
+.ads-payment-settings-panel { overflow: hidden; }
+.ads-payment-settings-column { gap: 14px; padding: 14px; }
+.ads-payment-heading { max-width: none; margin: 0; padding: 16px 18px; border-bottom: 1px solid #d6e3d8; }
+.ads-payment-heading h1 { margin: 0; color: #111813; font-size: 18px; letter-spacing: -.02em; }
+.ads-payment-heading p { margin-top: 4px; color: #6c776e; font-size: 11px; }
+.ads-payment-eyebrow { display: none; }
+.ads-payment-disclosure { border-color: #c7d8ae; color: #65792c; background: #f3f6d8; }
+
+.ads-payment-card { padding: 17px; border-color: #e1eae2; border-radius: 16px; background: #fff; box-shadow: 0 8px 22px rgba(15, 23, 42, .04); }
+.ads-payment-card-heading h2 { color: #172019; font-size: 15px; }
+.ads-payment-step { border-color: #cce7cc; color: #4eae42; background: #edf8ec; }
+.ads-payment-count,
+.ads-payment-section-copy { color: #6f7c71; }
+.ads-payment-switch b { color: #55a845; }
+.ads-payment-switch > span { background: #d4ddd5; }
+.ads-payment-switch input:checked + span { background: linear-gradient(90deg, #54a438, #75ca4f); }
+
+.ads-payment-surface {
+  min-height: 62px;
+  border-color: #e2e9e3;
+  color: #222b24;
+  background: #f5f6f5;
+}
+.ads-payment-surface.is-selected { border-color: #64b952; background: #f5fff3; }
+.ads-payment-surface-icon { width: 36px; height: 36px; color: #59b449; background: #edf8ec; }
+.ads-payment-surface small { color: #7c877e; }
+.ads-payment-form-grid { grid-template-columns: 1fr; }
+
+.ads-payment-form-grid label > span:first-child,
+.ads-billing-options-grid label > span:first-child { color: #27302a; }
+.ads-payment-select-wrap select,
+.ads-billing-history-filter select,
+.ads-payment-rate-field > div,
+.ads-billing-coupon { border-color: #e0e6e1; color: #202923; background: #f4f5f4; }
+.ads-payment-rate-field input,
+.ads-billing-coupon input { color: #202923; }
+.ads-payment-rate-field > div span { border-left-color: #dde5de; color: #69766c; }
+.ads-payment-rate-field small { color: #859087; }
+.ads-payment-chip-list button { border-color: #dfe7e0; color: #566259; background: #f6f7f6; }
+.ads-payment-chip-list button.is-selected { border-color: #62b853; color: #397e31; background: #eff9ed; }
+
+.ads-signature-editor { border-color: #e0e7e1; background: #f6f7f6; }
+.ads-signature-toolbar { border-bottom-color: #e0e7e1; }
+.ads-signature-toolbar button { color: #68736a; }
+.ads-signature-toolbar button:hover { color: #2f7f35; background: #e9f5e8; }
+.ads-signature-toolbar > span { background: #dce5dd; }
+.ads-signature-editor textarea { color: #28312a; }
+.ads-payment-save-row > span { color: #66866b; }
+.ads-payment-primary-button { color: #fff; background: linear-gradient(100deg, #77c654, #a2de75); box-shadow: none; }
+
+.ads-payment-preview-card { position: sticky; top: 0; display: block; min-height: calc(100dvh - 70px); padding: 14px; }
+.ads-payment-preview-heading { min-height: 40px; padding: 0 4px 12px; border-bottom: 1px solid #d7e3d8; }
+.ads-payment-preview-heading h2 { color: #172019; font-size: 16px; }
+.ads-payment-preview-heading svg { color: #57ad49; }
+.ads-payment-preview-stage { min-height: 240px; border-color: #c8dec9; background: radial-gradient(circle at 75% 10%, rgba(112, 228, 93, .22), transparent 35%), linear-gradient(145deg, #18402a, #0b281d); }
+.ads-payment-receipt { border-color: #d8e5d9; background: #fff; }
+.ads-payment-receipt header { border-bottom-color: #dfe7e0; }
+.ads-payment-receipt-logo { color: #fff; background: #55af46; }
+.ads-payment-receipt header strong,
+.ads-payment-receipt dd { color: #172019; }
+.ads-payment-receipt header small,
+.ads-payment-receipt dt,
+.ads-payment-receipt > small { color: #707d72; }
+.ads-payment-receipt blockquote { color: #526257; background: #f4faf3; }
+
+.ads-billing-page { padding: 0 2px 2px; }
+.ads-billing-heading { display: none; }
+.ads-billing-tabs { max-width: none; margin: 0; padding: 5px 8px; border: 1px solid #cbdace; border-radius: 18px 18px 0 0; background: rgba(241, 248, 242, .96); }
+.ads-billing-tabs button { min-height: 38px; margin-right: 5px; padding: 0 14px; border-radius: 999px; color: #5f6c62; }
+.ads-billing-tabs button::after { display: none; }
+.ads-billing-tabs button.is-active { color: #fff; background: linear-gradient(100deg, #4b9e3b, #88c85f); }
+.ads-billing-tabs button.is-active svg { color: currentColor; }
+.ads-billing-panel { max-width: none; }
+.ads-billing-purchase-layout { grid-template-columns: minmax(0, 1.25fr) minmax(310px, .8fr); gap: 2px; }
+.ads-billing-plan-builder { gap: 13px; padding: 14px; border-radius: 0 0 18px 18px; }
+.ads-billing-tier-grid > button { min-height: 175px; border-color: #dbe5dc; color: #f4fff7; background: linear-gradient(145deg, #173829, #071c14); }
+.ads-billing-tier-grid > button:nth-child(2) { color: #fff9dc; background: linear-gradient(145deg, #5b481c, #211707); }
+.ads-billing-tier-grid > button.is-selected { border: 4px solid #58e57b; background: linear-gradient(145deg, #153a28, #071c14); }
+.ads-billing-tier-grid small { color: #bdc9c0; }
+.ads-billing-tier-grid b { color: #fff; }
+.ads-billing-tier-grid b i { color: #bdc9c0; }
+.ads-billing-feature-list label,
+.ads-billing-session-list article { border-color: #e0e8e1; color: #303a32; background: #fff; }
+.ads-billing-feature-list small,
+.ads-billing-session-list small,
+.ads-billing-session-list time { color: #3f4d43; }
+.ads-billing-session-list article > span:nth-last-of-type(1) { color: #405348; background: #e9f0ea; }
+.ads-billing-session-list article > span.is-current { color: #075f28; background: #e4f6e8; }
+.ads-billing-session-list button { border-color: #90c99c; color: #173f24; background: #edf8ef; }
+.ads-billing-summary { top: 0; min-height: calc(100dvh - 116px); padding: 20px; border-radius: 0 0 18px 18px; }
+.ads-billing-summary > header { border-bottom-color: #dce6dd; }
+.ads-billing-summary h2,
+.ads-billing-summary-product h3,
+.ads-billing-summary dd,
+.ads-billing-total span { color: #172019; }
+.ads-billing-summary header p,
+.ads-billing-summary dl div,
+.ads-billing-safe { color: #6e7b71; }
+.ads-billing-summary-product { background: #f3f8f2; }
+.ads-billing-total { border-top-color: #dbe5dc; }
+.ads-billing-total strong { color: #4eaa42; }
+.ads-billing-managed-plan,
+.ads-billing-table-wrap { border-color: #dbe5dc; background: #fff; }
+.ads-billing-managed-plan h3,
+.ads-billing-managed-plan dd,
+.ads-billing-table td strong,
+.ads-billing-table td b { color: #263029; }
+.ads-billing-managed-plan > header small,
+.ads-billing-managed-plan p,
+.ads-billing-managed-plan dt,
+.ads-billing-plan-status,
+.ads-billing-table-note { color: #4f5f54; }
+.ads-billing-managed-plan > header span { color: #405348; background: #e9f0ea; }
+.ads-billing-managed-plan > header span.is-active { color: #075f28; background: #e4f6e8; }
+.ads-billing-managed-plan dl div { background: #f5f7f5; }
+.ads-billing-managed-plan > button,
+.ads-billing-add-session { border-color: #90c99c; color: #176c2b; background: #edf8ef; }
+.ads-billing-table th { color: #5f6e63; background: #edf4ee; }
+.ads-billing-table td { border-top-color: #e2e9e3; color: #4f5c52; }
+
+@media (max-width: 820px) {
+  .ads-payment-layout,
+  .ads-billing-purchase-layout { grid-template-columns: 1fr; }
+  .ads-payment-preview-card,
+  .ads-billing-summary { min-height: auto; }
+}
+
+@media (max-width: 720px) {
+  .ads-payment-page { padding: 0; }
+  .ads-payment-layout { min-height: 100%; }
+  .ads-payment-settings-panel,
+  .ads-payment-preview-card { border-radius: 15px; }
+  .ads-payment-preview-card { margin-top: 8px; }
+  .ads-billing-tabs { border-radius: 15px 15px 0 0; }
+  .ads-billing-plan-builder,
+  .ads-billing-summary { border-radius: 0 0 15px 15px; }
+}

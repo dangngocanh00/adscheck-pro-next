@@ -1,0 +1,1410 @@
+.ads-save-app.is-ads-check-pro .ads-main-panel:has(.ads-pro-workspace) {
+  overflow: hidden;
+  background: #EFF6FF;
+  border-radius: 16px;
+}
+
+/* Workspace is a GRID (not flex-column) so Function/Workflow can span BOTH
+   the "tabs" row and the "body" row — i.e. reach the same true visual top
+   as Curve B's surface (which rises to the tab row's top for most of its
+   width — see RECOVERY_START_X in the surface module), while Folder/Table
+   stay confined to the "body" row only, untouched, at their existing Y. */
+.ads-pro-workspace {
+  --pro-mint: #EFF6FF;
+  --pro-text: #172019;
+  --pro-muted: #707972;
+  --pro-surface-radius: 12px;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  position: relative;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: "tabs" "body";
+  color: var(--pro-text);
+  background: var(--pro-mint);
+  font-family: "Google Sans Flex", "Be Vietnam Pro", system-ui, sans-serif;
+}
+
+/* Curve C is now the REAL production host-shell geometry (AdsCheckShellCurve,
+   rendered by the product shell one level up, in the 58px right margin the
+   shell already reserves — see ads-check-pro.css) — NOT a column of this
+   grid. This workspace's grid only ever has to make room for Function/
+   Workflow's own columns; the reopen rail is `position:fixed` (see
+   .ads-pro-panel-rail below) and doesn't participate in grid layout at all.
+   Function/Workflow's own column track is widened by +4px (their fixed
+   panel width plus the breathing gap), and the panel itself carries
+   margin-left:4px — so the gap comes out of the TRACK, not the panel's own
+   rendered width (still exactly 300/360px). */
+.ads-pro-workspace.has-function-panel:not(.has-workflow-panel) {
+  grid-template-columns: minmax(0, 1fr) 304px;
+  grid-template-areas: "tabs function" "body function";
+}
+.ads-pro-workspace.has-workflow-panel:not(.has-function-panel) {
+  grid-template-columns: minmax(0, 1fr) 364px;
+  grid-template-areas: "tabs workflow" "body workflow";
+}
+.ads-pro-workspace.has-function-panel.has-workflow-panel {
+  grid-template-columns: minmax(0, 1fr) 304px 364px;
+  grid-template-areas: "tabs function workflow" "body function workflow";
+}
+
+.ads-pro-workspace-surface {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* Shared top row — asset tabs (flex:none) + action toolbar (flex:1 1 auto)
+   share this single horizontal band. Its width IS the Curve B column's
+   current width already (grid-area:tabs uses the same "minmax(0,1fr)" track
+   as the body row), so the toolbar shrinking/growing here as Function/
+   Workflow open/close is a natural consequence of the grid track sizing,
+   not something the toolbar has to compute for itself. min-width:0 lets the
+   grid item actually shrink below its content's intrinsic width instead of
+   overflowing the track (the default `min-width:auto` grid-item behavior). */
+.ads-pro-header-row {
+  grid-area: tabs;
+  position: relative;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  gap: 8px;
+}
+
+.ads-asset-tabs {
+  height: 44px;
+  flex: none;
+  min-width: 0;
+  padding: 4px 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow-x: auto;
+  background: transparent;
+  scrollbar-width: none;
+}
+
+.ads-asset-tabs::-webkit-scrollbar { display: none; }
+.ads-asset-tabs button {
+  width: 81px;
+  min-width: 81px;
+  max-width: 81px;
+  height: 32px;
+  padding: 0 12px;
+  position: relative;
+  isolation: isolate;
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(rgba(255, 255, 255, .08) 0%, rgba(255, 255, 255, .28) 100%);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  color: rgba(255, 255, 255, .9);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background .2s cubic-bezier(.2, .8, .2, 1), color .2s cubic-bezier(.2, .8, .2, 1), transform .2s cubic-bezier(.2, .8, .2, 1);
+}
+
+.ads-asset-tabs button::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+  border: .5px solid rgba(255, 255, 255, .32);
+  -webkit-mask-image: radial-gradient(120% 82% at 0 0, #000 60%, transparent 72%), radial-gradient(120% 78% at 100% 100%, #000 55%, transparent 72%);
+  mask-image: radial-gradient(120% 82% at 0 0, #000 60%, transparent 72%), radial-gradient(120% 78% at 100% 100%, #000 55%, transparent 72%);
+  -webkit-mask-repeat: no-repeat, no-repeat;
+  mask-repeat: no-repeat, no-repeat;
+  mask-composite: add;
+}
+
+.ads-asset-tabs button:hover { background: linear-gradient(rgba(255, 255, 255, .14) 0%, rgba(255, 255, 255, .34) 100%); color: var(--cv-brand-hover-soft, #eafbee); }
+.ads-asset-tabs button:active { transform: scale(.97); }
+.ads-asset-tabs button[data-state="active"] {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  background: linear-gradient(270deg, var(--cv-fw-pin-active-start, #7cd249) 0%, var(--cv-fw-pin-active-end, #339d36) 100%), linear-gradient(270deg, var(--cv-asset-tab-active-2-start, #73c258) 0%, var(--cv-asset-tab-active-2-end, #3c9944) 100%), var(--cv-asset-tab-active-solid, #093);
+  color: #fff;
+  box-shadow: 0 8px 18px var(--cv-asset-tab-active-glow, rgba(75, 179, 63, .26));
+}
+
+.ads-asset-tabs button[data-state="active"]::before { content: none; }
+.ads-asset-tabs button[data-state="active"],
+.ads-asset-tabs button[data-state="active"] + button { margin-left: 8px; }
+.ads-asset-tabs button[data-state="active"]:first-child { margin-left: 0; }
+
+.ads-asset-tab-count {
+  box-sizing: border-box;
+  min-width: 16px;
+  height: 16px;
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .15);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: .01em;
+  line-height: 14px;
+}
+
+/* .ads-pro-workspace-body is the "body" grid area — it holds ONLY the main
+   region (folder + table), LOCKED at its existing Y (below the tab row).
+   Function/Workflow are NOT nested in here — they're top-level grid items of
+   .ads-pro-workspace itself, each in their own named grid-area/column,
+   spanning both the "tabs" and "body" rows (reaching Curve B's true visual
+   top). Curve C/the reopen rail live entirely outside this grid now — see
+   ads-check-pro.css (host shell) and .ads-pro-panel-rail (fixed) below. */
+.ads-pro-workspace-body {
+  grid-area: body;
+  min-height: 0;
+  position: relative;
+  z-index: 10;
+  display: flex;
+  border-radius: 0 0 0 14px;
+  overflow: hidden;
+}
+
+/* Main region owns ONLY the folder panel + table. Opening Function/Workflow
+   shrinks it via the outer grid's column-gap/track sizing (see
+   .ads-pro-workspace's has-function-panel/has-workflow-panel rules) — not an
+   internal grid concern of main-region itself. Folder is now ALWAYS a real
+   grid column (never fully removed) — 84px when collapsed (production's own
+   .folder-panel--collapsed exact width), 180px when expanded
+   (.has-folder-panel below) — so the table/Curve B track reclaims exactly
+   the pixel difference for free via the grid, no folder-specific JS math. */
+.ads-pro-main-region {
+  min-width: 0;
+  min-height: 0;
+  flex: 1 1 auto;
+  display: grid;
+  grid-template-columns: 84px minmax(0, 1fr);
+  overflow: hidden;
+}
+
+.ads-pro-workspace.has-folder-panel .ads-pro-main-region { grid-template-columns: 180px minmax(0, 1fr); }
+
+.ads-pro-panel-rail { display: none; }
+
+/* Always a real, visible grid column on desktop — collapsed is a persistent
+   mini rail (production's own .folder-panel--collapsed, 84px), never
+   display:none, so the table only ever expands up to its right edge, never
+   underneath it. The @media(max-width:1180px) block further down still
+   fully hides this behind display:none unless .is-open there — the mobile
+   drawer overlay is untouched, out of this round's scope. */
+.ads-pro-folders {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  padding: 0 8px 12px;
+  display: flex;
+  flex-direction: column;
+  overflow: visible;
+  border-right: 1px solid #e3ede5;
+  border-radius: 20px 12px 12px 12px;
+  margin-right: 3px;
+  background: #fff;
+}
+
+.ads-pro-folders > header {
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.ads-pro-folders h2 { margin: 0; color: rgba(0, 0, 0, .6); font-size: 13px; letter-spacing: .13px; font-weight: 500; }
+.ads-pro-folders > header button {
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: #79837b;
+  cursor: pointer;
+}
+
+/* Collapsed mini rail (production width: 84px) — folder icon + expand `»`
+   in the header, then EVERY folder as its own compact row (Batch Update
+   Part C — production renders the full list here, not just the active
+   folder), and a mini "+" button. Production reference:
+   .folder-panel--collapsed{flex:0 0 84px;width:84px}. */
+.ads-pro-folders.is-collapsed {
+  width: 84px;
+  padding: 0 6px 10px;
+  align-items: stretch;
+}
+
+.ads-pro-folders.is-collapsed > header {
+  justify-content: center;
+  gap: 6px;
+  color: #00a32e;
+}
+
+.ads-pro-folders.is-collapsed > header button {
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  background: #fff;
+  color: rgba(0, 0, 0, .6);
+  box-shadow: 0 16px 32px rgba(0, 177, 115, .06);
+}
+
+.ads-pro-folders.is-collapsed > header button:hover { color: var(--cv-brand-primary-hover, #1D4ED8); }
+
+/* Scoped under .ads-pro-folders.is-collapsed (specificity 0,2,1/0,2,2) to
+   beat the generic .ads-pro-folders nav / nav button rules (0,1,1/0,1,2)
+   above, which target the EXPANDED list's <nav> and would otherwise force
+   this collapsed list into display:grid (equal-share row stretching). */
+.ads-pro-folders.is-collapsed .ads-pro-folders-mini-list {
+  min-height: 0;
+  flex: 1;
+  margin: 4px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #b7c4b9 transparent;
+}
+
+.ads-pro-folders.is-collapsed .ads-pro-folders-mini-row {
+  min-height: 40px;
+  flex: none;
+  padding: 6px 2px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: #5a6b60;
+  cursor: pointer;
+}
+
+.ads-pro-folders.is-collapsed .ads-pro-folders-mini-row:hover { background: var(--cv-brand-tint-06, rgba(0, 163, 46, .06)); color: var(--cv-brand-solid-2, #00a32e); }
+
+.ads-pro-folders.is-collapsed .ads-pro-folders-mini-row.ads-pro-folders-mini-active {
+  background: linear-gradient(90deg, rgba(0, 255, 55, .075) 0%, rgba(38, 255, 38, .04) 100%), linear-gradient(90deg, rgba(255, 255, 255, .3) 0%, rgba(255, 255, 255, .3) 100%);
+  color: #00a32e;
+}
+
+.ads-pro-folders.is-collapsed .ads-pro-folders-mini-row span {
+  max-width: 100%;
+  overflow: hidden;
+  font-size: 10px;
+  letter-spacing: .1px;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ads-folder-add-mini {
+  min-height: 28px;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+}
+
+.ads-panel-heading > button {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: #79837b;
+  cursor: pointer;
+}
+
+.ads-pro-folders nav { display: grid; gap: 2px; }
+.ads-pro-folder-row { position: relative; min-height: 40px; display: flex; align-items: center; }
+.ads-pro-folders nav .ads-pro-folder-select {
+  width: 100%;
+  min-height: 40px;
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: rgba(0, 0, 0, .6);
+  font-size: 13px;
+  letter-spacing: .13px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.ads-pro-folders nav .ads-pro-folder-select span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ads-pro-folders nav .ads-pro-folder-select small {
+  margin-left: auto;
+  padding: 2px 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .6);
+  color: var(--cv-brand-solid-2, #00a32e);
+  font-size: 13px;
+  line-height: 16px;
+}
+
+.ads-pro-folders nav .ads-pro-folder-select.is-active {
+  background: linear-gradient(90deg, var(--cv-folder-active-1, rgba(0, 255, 55, .075)) 0%, var(--cv-folder-active-2, rgba(38, 255, 38, .04)) 100%), linear-gradient(90deg, rgba(255, 255, 255, .3) 0%, rgba(255, 255, 255, .3) 100%);
+  color: var(--cv-brand-solid-2, #00a32e);
+  font-weight: 600;
+}
+.ads-pro-folders nav .ads-pro-folder-select.is-active small { margin-right: 30px; }
+
+.ads-pro-folder-actions { position: absolute; right: 5px; display: flex; align-items: center; }
+.ads-pro-folder-more {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: currentColor;
+  cursor: pointer;
+}
+.ads-pro-folder-more:hover { background: rgba(0, 163, 46, .1); }
+.ads-pro-folder-action-menu {
+  position: absolute;
+  z-index: 30;
+  top: calc(100% + 3px);
+  right: 0;
+  width: 132px;
+  padding: 4px;
+  border: 1px solid rgba(0, 0, 0, .1);
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, .15);
+}
+.ads-pro-folder-action-menu button {
+  width: 100%;
+  min-height: 32px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: rgba(0, 0, 0, .72);
+  font-size: 12px;
+  text-align: left;
+  cursor: pointer;
+}
+.ads-pro-folder-action-menu button:hover { background: rgba(0, 163, 46, .08); }
+.ads-pro-folder-action-menu button.is-danger { color: #d92d20; }
+.ads-pro-folder-rename-panel {
+  position: absolute;
+  z-index: 31;
+  top: 44px;
+  left: calc(100% + 8px);
+  width: 250px;
+  padding: 12px;
+  border: 1px solid rgba(0, 0, 0, .1);
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, .16);
+}
+.ads-pro-folder-rename-panel h3 { margin: 0 0 9px; color: rgba(0, 0, 0, .78); font-size: 13px; font-weight: 600; }
+.ads-pro-folder-rename-panel input { width: 100%; height: 34px; padding: 0 9px; border: 1px solid rgba(0, 0, 0, .18); border-radius: 6px; outline: 0; font: inherit; box-sizing: border-box; }
+.ads-pro-folder-rename-panel input:focus { border-color: var(--cv-brand-solid-2, #00a32e); box-shadow: 0 0 0 2px rgba(0, 163, 46, .12); }
+.ads-pro-folder-rename-error { margin: 6px 0 0; color: #d92d20; font-size: 11px; line-height: 15px; }
+.ads-pro-folder-rename-panel footer { display: flex; justify-content: flex-end; gap: 7px; margin-top: 10px; }
+.ads-pro-folder-rename-panel footer button { min-height: 30px; padding: 0 10px; border: 1px solid rgba(0, 0, 0, .13); border-radius: 6px; background: #fff; color: rgba(0, 0, 0, .72); font: inherit; font-size: 12px; cursor: pointer; }
+.ads-pro-folder-rename-panel footer .is-primary { border-color: var(--cv-brand-solid-2, #00a32e); background: var(--cv-brand-solid-2, #00a32e); color: #fff; }
+
+.ads-folder-add {
+  min-height: 36px;
+  margin: 10px 0 0;
+  padding: 10px 12px;
+  border: .5px dashed rgba(0, 0, 0, .2);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, .6);
+  color: rgba(0, 0, 0, .4);
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.ads-folder-add:hover { color: var(--cv-folder-add-hover, #10c12e); border-color: var(--cv-folder-add-hover, #10c12e); }
+
+.ads-pro-asset-panel { min-width: 0; min-height: 0; position: relative; display: flex; flex-direction: column; background: #fff; border-radius: var(--pro-surface-radius); overflow: hidden; }
+.ads-pro-asset-panel:focus { outline: 0; }
+/* Toolbar is a flex ITEM of TWO different flex containers depending on
+   viewport (ads-check-adaccounts-workspace.tsx): desktop/wide renders it
+   inside .ads-pro-header-row (a ROW flex, shared with the asset tabs);
+   drawer/narrow (isDrawer, <=1180px) renders it inside .ads-pro-asset-panel
+   (a COLUMN flex, above the table) instead — its own pre-existing spot,
+   unrelated to the header-row redesign. flex:1 1 auto must ONLY apply in
+   the row context: in a column flex container flex-basis is HEIGHT, so the
+   same declaration made the toolbar grow to ~400px tall and swallow the
+   table at every width <=1180px (found via a real bounding-box diagnostic,
+   VIA Final Correction batch). Base rule now defaults to the safe
+   auto-height behavior; the header-row-specific selector below restores
+   the horizontal fill-remaining-width behavior only where it's actually a
+   row sibling of the asset tabs. */
+.ads-pro-toolbar {
+  flex: none;
+  min-width: 0;
+  padding: 4px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 5px;
+  /* Round 6 fix: at some width/state/asset combinations (e.g. 1440px,
+     state 11, an asset with a Folder panel) even the fully-compact
+     tier's content is a few dozen px wider than this flex item's own
+     rendered width. justify-content:flex-end then overflows LEFTWARD
+     past this box's own edge and into the asset-tabs row next to it
+     (confirmed via getBoundingClientRect — no overflow property was set
+     here before). Clipping to this box's own lane keeps the worst case
+     to "edge-clipped within the toolbar", never bleeding into a sibling. */
+  overflow: hidden;
+}
+.ads-pro-header-row > .ads-pro-toolbar { flex: 1 1 auto; }
+
+.ads-pro-toolbar button,
+.ads-pro-toolbar select,
+.ads-pro-toolbar input { font: inherit; }
+.ads-pro-toolbar-primary { flex: none; display: flex; align-items: center; gap: 5px; }
+.ads-pro-load-button {
+  min-height: 32px;
+  padding: 0 11px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border: 1px solid var(--cv-brand-border, #BFDBFE);
+  border-radius: 999px;
+  background: var(--cv-brand-soft, #EFF6FF);
+  color: var(--cv-brand-primary, #2563EB);
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  box-shadow: 0 2px 7px rgba(37, 99, 235, .08);
+  transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+.ads-pro-load-button:hover:not(:disabled) {
+  background: var(--cv-brand-primary, #2563EB);
+  color: #fff;
+  border-color: var(--cv-brand-primary, #2563EB);
+  box-shadow: 0 6px 16px rgba(37, 99, 235, .28);
+  transform: translateY(-1px);
+}
+.ads-pro-load-button:active:not(:disabled) {
+  background: var(--cv-brand-primary-active, #1E40AF);
+  border-color: var(--cv-brand-primary-active, #1E40AF);
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(30, 64, 175, .22);
+  transform: translateY(0);
+}
+.ads-pro-load-button:disabled {
+  background: #F1F5F9;
+  color: #94A3B8;
+  border-color: #E2E8F0;
+  box-shadow: none;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* "Cài đặt Control Hub" (VIA tab only — see loadLabel/`is-muted` in
+   ads-check-pro-shared-controls.tsx, exclusive to that button) — Control
+   Hub's OWN feature identity (purple → magenta/pink), deliberately NOT the
+   global AdsMeta blue brand. The base `.ads-pro-load-button` rule above
+   (soft-blue pill → solid blue on hover) still governs every OTHER tab's
+   own "Tải TK/BM/Page/Pixel" button — untouched, out of scope here. */
+.ads-pro-load-button.is-muted {
+  background: linear-gradient(135deg, #7C3AED 0%, #A855F7 48%, #EC4899 100%);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, .18);
+  box-shadow: 0 4px 12px rgba(168, 85, 247, .18);
+  transition: filter .15s ease, box-shadow .15s ease;
+}
+.ads-pro-load-button.is-muted:hover { filter: brightness(1.08); box-shadow: 0 6px 16px rgba(168, 85, 247, .26); }
+.ads-pro-load-button.is-muted:active { filter: brightness(.92); }
+.ads-pro-load-button.is-muted:focus-visible { box-shadow: 0 0 0 2px rgba(255, 255, 255, .85), 0 4px 12px rgba(168, 85, 247, .18); }
+/* Narrow toolbar tier — icon-only, matching production's own narrow-width
+   behavior (its text label v-if's away entirely, not just visually
+   clipped). Width must stay in sync with NARROW_PRIMARY_WIDTH_PX in
+   ads-check-pro-shared-controls.tsx (32px, same footprint as
+   .ads-pro-icon-button). */
+.ads-pro-load-button.is-icon-only { width: 32px; padding: 0; justify-content: center; }
+.ads-pro-icon-button,
+.ads-pro-mobile-panel-buttons button {
+  width: 32px;
+  height: 32px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  border: 1px solid transparent;
+  border-radius: 50%;
+  background: #fff;
+  color: #111b14;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, .08);
+  cursor: pointer;
+  transition: background-color .15s ease, border-color .15s ease, color .15s ease;
+}
+
+/* Generic toolbar icon button — hover/active/open/selected all follow the
+   ONE AdsMeta-blue brand system now (was hardcoded green). Semantic status
+   controls (success/warning/danger) are separate classes, never this
+   shared primitive, so they're untouched by this. */
+.ads-pro-icon-button:hover,
+.ads-pro-icon-button.is-active { color: var(--cv-brand-primary-hover, #1D4ED8); background: var(--cv-brand-soft, #EFF6FF); border-color: var(--cv-brand-border, #BFDBFE); }
+.ads-pro-search {
+  flex: 1 1 auto;
+  min-width: 120px;
+  max-width: 220px;
+  height: 32px;
+  padding: 0 11px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 999px;
+  background: #fff;
+  color: #161e18;
+}
+
+/* Hidden, permanently-mounted measurement clone for the width-based
+   compact/dropdown decision (useToolbarOverflow) — never toggles content,
+   so measuring it can never observe its own already-compacted output. */
+.ads-pro-toolbar-measure {
+  position: absolute;
+  visibility: hidden;
+  pointer-events: none;
+  left: -99999px;
+  top: -99999px;
+}
+
+/* width:max-content is required: as a plain block-level flex container,
+   width:auto would otherwise stretch each row to match its widest sibling
+   inside the shrink-to-fit .ads-pro-toolbar-measure parent (all 3 rows would
+   report the SAME width — that of whichever row has the most content —
+   silently breaking useToolbarOverflow's per-row measurements). */
+.ads-pro-toolbar-measure-row { width: max-content; display: flex; align-items: center; gap: 5px; white-space: nowrap; }
+
+.ads-pro-actions-menu-wrapper { position: relative; flex: none; }
+.ads-pro-actions-trigger {
+  min-height: 32px;
+  padding: 0 11px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border: 0;
+  border-radius: 999px;
+  background: #fff;
+  color: #111b14;
+  box-shadow: 0 1px 2px rgba(15, 60, 25, .08);
+  font-size: 11.5px;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.ads-pro-actions-trigger:hover,
+.ads-pro-actions-trigger[aria-expanded="true"] { color: var(--cv-brand-primary-hover, #1D4ED8); background: var(--cv-brand-soft, #EFF6FF); }
+
+/* Portaled to document.body (see AdsProActionsMenu) — position:fixed with
+   top/right set inline from the trigger's own measured rect, so this no
+   longer depends on (or gets clipped by) the toolbar's overflow:hidden. */
+.ads-pro-actions-menu {
+  min-width: 180px;
+  padding: 6px;
+  position: fixed;
+  z-index: 30;
+  display: grid;
+  gap: 2px;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 16px 32px rgba(15, 60, 25, .16);
+}
+
+.ads-pro-actions-menu-item {
+  min-height: 40px;
+  padding: 4px 6px;
+  display: flex;
+  align-items: center;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.ads-pro-actions-menu-item:hover { background: #EFF6FF; }
+.ads-pro-actions-menu-item .ads-pro-icon-button,
+.ads-pro-actions-menu-item .ads-pro-load-button { box-shadow: none; }
+
+.ads-pro-search input { min-width: 0; width: 100%; border: 0; outline: 0; background: transparent; color: #1b241d; font-size: 12.5px; }
+.ads-pro-search input::placeholder { color: #969d97; }
+.ads-pro-mix select {
+  height: 32px;
+  min-width: 78px;
+  padding: 0 26px 0 12px;
+  border: 0;
+  border-radius: 999px;
+  outline: 0;
+  background: #fff;
+  color: #1b241d;
+  font-size: 11.5px;
+}
+
+.ads-pro-mobile-panel-buttons { display: none; }
+
+.ads-pro-load-button svg,
+.ads-pro-icon-button svg,
+.ads-pro-mobile-panel-buttons svg,
+.ads-pro-search > svg { width: 15px; height: 15px; }
+.ads-pro-workspace button:focus-visible,
+.ads-pro-workspace input:focus-visible,
+.ads-pro-workspace select:focus-visible,
+.ads-pro-workspace textarea:focus-visible { outline: 3px solid var(--cv-brand-focus-soft, #DBEAFE); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ads-asset-tabs button { transition: none; }
+}
+
+@media (min-width: 1181px) {
+  .ads-pro-workspace { position: relative; }
+  /* Grid-area only for placement — the outer workspace grid's column track
+     sizes these (grid items stretch to fill their area in both axes by
+     default, which is exactly what gives them Curve B's full vertical
+     extent for free). margin-left:4px is the Curve-B/prior-panel gap: the
+     track itself is widened by the same 4px (see has-function-panel etc.),
+     so this margin comes out of the TRACK, not the panel's own 300/360px
+     width — and it never re-applies between the panel and the right shell,
+     which gets no margin, keeping that boundary flush as before.
+     position:relative + z-index:10 is required now that these are direct
+     siblings of the absolutely-positioned z-index:0 SVG surface (they used
+     to be nested inside .ads-pro-workspace-body, which carried z-index:10
+     itself and so painted its non-positioned children above the SVG for
+     free) — without it these panels are non-positioned and would paint
+     BELOW the SVG's z-index:0 stacking context, i.e. invisible. */
+  .ads-function-library.is-open,
+  .ads-workflow-panel.is-open { margin-left: 4px; position: relative; z-index: 10; }
+  .ads-function-library.is-open { grid-area: function; }
+  .ads-workflow-panel.is-open { grid-area: workflow; }
+  /* Reopen rail — socketed INTO Curve C's own indentation (see
+     ads-check-shell-curve-geometry.ts): top/left are computed in JS purely
+     from the host shell's rect (.ads-workspace) + Curve C's fixed viewBox
+     anchors, applied here as inline style — no CSS top/right of its own, no
+     viewport-derived value. Buttons are individually backgrounded pills
+     (42x64, dark navy/AdsMeta-blue translucent, border-radius:999px) —
+     there is no shared dark rail/shell box; Curve C itself is the real
+     host-shell SVG path one level up (AdsCheckShellCurve). Both buttons
+     (Function/grid + Workflow/folder) share ONE color system — they only
+     ever differ by which is currently rendered (each is a "reopen" button,
+     shown only while its own panel is closed), never by a separate
+     hardcoded palette. */
+  .ads-pro-panel-rail {
+    position: fixed;
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .ads-pro-panel-rail button {
+    width: 42px;
+    height: 64px;
+    display: flex;
+    flex-direction: column;
+    place-content: center;
+    align-items: center;
+    gap: 8px;
+    padding: 12px;
+    border: 1px solid rgba(96, 165, 250, .28);
+    border-radius: 999px;
+    background: rgba(11, 31, 58, .72);
+    color: #60A5FA;
+    cursor: pointer;
+    transition: background-color 160ms ease, border-color 160ms ease;
+  }
+  .ads-pro-panel-rail button:hover { background: rgba(37, 99, 235, .4); border-color: rgba(96, 165, 250, .5); }
+  .ads-pro-panel-rail button:active { background: rgba(29, 78, 216, .62); border-color: rgba(147, 197, 253, .6); }
+}
+
+@media (min-width: 1181px) and (max-width: 1450px) {
+  .ads-pro-workspace.has-folder-panel .ads-pro-main-region { grid-template-columns: 142px minmax(0, 1fr); }
+  .ads-pro-workspace.has-function-panel:not(.has-workflow-panel) { grid-template-columns: minmax(0, 1fr) 274px; }
+  .ads-pro-workspace.has-function-panel.has-workflow-panel { grid-template-columns: minmax(0, 1fr) 254px 284px; }
+  .ads-pro-workspace.has-workflow-panel:not(.has-function-panel) { grid-template-columns: minmax(0, 1fr) 284px; }
+}
+
+/* Refresh loading — CORRECTION x2: now scoped to the WHOLE workspace
+   (.ads-pro-workspace — tabs row + toolbar/Aa + folder panel + table +
+   pagination), never just the table panel and never the viewport. The
+   wrapper is positioned relative to .ads-pro-workspace itself (already
+   position:relative); the outer rounded-corner clip comes for free from
+   .ads-main-panel (its ancestor, already overflow:hidden;border-radius),
+   so no separate radius/clip-path is needed here.
+   z-index 25 — must clear every other LOCALLY-positioned (non-fixed)
+   element inside the workspace: .ads-pro-header-row=20 (tabs/toolbar),
+   .ads-pro-workspace-body=10, .ads-pro-selection-bar=12, sticky table
+   ths=2/3/4 — so the loading surface truly covers tabs/toolbar/folder/
+   table/pagination, not just most of them. (Fixed-position layers like
+   .ads-pro-actions-menu/.ads-pro-panel-rail/tag-picker are portaled to
+   document.body and escape this stacking context entirely — unaffected
+   either way.) */
+.ads-pro-refresh-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 25;
+  width: 100%;
+  height: 100%;
+}
+
+/* Notification-required panel — auto-opens once per genuine Ads Check Pro
+   entry (see the mount-only useEffect in AdsCheckAdAccountsWorkspace).
+   Category B (AdsProModalBackdrop, no backdrop-dismiss), same shared modal
+   infra as every other dialog in this app. Surface stays neutral/white;
+   theme shows only through the step-number badges/CTA (brand blue) — no
+   raster screenshot anywhere, the 2 "steps" are plain CSS/icon diagrams,
+   explicitly labelled as illustrative. */
+.ads-notif-required-modal {
+  width: min(480px, 92vw);
+  max-height: 88vh;
+  padding: 26px 26px 24px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  overflow-y: auto;
+  border: 1px solid #E2E8F0;
+  border-radius: 22px;
+  background: #fff;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, .3);
+  color: #17281b;
+}
+.ads-notif-required-close { width: 30px; height: 30px; position: absolute; right: 14px; top: 14px; display: grid; place-items: center; border: 0; border-radius: 50%; background: #F1F5F9; color: #475569; cursor: pointer; }
+.ads-notif-required-close:hover { background: #E2E8F0; }
+.ads-notif-required-badge { align-self: flex-start; flex: none; width: fit-content; padding: 5px 11px; display: inline-flex; align-items: center; gap: 6px; border-radius: 999px; color: var(--cv-brand-primary-hover, #1D4ED8); background: var(--cv-brand-icon-badge-bg, #DBEAFE); font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .03em; }
+.ads-notif-required-modal h2 { margin: 2px 0 0; font-size: 18px; font-weight: 700; line-height: 1.35; color: #0F172A; }
+.ads-notif-required-lead { margin: 0; color: #475569; font-size: 12.5px; line-height: 1.6; }
+.ads-notif-required-steps { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.ads-notif-required-step { padding: 14px; display: grid; gap: 10px; border: 1px solid #E2E8F0; border-radius: 16px; background: #F8FAFC; }
+.ads-notif-required-step-number { width: 24px; height: 24px; display: grid; place-items: center; border-radius: 50%; background: var(--cv-brand-primary, #2563EB); color: #fff; font-size: 12px; font-weight: 700; }
+.ads-notif-required-step-art { min-height: 64px; padding: 10px; display: grid; place-items: center; border: 1px solid var(--cv-brand-border, #BFDBFE); border-radius: 12px; background: var(--cv-brand-soft, #EFF6FF); }
+.ads-notif-required-step p { margin: 0; color: #334155; font-size: 11.5px; line-height: 1.5; }
+.ads-notif-required-browser-chrome { width: 100%; padding: 6px 8px; display: flex; align-items: center; gap: 5px; border-radius: 8px; background: #fff; box-shadow: 0 1px 3px rgba(15, 23, 42, .1); }
+.ads-notif-required-browser-chrome i { width: 6px; height: 6px; border-radius: 50%; background: #CBD5E1; }
+.ads-notif-required-address-bar { min-width: 0; flex: 1; height: 18px; margin-left: 4px; display: grid; place-items: center; border-radius: 999px; background: var(--cv-brand-icon-badge-bg, #DBEAFE); color: var(--cv-brand-primary-hover, #1D4ED8); }
+.ads-notif-required-toggle-row { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 11.5px; color: #334155; font-weight: 600; }
+.ads-notif-required-toggle { width: 32px; height: 18px; flex: none; position: relative; display: block; border-radius: 999px; background: #CBD5E1; }
+.ads-notif-required-toggle em { position: absolute; top: 2px; left: 2px; width: 14px; height: 14px; border-radius: 50%; background: #fff; font-style: normal; }
+.ads-notif-required-toggle.is-on { background: var(--cv-brand-primary, #2563EB); }
+.ads-notif-required-toggle.is-on em { left: 16px; }
+.ads-notif-required-note { margin: 0; color: #94A3B8; font-size: 10px; line-height: 1.5; font-style: italic; }
+.ads-notif-required-done { width: 100%; min-height: 44px; margin-top: 4px; display: flex; align-items: center; justify-content: center; gap: 7px; border: 0; border-radius: 999px; background: var(--cv-brand-primary, #2563EB); color: #fff; font-size: 13px; font-weight: 700; cursor: pointer; transition: background-color .15s ease; }
+.ads-notif-required-done:hover { background: var(--cv-brand-primary-hover, #1D4ED8); }
+.ads-notif-required-done:active { background: var(--cv-brand-primary-active, #1E40AF); }
+.ads-notif-required-done:focus-visible { outline: 3px solid var(--cv-brand-focus-soft, #DBEAFE); outline-offset: 2px; }
+
+@media (max-width: 480px) {
+  .ads-notif-required-steps { grid-template-columns: 1fr; }
+}
+
+/* Control Hub setup — Step 1 ("Tôn chỉ của Adscheck"), opened from the VIA
+   tab's own "Cài đặt Control Hub" button (ads-check-pro-shared-controls.tsx
+   loadButton, distinct from the sidebar nav-icon's separate onboarding
+   modal). Reference screenshot's highlight/CTA was legacy green — AdsMeta
+   blue throughout here instead, same tokens/neutrals as every other
+   ads-check-pro modal (.ads-notif-required-modal etc). */
+.ads-charter-modal {
+  width: min(560px, 92vw);
+  max-height: 88vh;
+  padding: 26px 26px 20px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  border: 1px solid #E2E8F0;
+  border-radius: 22px;
+  background: #fff;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, .3);
+  color: #334155;
+}
+.ads-charter-close { width: 30px; height: 30px; position: absolute; right: 14px; top: 14px; display: grid; place-items: center; border: 0; border-radius: 50%; background: #F1F5F9; color: #475569; cursor: pointer; }
+.ads-charter-close:hover { background: #E2E8F0; }
+.ads-charter-close:focus-visible { outline: 3px solid var(--cv-brand-focus-soft, #DBEAFE); outline-offset: 2px; }
+.ads-charter-title { margin: 4px 32px 0; text-align: center; font-size: 19px; font-weight: 700; color: #0F172A; }
+.ads-charter-body { min-height: 0; overflow-y: auto; padding-right: 4px; display: flex; flex-direction: column; gap: 12px; font-size: 13.5px; line-height: 1.65; }
+.ads-charter-body p { margin: 0; }
+.ads-charter-lead { font-weight: 700; color: #0F172A; }
+.ads-charter-highlight { color: var(--cv-brand-primary-hover, #1D4ED8); font-weight: 700; }
+.ads-charter-list { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.ads-charter-list li { padding-left: 18px; position: relative; }
+.ads-charter-list li::before { content: ''; position: absolute; left: 0; top: 9px; width: 6px; height: 6px; border-radius: 999px; background: var(--cv-brand-primary, #2563EB); }
+.ads-charter-callout { margin: 4px 0; padding: 14px 16px; border-radius: 14px; background: var(--cv-brand-soft, #EFF6FF); border: 1px solid var(--cv-brand-border, #BFDBFE); }
+.ads-charter-callout p { font-weight: 700; color: #1E3A8A; }
+.ads-charter-callout p + p { margin-top: 2px; }
+.ads-charter-closing { text-align: center; font-weight: 700; font-size: 14.5px; color: #0F172A; }
+.ads-charter-footer { flex: none; padding-top: 4px; }
+.ads-charter-cta {
+  width: 100%;
+  height: 46px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--cv-brand-primary, #2563EB);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(37, 99, 235, .28);
+  transition: background-color 160ms ease, box-shadow 160ms ease;
+}
+.ads-charter-cta:hover:not(:disabled) { background: var(--cv-brand-primary-hover, #1D4ED8); }
+.ads-charter-cta:active:not(:disabled) { background: var(--cv-brand-primary-active, #1E40AF); box-shadow: 0 4px 10px rgba(30, 64, 175, .24); }
+.ads-charter-cta:focus-visible { outline: 3px solid var(--cv-brand-focus-soft, #DBEAFE); outline-offset: 2px; }
+.ads-charter-cta:disabled { background: #E2E8F0; color: #94A3B8; box-shadow: none; cursor: not-allowed; }
+
+@media (max-width: 480px) {
+  .ads-charter-modal { width: min(94vw, 480px); padding: 22px 18px 16px; }
+  .ads-charter-title { font-size: 17px; }
+}
+
+/* Control Hub setup — Step 2 ("Cơ chế bảo mật của Control Hub"). Wider than
+   Step 1, subtle-blue surface (not plain white) per the reference
+   screenshot's density/geometry — brand accents (badges/checkbox/primary
+   CTA) are AdsMeta blue; the warning card stays semantic yellow/orange
+   (never brand-tokenized — this is a real safety warning, not a brand
+   accent). */
+.ads-security-modal {
+  width: min(640px, 92vw);
+  max-height: 88vh;
+  padding: 28px 28px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  border: 1px solid var(--cv-brand-border, #BFDBFE);
+  border-radius: 20px;
+  background: var(--cv-brand-soft, #EFF6FF);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, .3);
+  color: #334155;
+}
+.ads-security-title { margin: 0; text-align: center; font-size: 19px; font-weight: 700; color: #0F172A; }
+.ads-security-body { min-height: 0; overflow-y: auto; padding-right: 4px; display: flex; flex-direction: column; gap: 14px; font-size: 13px; line-height: 1.6; }
+.ads-security-lead { margin: 0; }
+.ads-security-card { position: relative; padding: 16px 18px 16px 20px; display: flex; flex-direction: column; gap: 8px; border-radius: 16px; background: #fff; border: 1px solid #E2E8F0; }
+.ads-security-badge { width: 26px; height: 26px; flex: none; display: grid; place-items: center; border-radius: 50%; background: var(--cv-brand-primary, #2563EB); color: #fff; font-size: 13px; font-weight: 700; }
+.ads-security-card h3 { margin: 2px 0 0; font-size: 14px; font-weight: 700; color: #0F172A; }
+.ads-security-card p { margin: 0; }
+.ads-security-card p strong { color: var(--cv-brand-primary-hover, #1D4ED8); }
+
+.ads-security-warning { padding: 14px 16px; display: flex; flex-direction: column; gap: 6px; border-radius: 16px; background: #FFFBEB; border: 1px solid #FDE68A; }
+.ads-security-warning h3 { margin: 0; font-size: 13.5px; font-weight: 700; color: #92400E; }
+.ads-security-warning p { margin: 0; color: #78350F; }
+
+.ads-security-ack { display: flex; align-items: flex-start; gap: 10px; padding: 2px 2px 0; font-size: 12.5px; cursor: pointer; }
+.ads-security-ack input { margin-top: 2px; width: 18px; height: 18px; flex: none; accent-color: var(--cv-brand-primary, #2563EB); cursor: pointer; }
+
+.ads-security-footer { flex: none; display: flex; gap: 10px; padding-top: 6px; }
+.ads-security-defer { flex: 0 0 auto; height: 46px; padding: 0 20px; border: 1px solid #CBD5E1; border-radius: 999px; background: #fff; color: #334155; font-size: 13.5px; font-weight: 600; cursor: pointer; }
+.ads-security-defer:hover { background: #F1F5F9; }
+.ads-security-defer:focus-visible { outline: 3px solid var(--cv-brand-focus-soft, #DBEAFE); outline-offset: 2px; }
+.ads-security-cta {
+  flex: 1 1 auto;
+  height: 46px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--cv-brand-primary, #2563EB);
+  color: #fff;
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(37, 99, 235, .28);
+  transition: background-color 160ms ease, box-shadow 160ms ease;
+}
+.ads-security-cta:hover:not(:disabled) { background: var(--cv-brand-primary-hover, #1D4ED8); }
+.ads-security-cta:active:not(:disabled) { background: var(--cv-brand-primary-active, #1E40AF); box-shadow: 0 4px 10px rgba(30, 64, 175, .24); }
+.ads-security-cta:focus-visible { outline: 3px solid var(--cv-brand-focus-soft, #DBEAFE); outline-offset: 2px; }
+.ads-security-cta:disabled { background: #CBD5E1; color: #F1F5F9; box-shadow: none; cursor: not-allowed; opacity: .75; }
+
+@media (max-width: 480px) {
+  .ads-security-modal { width: min(94vw, 480px); padding: 22px 18px 16px; }
+  .ads-security-footer { flex-direction: column-reverse; }
+  .ads-security-defer { width: 100%; }
+}
+
+/* Deferred-setup warning — shown after "Thiết lập sau"/ESC on Step 2. Not a
+   Dialog: no backdrop, small, anchored bottom-right of the viewport (toast-
+   style) so it never covers/blocks the module underneath. z-index stays
+   BELOW .ads-advanced-filter-backdrop (50, the shared modal-backdrop
+   z-index) so a centered modal — should one ever open while this toast is
+   still visible — always stacks above it. Semantic yellow/orange,
+   deliberately NOT brand-tokenized (a real warning, not a themeable brand
+   surface). */
+.ads-security-deferred-warning {
+  position: fixed;
+  z-index: 45;
+  right: 24px;
+  bottom: 24px;
+  width: min(360px, calc(100vw - 24px));
+  padding: 12px 32px 12px 14px;
+  display: flex;
+  gap: 10px;
+  border-radius: 14px;
+  background: #FFFBEB;
+  border: 1px solid #FDE68A;
+  box-shadow: 0 16px 32px rgba(120, 53, 15, .16);
+  color: #78350F;
+}
+.ads-security-deferred-warning-icon { flex: none; margin-top: 2px; color: #B45309; }
+.ads-security-deferred-warning-copy { display: flex; flex-direction: column; gap: 4px; font-size: 12.5px; line-height: 1.5; }
+.ads-security-deferred-warning-copy strong { font-size: 13px; color: #92400E; }
+.ads-security-deferred-warning-copy p { margin: 0; }
+.ads-security-deferred-warning > button { position: absolute; right: 8px; top: 8px; width: 22px; height: 22px; display: grid; place-items: center; border: 0; border-radius: 50%; background: transparent; color: #92400E; cursor: pointer; }
+.ads-security-deferred-warning > button:hover { background: rgba(180, 83, 9, .12); }
+.ads-security-deferred-warning > button:focus-visible { outline: 2px solid #B45309; outline-offset: 1px; }
+
+@media (max-width: 480px) {
+  .ads-security-deferred-warning { right: 12px; bottom: 12px; max-width: calc(100vw - 24px); }
+}
+
+/* Control Hub setup — Step 3 ("Tạo mật khẩu mã hóa Control Hub"). Same
+   soft-blue outer surface + white inner cards as Step 2. Brand (AdsMeta
+   blue): stepper active state, badges, focus rings, primary CTA. Semantic
+   (never brand-tokenized): validation rules (red/green) and the warning
+   card (yellow/orange). */
+.ads-cred-modal {
+  width: min(680px, 92vw);
+  max-height: 90vh;
+  padding: 26px 28px 20px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  border: 1px solid var(--cv-brand-border, #BFDBFE);
+  border-radius: 20px;
+  background: var(--cv-brand-soft, #EFF6FF);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, .3);
+  color: #334155;
+}
+.ads-cred-close { width: 30px; height: 30px; position: absolute; right: 14px; top: 14px; display: grid; place-items: center; border: 0; border-radius: 50%; background: #F1F5F9; color: #475569; cursor: pointer; }
+.ads-cred-close:hover { background: #E2E8F0; }
+.ads-cred-close:focus-visible { outline: 3px solid var(--cv-brand-focus-soft, #DBEAFE); outline-offset: 2px; }
+.ads-cred-modal-content { min-height: 0; display: flex; flex-direction: column; gap: 14px; }
+.ads-cred-modal-content.is-dimmed { filter: blur(4px); opacity: .55; pointer-events: none; transition: filter 160ms ease, opacity 160ms ease; }
+.ads-cred-title { margin: 4px 32px 0; text-align: center; font-size: 18px; font-weight: 700; color: #0F172A; }
+.ads-cred-title-row { margin: 4px 32px 0; display: flex; align-items: center; justify-content: center; gap: 8px; color: var(--cv-brand-primary, #2563EB); }
+.ads-cred-title-inline { margin: 0; font-size: 18px; font-weight: 700; color: #0F172A; }
+
+.ads-cred-stepper { margin: 0; padding: 0; list-style: none; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 12.5px; color: #94A3B8; }
+.ads-cred-stepper li { display: flex; align-items: center; gap: 6px; }
+.ads-cred-stepper li.is-active { color: #0F172A; font-weight: 700; }
+.ads-cred-stepper li.is-completed { color: #64748B; }
+.ads-cred-stepper-badge { width: 20px; height: 20px; flex: none; display: grid; place-items: center; border-radius: 50%; background: #E2E8F0; color: #64748B; font-size: 11px; font-weight: 700; }
+.ads-cred-stepper li.is-active .ads-cred-stepper-badge { background: var(--cv-brand-primary, #2563EB); color: #fff; }
+.ads-cred-stepper li.is-completed .ads-cred-stepper-badge { background: var(--cv-brand-soft, #EFF6FF); color: var(--cv-brand-primary-hover, #1D4ED8); }
+.ads-cred-stepper-sep { color: #CBD5E1; }
+
+.ads-cred-body { min-height: 0; overflow-y: auto; padding-right: 4px; display: flex; flex-direction: column; gap: 14px; font-size: 13px; line-height: 1.6; }
+.ads-cred-info-card { padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; border-radius: 16px; background: #fff; border: 1px solid #E2E8F0; }
+.ads-cred-info-card > p { margin: 0; display: flex; align-items: flex-start; gap: 8px; }
+.ads-cred-info-badge { width: 20px; height: 20px; flex: none; margin-top: 1px; display: grid; place-items: center; border-radius: 50%; background: var(--cv-brand-soft, #EFF6FF); color: var(--cv-brand-primary-hover, #1D4ED8); font-size: 11px; font-weight: 700; }
+.ads-cred-info-card h3 { margin: 0; font-size: 13.5px; font-weight: 700; color: #0F172A; }
+.ads-cred-info-card ul { margin: 0; padding: 0 0 0 18px; display: flex; flex-direction: column; gap: 4px; }
+.ads-cred-info-card li { color: #334155; }
+.ads-cred-info-note { margin: 2px 0 0; font-style: italic; color: #64748B; font-size: 12.5px; }
+
+.ads-cred-form { padding: 14px 16px; display: flex; flex-direction: column; gap: 12px; border-radius: 16px; background: #fff; border: 1px solid #E2E8F0; }
+.ads-cred-field { display: flex; flex-direction: column; gap: 6px; }
+.ads-cred-field-label { font-size: 12.5px; font-weight: 600; color: #334155; }
+.ads-cred-field-control { height: 42px; padding: 0 6px 0 16px; position: relative; display: flex; align-items: center; border: 1px solid #CBD5E1; border-radius: 999px; background: #fff; transition: border-color 160ms ease, box-shadow 160ms ease; }
+.ads-cred-field-control:focus-within { border-color: var(--cv-brand-primary, #2563EB); box-shadow: 0 0 0 3px var(--cv-brand-focus-soft, #DBEAFE); }
+.ads-cred-field-control input { flex: 1; min-width: 0; height: 100%; border: 0; outline: 0; background: transparent; color: #0F172A; font: inherit; font-size: 13px; }
+.ads-cred-field-control input::placeholder { color: #94A3B8; }
+.ads-cred-field-eye { width: 30px; height: 30px; flex: none; display: grid; place-items: center; border: 0; border-radius: 50%; background: transparent; color: #64748B; cursor: pointer; }
+.ads-cred-field-eye:hover { background: var(--cv-brand-soft, #EFF6FF); color: var(--cv-brand-primary-hover, #1D4ED8); }
+.ads-cred-field-eye:focus-visible { outline: 2px solid var(--cv-brand-primary, #2563EB); outline-offset: 1px; }
+
+.ads-cred-rules { margin: -2px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 4px; font-size: 12px; }
+.ads-cred-rules li { display: flex; align-items: center; gap: 6px; }
+.ads-cred-rules li svg { flex: none; }
+.ads-cred-rules li.is-unmet { color: #DC2626; }
+.ads-cred-rules li.is-met { color: #16A34A; }
+.ads-cred-mismatch { margin: -4px 0 0; color: #DC2626; font-size: 12px; }
+
+.ads-cred-warning { padding: 14px 16px; display: flex; flex-direction: column; gap: 6px; border-radius: 16px; background: #FFFBEB; border: 1px solid #FDE68A; }
+.ads-cred-warning h3 { margin: 0; font-size: 13.5px; font-weight: 700; color: #92400E; }
+.ads-cred-warning p { margin: 0; color: #78350F; }
+
+.ads-cred-radio-card { padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; border-radius: 16px; background: #fff; border: 1px solid #E2E8F0; }
+.ads-cred-radio-card h3 { margin: 0; font-size: 13.5px; font-weight: 700; color: #0F172A; }
+.ads-cred-radio-row { display: flex; align-items: flex-start; gap: 10px; padding: 10px 12px; border: 1px solid #E2E8F0; border-radius: 12px; cursor: pointer; transition: border-color 160ms ease, background-color 160ms ease; }
+.ads-cred-radio-row:hover { background: var(--cv-brand-soft, #EFF6FF); }
+.ads-cred-radio-row.is-selected { border-color: var(--cv-brand-primary, #2563EB); background: var(--cv-brand-soft, #EFF6FF); }
+.ads-cred-radio-row:focus-within { outline: 3px solid var(--cv-brand-focus-soft, #DBEAFE); outline-offset: 2px; }
+.ads-cred-radio-row input[type="radio"] { margin-top: 2px; width: 18px; height: 18px; flex: none; accent-color: var(--cv-brand-primary, #2563EB); cursor: pointer; }
+.ads-cred-radio-copy { display: flex; flex-direction: column; gap: 2px; }
+.ads-cred-radio-copy strong { font-size: 13px; color: #0F172A; }
+.ads-cred-radio-row.is-selected .ads-cred-radio-copy strong { color: var(--cv-brand-primary-hover, #1D4ED8); }
+.ads-cred-radio-copy small { font-size: 12px; line-height: 1.5; color: #64748B; }
+
+/* Authenticator setup (QR + secret) — same white-card/blue-badge language
+   as the rest of this modal. The QR is a deterministic decorative pattern
+   (see AdsControlHubAuthenticatorQr), never a real scannable code — labeled
+   "Minh họa" the same way Billing's own QR placeholder is. */
+.ads-cred-auth-card { padding: 18px 16px; display: flex; flex-direction: column; align-items: center; gap: 14px; border-radius: 16px; background: #fff; border: 1px solid #E2E8F0; }
+.ads-cred-auth-icon { width: 44px; height: 44px; display: grid; place-items: center; border-radius: 50%; background: var(--cv-brand-soft, #EFF6FF); color: var(--cv-brand-primary, #2563EB); }
+.ads-cred-auth-card > h3 { margin: -6px 0 0; font-size: 15px; font-weight: 700; color: #0F172A; }
+.ads-cred-auth-step { width: 100%; display: flex; align-items: flex-start; gap: 12px; text-align: left; }
+.ads-cred-auth-step-badge { width: 24px; height: 24px; flex: none; display: grid; place-items: center; border-radius: 50%; background: var(--cv-brand-primary, #2563EB); color: #fff; font-size: 12px; font-weight: 700; }
+.ads-cred-auth-step > div { min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.ads-cred-auth-step strong { font-size: 13px; color: #0F172A; }
+.ads-cred-auth-step p { margin: 0; font-size: 12.5px; line-height: 1.55; color: #64748B; }
+
+.ads-cred-qr-wrap { margin: 6px 0; padding: 14px; display: grid; place-items: center; border-radius: 14px; background: #F8FAFC; border: 1px solid #E2E8F0; }
+.ads-cred-qr { width: 148px; position: relative; display: grid; gap: 6px; }
+.ads-cred-qr-grid { display: grid; grid-template-columns: repeat(13, 1fr); gap: 1px; padding: 8px; border: 1px solid #E2E8F0; border-radius: 10px; background: #fff; }
+.ads-cred-qr-grid span { aspect-ratio: 1; background: #fff; }
+.ads-cred-qr-grid span[data-on] { background: #0F172A; }
+.ads-cred-qr-badge { padding: 3px 10px; justify-self: center; border-radius: 999px; background: var(--cv-brand-soft, #EFF6FF); color: var(--cv-brand-primary-hover, #1D4ED8); font-size: 9px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
+
+.ads-cred-secret-row { width: 100%; max-width: 100%; padding: 4px 4px 4px 16px; display: flex; align-items: center; gap: 8px; border: 1px solid #CBD5E1; border-radius: 999px; background: #F8FAFC; }
+.ads-cred-secret-value { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: ui-monospace, "SFMono-Regular", Menlo, monospace; font-size: 12.5px; letter-spacing: .02em; color: #0F172A; }
+.ads-cred-secret-copy { width: 32px; height: 32px; flex: none; display: grid; place-items: center; border: 0; border-radius: 50%; background: #fff; color: #475569; cursor: pointer; box-shadow: 0 1px 2px rgba(15, 23, 42, .1); }
+.ads-cred-secret-copy:hover { background: var(--cv-brand-soft, #EFF6FF); color: var(--cv-brand-primary-hover, #1D4ED8); }
+.ads-cred-secret-copy:focus-visible { outline: 3px solid var(--cv-brand-focus-soft, #DBEAFE); outline-offset: 2px; }
+
+.ads-cred-footer { flex: none; display: flex; justify-content: flex-end; gap: 10px; padding-top: 4px; }
+.ads-cred-back { height: 44px; padding: 0 22px; border: 1px solid #CBD5E1; border-radius: 999px; background: #fff; color: #334155; font-size: 13.5px; font-weight: 600; cursor: pointer; }
+.ads-cred-back:hover { background: #F1F5F9; }
+.ads-cred-back:focus-visible { outline: 3px solid var(--cv-brand-focus-soft, #DBEAFE); outline-offset: 2px; }
+.ads-cred-cta {
+  height: 44px;
+  padding: 0 26px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--cv-brand-primary, #2563EB);
+  color: #fff;
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(37, 99, 235, .28);
+  transition: background-color 160ms ease, box-shadow 160ms ease;
+}
+.ads-cred-cta:hover:not(:disabled) { background: var(--cv-brand-primary-hover, #1D4ED8); }
+.ads-cred-cta:active:not(:disabled) { background: var(--cv-brand-primary-active, #1E40AF); box-shadow: 0 4px 10px rgba(30, 64, 175, .24); }
+.ads-cred-cta:focus-visible { outline: 3px solid var(--cv-brand-focus-soft, #DBEAFE); outline-offset: 2px; }
+.ads-cred-cta:disabled { background: #CBD5E1; color: #F1F5F9; box-shadow: none; cursor: not-allowed; opacity: .75; }
+
+@media (max-width: 560px) {
+  .ads-cred-modal { width: min(94vw, 480px); padding: 22px 18px 16px; }
+  .ads-cred-footer { flex-direction: column-reverse; }
+  .ads-cred-back, .ads-cred-cta { width: 100%; }
+}
+
+/* OTP verify overlay — nested ON TOP of Authenticator Setup (never
+   replaces it; see .ads-cred-modal-content.is-dimmed above for the
+   dimmed/blurred/inert background treatment). Compact, crisp, its own
+   z-index above the shared modal-backdrop (50) but comfortably below the
+   app's destructive/local-dialog layers (120/150). */
+.ads-otp-layer { position: fixed; z-index: 70; inset: 0; display: grid; place-items: center; padding: 16px; pointer-events: none; }
+.ads-otp-modal {
+  width: min(370px, calc(100vw - 24px));
+  padding: 20px 22px 18px;
+  pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  border: 1px solid #E2E8F0;
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, .28);
+  color: #334155;
+}
+.ads-otp-title-row { display: flex; align-items: center; gap: 8px; color: var(--cv-brand-primary, #2563EB); }
+.ads-otp-title-row h3 { margin: 0; font-size: 15px; font-weight: 700; color: #0F172A; }
+.ads-otp-warning { margin: 0; padding: 10px 12px; border-radius: 12px; background: #FFFBEB; border: 1px solid #FDE68A; color: #78350F; font-size: 12px; line-height: 1.5; }
+/* Failure state — semantic red, same compact card size/position as the
+   yellow instruction card above (never a giant panel), swapped in only
+   while phase === 'failed'. */
+.ads-otp-error { margin: 0; padding: 10px 12px; display: flex; flex-direction: column; gap: 4px; border-radius: 12px; background: #FEF2F2; border: 1px solid #FECACA; color: #991B1B; font-size: 12px; line-height: 1.5; }
+.ads-otp-error p { margin: 0; }
+.ads-otp-error p:first-child { display: flex; align-items: center; gap: 6px; font-weight: 700; }
+.ads-otp-cells { display: flex; justify-content: space-between; gap: 6px; }
+.ads-otp-cells input {
+  width: 100%;
+  max-width: 46px;
+  height: 50px;
+  border: 1px solid #CBD5E1;
+  border-radius: 12px;
+  background: #F8FAFC;
+  color: #0F172A;
+  font-size: 18px;
+  font-weight: 700;
+  text-align: center;
+  transition: border-color 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
+}
+.ads-otp-cells input:focus { outline: 0; border-color: var(--cv-brand-primary, #2563EB); background: #fff; box-shadow: 0 0 0 3px var(--cv-brand-focus-soft, #DBEAFE); }
+.ads-otp-cells input:disabled { background: #F1F5F9; color: #94A3B8; cursor: not-allowed; }
+.ads-otp-footer { display: flex; justify-content: flex-end; gap: 10px; }
+.ads-otp-cancel { height: 40px; padding: 0 18px; border: 1px solid #CBD5E1; border-radius: 999px; background: #fff; color: #334155; font-size: 13px; font-weight: 600; cursor: pointer; }
+.ads-otp-cancel:disabled { color: #CBD5E1; cursor: not-allowed; }
+.ads-otp-cancel:hover { background: #F1F5F9; }
+.ads-otp-cancel:focus-visible { outline: 3px solid var(--cv-brand-focus-soft, #DBEAFE); outline-offset: 2px; }
+.ads-otp-confirm {
+  height: 40px;
+  min-width: 122px;
+  padding: 0 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--cv-brand-primary, #2563EB);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(37, 99, 235, .26);
+  transition: background-color 160ms ease;
+}
+.ads-otp-confirm:hover:not(:disabled) { background: var(--cv-brand-primary-hover, #1D4ED8); }
+.ads-otp-confirm:active:not(:disabled) { background: var(--cv-brand-primary-active, #1E40AF); }
+.ads-otp-confirm:focus-visible { outline: 3px solid var(--cv-brand-focus-soft, #DBEAFE); outline-offset: 2px; }
+.ads-otp-confirm:disabled { background: #CBD5E1; color: #F1F5F9; box-shadow: none; cursor: not-allowed; opacity: .75; }
+
+@media (max-width: 420px) {
+  .ads-otp-modal { padding: 18px 16px 16px; }
+  .ads-otp-cells input { height: 44px; font-size: 16px; }
+}
+
+/* Control Hub setup — final success screen (demo verify, 2nd attempt).
+   Illustration/check keeps semantic success green on purpose (a real
+   success indicator, not a brand surface); the primary CTA stays AdsMeta
+   blue like every other brand control in this flow. */
+.ads-security-success-modal {
+  width: min(400px, 92vw);
+  padding: 28px 26px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, .3);
+  color: #334155;
+}
+.ads-security-success-icon { width: 56px; height: 56px; margin-bottom: 4px; display: grid; place-items: center; border-radius: 50%; background: #ECFDF5; color: #16A34A; }
+.ads-security-success-modal h2 { margin: 0; font-size: 17px; font-weight: 700; color: #0F172A; }
+.ads-security-success-modal p { margin: 0; font-size: 13px; line-height: 1.6; color: #64748B; }
+.ads-security-success-cta {
+  width: 100%;
+  height: 46px;
+  margin-top: 8px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--cv-brand-primary, #2563EB);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(37, 99, 235, .28);
+  transition: background-color 160ms ease;
+}
+.ads-security-success-cta:hover { background: var(--cv-brand-primary-hover, #1D4ED8); }
+.ads-security-success-cta:active { background: var(--cv-brand-primary-active, #1E40AF); }
+.ads-security-success-cta:focus-visible { outline: 3px solid var(--cv-brand-focus-soft, #DBEAFE); outline-offset: 2px; }
+
+/* Success toast — same non-modal, no-backdrop, bottom-right pattern as
+   .ads-security-deferred-warning, kept semantic green (a real success
+   signal) rather than AdsMeta blue. */
+.ads-security-success-toast {
+  position: fixed;
+  z-index: 45;
+  right: 24px;
+  bottom: 24px;
+  width: min(340px, calc(100vw - 24px));
+  padding: 12px 32px 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-radius: 14px;
+  background: #ECFDF5;
+  border: 1px solid #A7F3D0;
+  box-shadow: 0 16px 32px rgba(6, 95, 70, .16);
+  color: #065F46;
+}
+.ads-security-success-toast-icon { flex: none; color: #16A34A; }
+.ads-security-success-toast-copy { display: flex; flex-direction: column; gap: 2px; font-size: 12.5px; line-height: 1.4; }
+.ads-security-success-toast-copy strong { font-size: 13px; color: #065F46; }
+.ads-security-success-toast > button { position: absolute; right: 8px; top: 8px; width: 22px; height: 22px; display: grid; place-items: center; border: 0; border-radius: 50%; background: transparent; color: #065F46; cursor: pointer; }
+.ads-security-success-toast > button:hover { background: rgba(6, 95, 70, .12); }
+.ads-security-success-toast > button:focus-visible { outline: 2px solid #16A34A; outline-offset: 1px; }
+
+@media (max-width: 480px) {
+  .ads-security-success-toast { right: 12px; bottom: 12px; max-width: calc(100vw - 24px); }
+}
+
+/* Control Hub POST-SETUP settings — a separate modal from the onboarding
+   step-machine (ads-check-pro-control-hub-password-modal.tsx etc.), reuses
+   several of that flow's shared classes (ads-cred-field, ads-cred-rules,
+   ads-cred-mismatch, ads-cred-footer, ads-cred-back, ads-cred-cta,
+   ads-security-defer, ads-security-cta) for the expanded change-password
+   card so both stay visually identical for free. AdsMeta blue is the brand
+   accent (gear icon, focus, primary CTA, toggle-on); "Đã thiết lập" stays
+   semantic green and "Chưa thiết lập" semantic red — neither is brand-
+   tokenized. */
+.ads-security-settings-modal {
+  width: min(480px, 92vw);
+  max-height: 88vh;
+  padding: 22px 24px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  border: 1px solid var(--cv-brand-border, #BFDBFE);
+  border-radius: 20px;
+  background: var(--cv-brand-soft, #EFF6FF);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, .3);
+  color: #334155;
+}
+.ads-security-settings-header { flex: none; display: flex; align-items: center; gap: 8px; color: var(--cv-brand-primary, #2563EB); }
+.ads-security-settings-header h2 { margin: 0; flex: 1; min-width: 0; font-size: 16px; font-weight: 700; color: #0F172A; }
+.ads-security-settings-close { width: 28px; height: 28px; flex: none; display: grid; place-items: center; border: 0; border-radius: 50%; background: #fff; color: #475569; cursor: pointer; }
+.ads-security-settings-close:hover { background: #F1F5F9; }
+.ads-security-settings-close:focus-visible { outline: 3px solid var(--cv-brand-focus-soft, #DBEAFE); outline-offset: 2px; }
+
+.ads-security-settings-body { min-height: 0; overflow-y: auto; padding-right: 2px; display: flex; flex-direction: column; gap: 14px; font-size: 12.5px; line-height: 1.6; }
+.ads-security-settings-card { padding: 16px 18px; display: flex; flex-direction: column; gap: 8px; border-radius: 16px; background: #fff; border: 1px solid #E2E8F0; }
+.ads-security-settings-card p { margin: 0; color: #64748B; }
+.ads-security-settings-card-title { display: flex; align-items: center; gap: 8px; }
+.ads-security-settings-card-title h3 { margin: 0; flex: 1; min-width: 0; font-size: 13.5px; font-weight: 700; color: #0F172A; }
+.ads-security-badge-done { flex: none; padding: 3px 10px; border-radius: 999px; background: #ECFDF5; color: #16A34A; font-size: 11px; font-weight: 700; }
+.ads-security-badge-pending { flex: none; padding: 3px 10px; border-radius: 999px; background: #FEF2F2; color: #DC2626; font-size: 11px; font-weight: 700; }
+
+.ads-security-settings-field-label { margin-top: 4px; font-size: 12.5px; font-weight: 600; color: #334155; }
+.ads-security-settings-password-row { display: flex; align-items: center; gap: 10px; }
+.ads-security-settings-masked { flex: 1; min-width: 0; height: 40px; padding: 0 16px; display: flex; align-items: center; border: 1px solid #CBD5E1; border-radius: 999px; background: #F8FAFC; color: #334155; letter-spacing: .08em; font-size: 14px; }
+.ads-security-settings-change-btn { flex: none; height: 40px; padding: 0 18px; border: 1px solid var(--cv-brand-border, #BFDBFE); border-radius: 999px; background: var(--cv-brand-soft, #EFF6FF); color: var(--cv-brand-primary-hover, #1D4ED8); font-size: 12.5px; font-weight: 700; cursor: pointer; }
+.ads-security-settings-change-btn:hover { background: var(--cv-brand-border, #BFDBFE); }
+.ads-security-settings-change-btn:focus-visible { outline: 3px solid var(--cv-brand-focus-soft, #DBEAFE); outline-offset: 2px; }
+
+.ads-security-settings-divider { margin: 2px 0 0; padding-top: 12px; border-top: 1px dashed #E2E8F0; color: #64748B; }
+.ads-security-settings-card-actions { display: flex; justify-content: flex-end; gap: 10px; padding-top: 2px; }
+
+.ads-security-toggle-row { padding: 2px 0; position: relative; display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
+.ads-security-toggle-row span:first-child { font-size: 13px; font-weight: 600; color: #0F172A; }
+.ads-security-toggle-row input { position: absolute; opacity: 0; pointer-events: none; }
+.ads-security-toggle-row i { width: 36px; height: 21px; padding: 2px; flex: none; display: flex; justify-content: flex-start; border-radius: 999px; background: #CBD5E1; transition: background-color 180ms ease; }
+.ads-security-toggle-row i span { width: 17px; height: 17px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(15, 23, 42, .2); transition: transform 180ms ease; }
+.ads-security-toggle-row input:checked + i { background: var(--cv-brand-primary, #2563EB); }
+.ads-security-toggle-row input:checked + i span { transform: translateX(15px); }
+.ads-security-toggle-row input:focus-visible + i { outline: 3px solid var(--cv-brand-focus-soft, #DBEAFE); outline-offset: 2px; }
+.ads-security-settings-toggle-sep { height: 1px; margin: 2px 0; background: #E2E8F0; }
+
+@media (max-width: 480px) {
+  .ads-security-settings-modal { width: min(94vw, 420px); padding: 18px 16px 16px; }
+  .ads-security-settings-password-row { flex-direction: column; align-items: stretch; }
+  .ads-security-settings-change-btn { width: 100%; }
+}
+
+/* Control Hub — floating help button + guide modal. AdsMeta blue is the
+   brand accent throughout (fab, dashed card borders, numbered badges,
+   inline link accents); the warning card at the bottom stays semantic
+   amber/yellow, never brand-tokenized. z-index 40 — deliberately BELOW the
+   deferred-warning/success toasts (45, same bottom-right corner) so a
+   transient toast never gets visually covered by the persistent fab. */
+.ads-control-hub-help-fab {
+  position: fixed;
+  z-index: 40;
+  right: 22px;
+  bottom: 22px;
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--cv-brand-border, #BFDBFE);
+  border-radius: 50%;
+  background: #fff;
+  color: var(--cv-brand-primary, #2563EB);
+  font-size: 19px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 10px 26px rgba(37, 99, 235, .22), 0 0 0 6px var(--cv-brand-soft, #EFF6FF);
+  transition: background-color 160ms ease, color 160ms ease, transform 160ms ease, box-shadow 160ms ease;
+}
+.ads-control-hub-help-fab:hover { background: var(--cv-brand-primary, #2563EB); color: #fff; transform: translateY(-2px); box-shadow: 0 14px 30px rgba(37, 99, 235, .3), 0 0 0 6px var(--cv-brand-soft, #EFF6FF); }
+.ads-control-hub-help-fab:active { transform: translateY(0); }
+.ads-control-hub-help-fab:focus-visible { outline: 3px solid var(--cv-brand-focus-soft, #DBEAFE); outline-offset: 3px; }
+
+.ads-help-modal {
+  width: min(860px, calc(100vw - 32px));
+  max-height: calc(100vh - 40px);
+  padding: 22px 26px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  border-radius: 22px;
+  background: #fff;
+  box-shadow: 0 30px 90px rgba(0, 0, 0, .32);
+  color: #334155;
+}
+.ads-help-header { flex: none; display: flex; align-items: center; gap: 10px; }
+.ads-help-header-icon { flex: none; color: #D97706; }
+.ads-help-header h2 { margin: 0; flex: 1; min-width: 0; font-size: 17px; font-weight: 700; color: #0F172A; }
+.ads-help-close { width: 30px; height: 30px; flex: none; display: grid; place-items: center; border: 0; border-radius: 50%; background: #F1F5F9; color: #475569; cursor: pointer; }
+.ads-help-close:hover { background: #E2E8F0; }
+.ads-help-close:focus-visible { outline: 3px solid var(--cv-brand-focus-soft, #DBEAFE); outline-offset: 2px; }
+
+.ads-help-body { min-height: 0; overflow-y: auto; padding-right: 2px; display: flex; flex-direction: column; gap: 16px; }
+.ads-help-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.ads-help-card { padding: 20px; display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center; border: 1.5px dashed var(--cv-brand-border-strong, #60A5FA); border-radius: 16px; background: #F8FAFC; }
+.ads-help-card p { margin: 0; font-size: 13px; line-height: 1.55; color: #334155; }
+.ads-help-badge { width: 24px; height: 24px; display: grid; place-items: center; border-radius: 50%; background: var(--cv-brand-primary, #2563EB); color: #fff; font-size: 12px; font-weight: 700; }
+.ads-help-accent { color: var(--cv-brand-primary-hover, #1D4ED8); font-weight: 700; }
+
+.ads-help-warning { padding: 14px 16px; border-radius: 16px; background: #FFFBEB; border: 1px solid #FDE68A; }
+.ads-help-warning p { margin: 0; color: #78350F; font-size: 12.5px; line-height: 1.6; }
+
+/* Mini HTML/CSS illustrations — decorative only, no new image assets
+   (the one exception, AdsCheckBrandMark, reuses assets/log-removebg.png —
+   the single real Adscheck brand mark, sized here as a "card icon"). */
+.ads-help-mini-card { width: 100%; padding: 14px; display: flex; flex-direction: column; align-items: center; gap: 4px; border-radius: 12px; background: #fff; border: 1px solid #E2E8F0; }
+.ads-help-mini-logo { width: 30px; height: 30px; margin-bottom: 4px; }
+.ads-help-mini-card strong { font-size: 12.5px; color: #0F172A; }
+.ads-help-mini-card small { font-size: 11px; color: #64748B; }
+.ads-help-mini-account { align-items: flex-start; text-align: left; gap: 6px; }
+.ads-help-mini-balance { display: flex; align-items: center; gap: 4px; color: #334155; }
+.ads-help-mini-link { display: inline-flex; align-items: center; gap: 3px; margin-top: 2px; color: var(--cv-brand-primary-hover, #1D4ED8); font-size: 11px; font-weight: 700; }
+
+.ads-help-mini-store-list { width: 100%; display: flex; flex-direction: column; gap: 8px; }
+.ads-help-mini-store { padding: 8px 10px; display: flex; align-items: center; gap: 8px; border-radius: 10px; background: #fff; border: 1px solid #E2E8F0; text-align: left; }
+.ads-help-mini-store-icon { width: 26px; height: 26px; flex: none; display: grid; place-items: center; border-radius: 8px; background: var(--cv-brand-soft, #EFF6FF); color: var(--cv-brand-primary, #2563EB); }
+.ads-help-mini-store strong { display: block; font-size: 11.5px; color: #0F172A; }
+.ads-help-mini-store small { font-size: 10.5px; color: #64748B; }
+
+.ads-help-mini-toolbar { width: 100%; height: 40px; padding: 0 8px; display: flex; align-items: center; justify-content: space-between; gap: 8px; border-radius: 999px; background: #0F172A; }
+.ads-help-mini-toolbar-btn { flex: none; height: 26px; padding: 0 10px; display: inline-flex; align-items: center; gap: 5px; border-radius: 999px; background: linear-gradient(135deg, #7C3AED 0%, #A855F7 48%, #EC4899 100%); color: #fff; font-size: 10px; font-weight: 700; white-space: nowrap; }
+.ads-help-mini-toolbar-refresh { width: 26px; height: 26px; flex: none; display: grid; place-items: center; border-radius: 50%; background: #fff; color: var(--cv-brand-primary, #2563EB); box-shadow: 0 0 0 3px var(--cv-brand-border-strong, #60A5FA); }
+
+@media (max-width: 700px) {
+  .ads-help-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 480px) {
+  .ads-help-modal { padding: 18px 16px 18px; }
+  .ads-control-hub-help-fab { right: 16px; bottom: 16px; }
+}

@@ -1,0 +1,257 @@
+/* Ads Save "Tạo cấu hình mới" — Step 1 (Cài đặt cấu hình) modal.
+   Reuses the shared `.ads-advanced-filter-backdrop` (dim + blur, no
+   click-through) via `AdsProModalBackdrop`; only the panel/content below
+   is new. Scoped class names only — nothing here touches
+   `.ads-advanced-filter-backdrop` or any other module's selectors. */
+
+.ads-save-create-modal {
+  width: min(480px, 92vw);
+  max-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--cv-modal-border, #cfe0d2);
+  border-radius: 22px;
+  background: linear-gradient(180deg, var(--cv-modal-mint-1, #f3fbf5), var(--cv-modal-mint-2, #eef8f0) 60%);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, .3);
+  color: #17281b;
+  overflow: hidden;
+}
+
+.ads-save-create-header { flex: none; padding: 18px 18px 0; display: flex; align-items: center; gap: 8px; }
+.ads-save-create-header-icon { display: grid; place-items: center; color: var(--cv-brand-icon, #0cbd42); }
+.ads-save-create-header h2 { flex: 1; min-width: 0; margin: 0; font-size: 15.5px; font-weight: 650; }
+.ads-save-create-close { flex: none; width: 26px; height: 26px; display: grid; place-items: center; border: 0; border-radius: 999px; background: rgba(10, 30, 16, .06); color: #445048; cursor: pointer; }
+.ads-save-create-close:hover { background: rgba(10, 30, 16, .1); }
+
+.ads-save-create-stepper { flex: none; margin: 14px 18px 0; padding: 10px 14px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+.ads-save-create-step { display: flex; align-items: center; gap: 7px; }
+.ads-save-create-step-circle { width: 22px; height: 22px; flex: none; display: grid; place-items: center; border-radius: 50%; border: 1.5px solid #c3d2c5; color: #7c8a7f; font-size: 11.5px; font-weight: 700; background: #fff; }
+.ads-save-create-step-label { color: #7c8a7f; font-size: 12.5px; font-weight: 600; }
+.ads-save-create-step.is-active .ads-save-create-step-circle { border-color: var(--cv-brand-primary, #0d9f39); background: var(--cv-brand-primary, #0d9f39); color: #fff; }
+.ads-save-create-step.is-active .ads-save-create-step-label { color: var(--cv-brand-primary-hover, #0a7a34); }
+/* Step 1 once Step 2 is active — completed, muted (not the current step). */
+.ads-save-create-step.is-done .ads-save-create-step-circle { border-color: var(--cv-brand-primary, #0d9f39); background: var(--cv-brand-primary, #0d9f39); color: #fff; }
+.ads-save-create-step.is-done .ads-save-create-step-label { color: #7c9484; }
+.ads-save-create-step-connector { color: #b3c2b5; font-size: 13px; }
+
+.ads-save-create-body { flex: 1; min-height: 0; padding: 12px 18px 6px; display: flex; flex-direction: column; gap: 10px; overflow-y: auto; }
+
+.ads-save-create-card { padding: 14px; display: flex; flex-direction: column; gap: 12px; border-radius: 16px; background: #fff; box-shadow: 0 1px 0 rgba(9, 74, 26, .05); }
+.ads-save-create-card > header { display: flex; align-items: center; gap: 7px; color: var(--cv-brand-primary-hover, #0a7a34); }
+.ads-save-create-card > header h3 { margin: 0; color: #17281b; font-size: 13px; font-weight: 650; }
+
+.ads-save-create-field { display: grid; gap: 7px; font-size: 12.5px; color: #445048; font-weight: 600; }
+.ads-save-create-field input[type="text"] {
+  height: 38px;
+  padding: 0 14px;
+  border: 1px solid #e1e9e2;
+  border-radius: 999px;
+  background: #f5f7f5;
+  color: #17281b;
+  font: inherit;
+  font-weight: 400;
+}
+.ads-save-create-field input[type="text"]:focus { outline: none; border-color: var(--cv-brand-primary, #2563EB); background: #fff; }
+
+.ads-save-create-toggle-row { display: flex; gap: 8px; }
+.ads-save-create-toggle-row label {
+  position: relative;
+  flex: 1;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #e1e9e2;
+  border-radius: 999px;
+  background: #f5f7f5;
+  color: #5c6b60;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.ads-save-create-toggle-row label input { position: absolute; inset: 0; margin: 0; opacity: 0; cursor: pointer; }
+.ads-save-create-toggle-row label.is-selected { border-color: var(--cv-brand-primary, #0d9f39); background: var(--cv-brand-soft, #eafbf0); color: var(--cv-brand-primary-hover, #0a7a34); }
+
+.ads-save-create-option-list { display: flex; flex-direction: column; gap: 8px; }
+.ads-save-create-option {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 40px;
+  padding: 8px 12px;
+  border: 1px solid #e1e9e2;
+  border-radius: 12px;
+  background: #f5f7f5;
+  color: #445048;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+}
+/* Correction — Ads Save metric option overflow: `flex:1` alone let a long
+   label (e.g. "Lượt tương tác qua tin nhắn") get squeezed to a fixed 1fr
+   grid-column width and clip/overflow a fixed-height card. `min-width:0`
+   lets the label actually shrink and wrap instead of forcing overflow;
+   `white-space:normal`+`line-height` keeps a wrapped 2-line label readable
+   and vertically centered once the card's height (now `min-height`, not a
+   hard `height`) grows to contain it. */
+.ads-save-create-option span { flex: 1; min-width: 0; white-space: normal; line-height: 1.3; }
+.ads-save-create-option svg { flex: none; color: #7c8a7f; }
+.ads-save-create-option input[type="radio"],
+.ads-save-create-option input[type="checkbox"] { flex: none; width: 15px; height: 15px; accent-color: var(--cv-brand-primary, #0d9f39); cursor: pointer; }
+/* "Mục tiêu tải xuống" is checkbox/multi-select — square with a check
+   mark, distinct from the circular radio used elsewhere in this card
+   family ("Loại chỉ số" keeps its own radio inputs untouched below). */
+.ads-save-create-option input[type="checkbox"] { border-radius: 4px; }
+.ads-save-create-option.is-selected { border-color: var(--cv-brand-primary, #0d9f39); background: var(--cv-brand-soft, #eafbf0); color: var(--cv-brand-primary-hover, #0a7a34); }
+.ads-save-create-option.is-selected svg { color: var(--cv-brand-primary, #0d9f39); }
+
+.ads-save-create-metric-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.ads-save-create-metric-grid .ads-save-create-option { padding: 8px 10px; }
+/* 4th metric ("Lượt tương tác qua tin nhắn") spans 2 of the 3 columns so
+   it gets real width to wrap cleanly onto 1-2 lines instead of being
+   squeezed into the same 1/3 column as short labels; "Video" (5th) then
+   falls into the remaining column on that row — matches the reference
+   layout ([long, long] [Video]) without hardcoding pixel widths. */
+.ads-save-create-metric-grid .ads-save-create-option:nth-child(4) { grid-column: span 2; }
+
+.ads-save-create-schedule { display: flex; flex-direction: column; gap: 10px; }
+.ads-save-create-schedule > p { margin: 0; color: #5c6b60; font-size: 12px; }
+.ads-save-create-slots { display: flex; flex-direction: column; gap: 8px; }
+.ads-save-create-slot { display: flex; align-items: center; gap: 8px; }
+.ads-save-create-slot select {
+  height: 34px;
+  padding: 0 10px;
+  border: 1px solid #e1e9e2;
+  border-radius: 999px;
+  background: #f5f7f5;
+  color: #17281b;
+  font: inherit;
+}
+.ads-save-create-slot-remove { flex: none; width: 26px; height: 26px; display: grid; place-items: center; border: 0; border-radius: 50%; background: #f1f1f1; color: #8a5a5a; cursor: pointer; }
+
+/* "Lặp lại" repeat-interval row — compact, does NOT stretch across the
+   section (only the number input + unit label take up width, no flex:1). */
+.ads-save-create-repeat { display: flex; align-items: center; gap: 8px; }
+.ads-save-create-repeat input {
+  width: 76px;
+  height: 34px;
+  padding: 0 12px;
+  border: 1px solid #e1e9e2;
+  border-radius: 999px;
+  background: #f5f7f5;
+  color: #17281b;
+  font: inherit;
+  text-align: center;
+}
+.ads-save-create-repeat span { color: #5c6b60; font-size: 12.5px; font-weight: 600; }
+.ads-save-create-slot-remove:hover { background: #f5e4e4; }
+
+.ads-save-create-add-slot {
+  align-self: flex-start;
+  height: 30px;
+  padding: 0 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1.5px dashed var(--cv-brand-border-strong, #7bce93);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--cv-brand-primary-hover, #0a7a34);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.ads-save-create-add-slot:hover { background: var(--cv-brand-soft, #eafbf0); }
+
+
+.ads-save-create-footer { flex: none; padding: 14px 18px 18px; display: flex; justify-content: flex-end; gap: 8px; }
+.ads-save-create-footer .is-secondary { height: 36px; padding: 0 18px; border: 0; border-radius: 999px; background: #fff; color: var(--cv-brand-primary-hover, #0a7a34); font-size: 13px; font-weight: 600; cursor: pointer; }
+.ads-save-create-footer .is-primary { height: 36px; padding: 0 20px; border: 0; border-radius: 999px; background: var(--cv-brand-primary, #0d9f39); color: #fff; font-size: 13px; font-weight: 600; cursor: pointer; }
+.ads-save-create-footer .is-primary:disabled { background: var(--cv-brand-border, #bfe6cb); color: var(--cv-brand-soft, #eafbf0); cursor: not-allowed; }
+
+@media (max-width: 560px) {
+  .ads-save-create-metric-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* Step 2 — Chọn tài sản */
+.ads-save-create-panel {
+  flex: 1;
+  min-height: 0;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 1px 0 rgba(9, 74, 26, .05);
+}
+
+.ads-save-create-search { display: flex; align-items: center; gap: 8px; height: 38px; padding: 0 14px; flex: none; border: 1px solid #e1e9e2; border-radius: 999px; background: #f5f7f5; color: #7c8a7f; }
+.ads-save-create-search input { flex: 1; min-width: 0; border: 0; background: none; color: #17281b; font: inherit; }
+.ads-save-create-search input:focus { outline: none; }
+
+/* "Tải theo ID TKQC" — large rounded textarea + full-width load button. */
+.ads-save-create-id-textarea {
+  flex: none;
+  width: 100%;
+  min-height: 88px;
+  padding: 12px 14px;
+  border: 1px solid #e1e9e2;
+  border-radius: 16px;
+  background: #f5f7f5;
+  color: #17281b;
+  font: inherit;
+  resize: vertical;
+}
+.ads-save-create-id-textarea:focus { outline: none; border-color: var(--cv-brand-primary, #2563EB); background: #fff; }
+.ads-save-create-load-list {
+  flex: none;
+  width: 100%;
+  height: 38px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--cv-brand-soft-strong, #c9f0d6);
+  color: var(--cv-brand-primary-hover, #0a7a34);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.ads-save-create-load-list:not(:disabled):hover { filter: brightness(1.03); }
+.ads-save-create-load-list:not(:disabled) { background: var(--cv-brand-primary, #0d9f39); color: #fff; }
+.ads-save-create-load-list:disabled { cursor: not-allowed; }
+
+.ads-save-create-result-row { flex: none; display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 12.5px; color: #5c6b60; }
+.ads-save-create-result-row b { color: var(--cv-brand-primary-hover, #0a7a34); font-weight: 700; }
+.ads-save-create-select-all { border: 0; background: none; padding: 0; color: #2f6fed; font-size: 12.5px; font-weight: 600; cursor: pointer; }
+.ads-save-create-select-all:hover { text-decoration: underline; }
+
+/* Correction — Fixed Step 2 panel size: the ONLY element that scrolls.
+   `flex:1;min-height:0` (no `max-height`) makes it consume exactly the
+   remaining space inside the now fixed-height `.ads-save-create-body`
+   (see the modal component's own `bodyHeight` measurement) — never grows
+   the panel/modal itself, regardless of how many TKQC rows exist. */
+.ads-save-create-account-list { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 6px; overflow-y: auto; scrollbar-width: thin; scrollbar-color: #b7c4b9 transparent; }
+.ads-save-create-account-list::-webkit-scrollbar { width: 8px; }
+.ads-save-create-account-list::-webkit-scrollbar-track { background: transparent; }
+.ads-save-create-account-list::-webkit-scrollbar-thumb { border-radius: 999px; background: #b7c4b9; }
+.ads-save-create-account-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  background: #f5f7f5;
+  cursor: pointer;
+}
+.ads-save-create-account-row.is-selected { border-color: var(--cv-brand-border, #bfe6cb); background: var(--cv-brand-soft, #eafbf0); }
+.ads-save-create-account-dot { flex: none; width: 7px; height: 7px; border-radius: 50%; }
+.ads-save-create-account-identity { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+.ads-save-create-account-identity strong { color: #17281b; font-size: 12.5px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ads-save-create-account-identity small { color: #7c8a7f; font-size: 11.5px; }
+.ads-save-create-account-row input[type="checkbox"] { flex: none; width: 16px; height: 16px; accent-color: var(--cv-brand-primary, #0d9f39); cursor: pointer; }
+/* `margin: auto` on the sole child of a flex column centers it in BOTH
+   axes within the available (now fixed-height) list viewport — no fixed
+   pixel offsets, no separate centering wrapper needed. */
+.ads-save-create-account-empty { margin: auto; text-align: center; color: #7c8a7f; font-size: 12.5px; }
+

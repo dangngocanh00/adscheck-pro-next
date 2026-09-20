@@ -1,0 +1,931 @@
+/* Outer layer behind the two Billing panels — CORRECTED: `.ads-pro-workspace`'s
+   own `--pro-mint` (#edf8ef, used previously here) is never actually visible
+   in Ads Check Pro — Curve B's SVG (.ads-pro-workspace-surface, position:
+   absolute, 100%x100%, z-index:0) fully covers it with its own notch-fill/
+   notch-highlight <rect> layers BEFORE drawing the white/wash table path, so
+   THOSE rects are what a user actually sees behind/around the table. Per the
+   comment on that SVG in ads-check-adaccounts-workspace.tsx, they deliberately
+   duplicate the shell's own CSS background instead of reusing it (an SVG-
+   specific stacking constraint) — that shell rule is `.ads-save-app` in
+   ads-save.css, using the exact same tokens:
+     background:
+       radial-gradient(circle at 50% -20%, var(--cv-app-ambient, rgba(59,130,246,.20)), transparent 42%),
+       linear-gradient(135deg, var(--cv-app-bg-dark, #071426), var(--cv-app-bg-dark-2, #0B1F3A));
+   Billing has no SVG-stacking constraint, so it reuses that CSS declaration
+   directly (same --cv-app-bg-dark/-2/--cv-app-ambient tokens Curve B's own
+   notch layers use) — fully theme-aware, V1–V5, matching Ads Check Pro's
+   actual on-screen color in every version. */
+.ads-billing-page {
+  position: relative;
+  height: 100%;
+  min-height: 100%;
+  padding: 8px;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 50% -20%, var(--cv-app-ambient, rgba(59, 130, 246, .20)), transparent 42%),
+    linear-gradient(135deg, var(--cv-app-bg-dark, #071426), var(--cv-app-bg-dark-2, #0B1F3A));
+  color: #111713;
+  --purchase-line: #d7e5da;
+}
+
+/* Two-panel split (LEFT: tabs + tab content, RIGHT: "Gói của bạn") — the
+   frame itself is a NEUTRAL layout shell only (no surface/radius/clip of
+   its own); each panel owns its own background + full 4-corner radius so
+   they read as two separate boxes with a real gap, not one bar split in
+   half. Curve D SVG is sized (inline width/height, not 100%) to just the
+   LEFT panel's own measured width — see ads-check-billing-workspace-surface.ts
+   — and rounds its own 4 corners in the path itself (CORNER_RADIUS), so no
+   external overflow:hidden wrapper is needed to clip it. */
+.ads-billing-workspace-frame { position: relative; height: 100%; }
+.ads-billing-workspace-surface { position: absolute; inset: 0; z-index: 0; display: block; pointer-events: none; }
+/* Explicit z-index (matching Curve B's own tab-row/body convention:
+   z-index 20 for the tab row, 10 for content) so the surface's own
+   z-index:0 stacking context can never end up ambiguous relative to
+   normal-flow siblings — without this, the workspace-content wrapper's
+   own descendant backgrounds (.ads-purchase-builder etc., now made
+   transparent) previously painted over the surface regardless of DOM
+   order. */
+.ads-billing-workspace-content { position: relative; z-index: 10; }
+.ads-billing-workspace-frame > div:not(.ads-billing-tabs):not([hidden]) { height: 100%; }
+.ads-billing-tabs { width: calc(69.5% - 1px); height: 52px; margin: 0; padding: 6px 8px; position: absolute; z-index: 20; left: 0; top: 0; display: flex; align-items: center; border: 0; background: transparent; }
+/* Scoped to DIRECT children only — `.ads-billing-tabs-trailing` (the
+   Giftcode/search/filter toolbar) also lives inside `.ads-billing-tabs` for
+   layout purposes, and an unscoped `.ads-billing-tabs button` descendant
+   selector would otherwise also match its filter `<button>`, leaking the
+   dark tab-pill background/color/padding onto it (higher specificity than
+   `.ads-billing-plan-filter` alone). `>` also gives the 3 real tabs a
+   precise, toolbar-safe target for the small translateY nudge below. */
+/* Inactive material ported VERBATIM from Ads Check Pro's own asset tabs
+   (.ads-asset-tabs button, ads-check-adaccounts-workspace.css:97-137) — the
+   source-of-truth "glass on dark ambient" treatment, not a from-scratch
+   interpretation. That treatment is itself hardcoded (not theme-tokenized)
+   in Ads Check Pro EXCEPT its hover text color (--cv-brand-hover-soft), so
+   this port reproduces it exactly rather than inventing new tokens for it —
+   both sit on the SAME dark ambient background (.ads-billing-page reuses
+   .ads-save-app's own gradient, see the file-top comment), so the same
+   frosted-glass material reads correctly here too. Only the ACTIVE tab
+   stays on billing's own --cv-billing-tab-active-* tokens (untouched). */
+.ads-billing-tabs > button {
+  min-height: 38px;
+  padding: 0 14px;
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(rgba(255, 255, 255, .08) 0%, rgba(255, 255, 255, .28) 100%);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  color: rgba(255, 255, 255, .9);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background .2s cubic-bezier(.2, .8, .2, 1), color .2s cubic-bezier(.2, .8, .2, 1), transform .2s cubic-bezier(.2, .8, .2, 1);
+  transform: translateY(-4px);
+}
+.ads-billing-tabs > button::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+  border: .5px solid rgba(255, 255, 255, .32);
+  -webkit-mask-image: radial-gradient(120% 82% at 0 0, #000 60%, transparent 72%), radial-gradient(120% 78% at 100% 100%, #000 55%, transparent 72%);
+  mask-image: radial-gradient(120% 82% at 0 0, #000 60%, transparent 72%), radial-gradient(120% 78% at 100% 100%, #000 55%, transparent 72%);
+  -webkit-mask-repeat: no-repeat, no-repeat;
+  mask-repeat: no-repeat, no-repeat;
+  mask-composite: add;
+}
+.ads-billing-tabs > button:hover { background: linear-gradient(rgba(255, 255, 255, .14) 0%, rgba(255, 255, 255, .34) 100%); color: var(--cv-brand-hover-soft, #DBEAFE); }
+.ads-billing-tabs > button:active { transform: translateY(-4px) scale(.97); }
+.ads-billing-tabs > button:focus-visible { outline: 3px solid var(--cv-brand-focus-soft, #DBEAFE); outline-offset: 2px; }
+.ads-billing-tabs > button + button { margin-left: 7px; }
+.ads-billing-tabs > button.is-active {
+  color: #fff;
+  background: linear-gradient(105deg, var(--cv-billing-tab-active-start, #1D4ED8), var(--cv-billing-tab-active-end, #2563EB));
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+.ads-billing-tabs > button.is-active::before { content: none; }
+@media (prefers-reduced-motion: reduce) {
+  .ads-billing-tabs > button { transition: none; }
+}
+
+.ads-purchase-panel,
+.ads-purchase-layout { height: 100%; min-height: 0; }
+.ads-purchase-layout { display: grid; grid-template-columns: minmax(0, 2.25fr) minmax(420px, 1fr); gap: 8px; }
+/* Transparent on purpose — Curve D (a frame-level sibling SVG, sized to
+   match this element's own measured width) is now what paints this panel's
+   surface/rounded corners; an opaque background here would hide it. See
+   ads-check-billing-workspace-surface.ts. */
+.ads-purchase-builder { min-width: 0; min-height: 0; padding: 86px 18px 28px; position: relative; display: grid; align-content: start; gap: 16px; overflow: auto; border: 0; border-radius: 16px; background: transparent; scrollbar-width: thin; scrollbar-color: #b8cdbd transparent; }
+.ads-purchase-progress { height: 45px; position: absolute; z-index: 6; right: 20px; top: 4px; display: flex; align-items: center; gap: 10px; color: #65716a; font-size: 11px; }
+.ads-purchase-progress button { min-height: 36px; padding: 0 7px; display: inline-flex; align-items: center; gap: 7px; border: 0; border-radius: 9px; background: transparent; color: inherit; font-size: 11px; cursor: pointer; }
+.ads-purchase-progress button[aria-current='step'] { color: var(--cv-brand-primary-hover, #1D4ED8); font-weight: 650; }
+.ads-purchase-progress button[aria-current='step'] svg { width: 25px; height: 25px; padding: 5px; border-radius: 50%; color: #fff; background: var(--cv-brand-primary, #2563EB); }
+.ads-purchase-progress button.is-done { color: var(--cv-brand-primary-hover, #1D4ED8); font-weight: 650; }
+.ads-purchase-progress button.is-done svg { color: var(--cv-brand-primary, #2563EB); }
+.ads-purchase-progress button:disabled { cursor: not-allowed; opacity: .55; }
+.ads-purchase-progress > span { color: #9ba49e; }
+
+/* Step 2 — Chọn ngân hàng. Replaces the old placeholder 3-fake-bank
+   picker; ACB is the sole real option today, default-selected. */
+.ads-purchase-bank-step { padding: 22px; display: grid; gap: 16px; border: 1px solid #cadacc; border-radius: 18px; background: #fff; }
+.ads-purchase-bank-step > h2 { margin: 0; display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 700; }
+.ads-purchase-bank-step > h2 svg { color: var(--cv-brand-primary, #2563EB); }
+.ads-purchase-bank-list { display: grid; gap: 10px; }
+.ads-purchase-bank-row { min-height: 64px; padding: 0 20px; position: relative; display: flex; align-items: center; gap: 14px; border: 1.5px solid #e2e8e3; border-radius: 15px; background: #fff; cursor: pointer; }
+.ads-purchase-bank-row.is-selected { border-color: var(--cv-brand-primary, #2563EB); background: var(--cv-brand-soft, #EFF6FF); }
+.ads-purchase-bank-row input { position: absolute; opacity: 0; }
+.ads-purchase-bank-mark { min-width: 44px; height: 28px; padding: 0 8px; display: grid; place-items: center; border-radius: 8px; background: #eef2ef; color: #273229; font-size: 13px; font-weight: 800; letter-spacing: .02em; }
+.ads-purchase-bank-row.is-selected .ads-purchase-bank-mark { background: var(--cv-brand-icon-badge-bg, #DBEAFE); color: var(--cv-brand-primary-hover, #1D4ED8); }
+.ads-purchase-bank-divider { width: 1px; height: 26px; background: #e2e8e3; }
+.ads-purchase-bank-row > strong { min-width: 0; flex: 1; font-size: 13px; font-weight: 600; color: #202721; }
+.ads-purchase-bank-status { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+.ads-purchase-bank-status small { color: var(--cv-brand-primary-hover, #1D4ED8); font-size: 11px; font-weight: 700; }
+.ads-purchase-bank-radio { width: 18px; height: 18px; flex: none; display: grid; place-items: center; border: 1.5px solid #c7d8cb; border-radius: 50%; background: #fff; }
+.ads-purchase-bank-row.is-selected .ads-purchase-bank-radio { border-color: var(--cv-brand-primary, #2563EB); }
+.ads-purchase-bank-row.is-selected .ads-purchase-bank-radio::before { content: ''; width: 10px; height: 10px; border-radius: 50%; background: var(--cv-brand-primary, #2563EB); }
+.ads-purchase-bank-row:focus-within { outline: 3px solid var(--cv-brand-focus-soft, #DBEAFE); outline-offset: 2px; }
+
+/* Step 3 — Thanh toán (QR / chuyển khoản + Lưu ý). */
+.ads-purchase-payment-section { padding: 22px; display: grid; gap: 16px; border: 1px solid #cadacc; border-radius: 18px; background: #fff; }
+.ads-purchase-payment-section > h2 { margin: 0; display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 700; }
+.ads-purchase-payment-section > h2 svg { color: var(--cv-brand-primary, #2563EB); }
+.ads-purchase-payment-grid { display: grid; grid-template-columns: minmax(200px, .8fr) minmax(280px, 1.35fr); gap: 20px; align-items: start; }
+.ads-purchase-payment-qr-col { padding: 18px; display: grid; justify-items: center; gap: 6px; border: 1px solid #e2e8e3; border-radius: 15px; background: #fafcfa; text-align: center; }
+.ads-purchase-payment-qr-col strong { margin-top: 6px; font-size: 12.5px; }
+.ads-purchase-payment-qr-col > span { color: #4a564d; font-size: 11.5px; }
+.ads-purchase-payment-demo-note { margin-top: 4px; color: #8b968f; font-size: 9.5px; line-height: 1.4; }
+
+.ads-purchase-qr { width: 148px; position: relative; display: grid; gap: 6px; }
+.ads-purchase-qr-grid { display: grid; grid-template-columns: repeat(13, 1fr); gap: 1px; padding: 8px; border: 1px solid #e2e8e3; border-radius: 10px; background: #fff; }
+.ads-purchase-qr-grid span { aspect-ratio: 1; background: #fff; }
+.ads-purchase-qr-grid span[data-on] { background: #1c231e; }
+.ads-purchase-qr-badge { padding: 3px 10px; justify-self: center; border-radius: 999px; background: #f1f6f2; color: #59645b; font-size: 9px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
+
+.ads-purchase-transfer-card { padding: 18px; border: 1px solid #e2e8e3; border-radius: 15px; background: #fafcfa; }
+.ads-purchase-transfer-card h3 { margin: 0 0 12px; font-size: 13px; font-weight: 700; }
+.ads-purchase-transfer-card dl { margin: 0; display: grid; gap: 10px; }
+.ads-purchase-transfer-card dl > div { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-bottom: 10px; border-bottom: 1px dashed #e2e8e3; }
+.ads-purchase-transfer-card dl > div:last-child { padding-bottom: 0; border-bottom: 0; }
+.ads-purchase-transfer-card dt { color: #59645b; font-size: 11.5px; }
+.ads-purchase-transfer-card dd { margin: 0; display: flex; align-items: center; gap: 8px; font-size: 12.5px; font-weight: 600; color: #202721; }
+.ads-purchase-transfer-card dd button { width: 26px; height: 26px; flex: none; display: grid; place-items: center; border: 0; border-radius: 8px; background: #eef2ef; color: #445048; cursor: pointer; }
+.ads-purchase-transfer-card dd button:hover { background: #e2e8e3; }
+.ads-purchase-transfer-card div.is-emphasized dd { color: var(--cv-brand-primary-hover, #1D4ED8); font-weight: 700; }
+.ads-purchase-transfer-card div.is-emphasized dd button { color: var(--cv-brand-primary-hover, #1D4ED8); background: var(--cv-brand-icon-badge-bg, #DBEAFE); }
+
+.ads-purchase-countdown-row { margin-top: 14px; padding-top: 14px; display: flex; align-items: center; justify-content: space-between; gap: 10px; border-top: 1px dashed #e2e8e3; flex-wrap: wrap; }
+.ads-purchase-countdown-row > span { color: #59645b; font-size: 11px; }
+.ads-purchase-countdown { display: flex; align-items: center; gap: 4px; color: var(--cv-brand-primary-hover, #1D4ED8); font-size: 12px; font-weight: 700; }
+.ads-purchase-countdown-pill { min-width: 28px; padding: 5px 7px; border-radius: 8px; background: var(--cv-brand-icon-badge-bg, #DBEAFE); text-align: center; font-variant-numeric: tabular-nums; }
+
+.ads-purchase-payment-warning { margin: 0; padding: 12px 14px; display: flex; align-items: flex-start; gap: 8px; border-radius: 12px; background: #fff6e8; color: #8a5a06; font-size: 11.5px; line-height: 1.5; }
+.ads-purchase-payment-warning svg { flex: none; margin-top: 1px; color: #e8ad2f; }
+
+.ads-purchase-payment-notes > h2 svg { color: #e8ad2f; }
+.ads-purchase-payment-notice-row { padding: 16px; border-radius: 13px; background: #f7f7f7; color: #333d35; font-size: 12.5px; line-height: 1.6; }
+.ads-purchase-payment-notice-row + .ads-purchase-payment-notice-row { margin-top: 10px; }
+
+/* Payment-verification result cards (Step 3 bottom-right CTA area).
+   Success stays fixed semantic green and failure severity stays fixed
+   semantic warning/error in every color version — only the retry/complete
+   ACTION buttons below them (.ads-purchase-step3-actions / -complete)
+   follow the active brand token. */
+.ads-purchase-payment-result { padding: 16px; margin-top: 8px; display: grid; justify-items: center; gap: 6px; text-align: center; border-radius: 15px; }
+.ads-purchase-payment-result strong { font-size: 13.5px; font-weight: 700; }
+.ads-purchase-payment-result p { margin: 0; color: #4a564d; font-size: 11.5px; line-height: 1.5; }
+.ads-purchase-payment-result small { color: #8b968f; font-size: 10px; }
+.ads-purchase-payment-result.is-success { border: 1px solid #bbe8cb; background: #f3fbf6; }
+.ads-purchase-payment-result.is-success strong { color: #0f7a3c; }
+.ads-purchase-payment-result.is-success .ads-purchase-payment-result-icon { color: #16a34a; }
+.ads-purchase-payment-result.is-failed.is-warning { border: 1px solid #f5dfae; background: #fff8ea; }
+.ads-purchase-payment-result.is-failed.is-warning strong { color: #8a5a06; }
+.ads-purchase-payment-result.is-failed.is-warning .ads-purchase-payment-result-icon { color: #e8ad2f; }
+.ads-purchase-payment-result.is-failed.is-error { border: 1px solid #f3c9c6; background: #fdf2f1; }
+.ads-purchase-payment-result.is-failed.is-error strong { color: #b3261e; }
+.ads-purchase-payment-result.is-failed.is-error .ads-purchase-payment-result-icon { color: #d63b34; }
+.ads-purchase-payment-result-detail { width: 100%; margin: 6px 0 0; display: grid; gap: 7px; text-align: left; }
+.ads-purchase-payment-result-detail > div { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding-top: 7px; border-top: 1px dashed rgba(0, 0, 0, .08); }
+.ads-purchase-payment-result-detail > div:first-child { padding-top: 0; border-top: 0; }
+.ads-purchase-payment-result-detail dt { color: #59645b; font-size: 10.5px; }
+.ads-purchase-payment-result-detail dd { margin: 0; color: #202721; font-size: 11.5px; font-weight: 600; }
+.ads-purchase-step3-complete { width: 100%; min-height: 46px; margin-top: 10px; display: flex; align-items: center; justify-content: center; padding: 0 18px; border: 0; border-radius: 999px; background: var(--cv-brand-primary, #2563EB); color: #fff; font-size: 12px; font-weight: 750; white-space: nowrap; cursor: pointer; transition: background-color .15s ease; }
+.ads-purchase-step3-complete:hover { background: var(--cv-brand-primary-hover, #1D4ED8); }
+.ads-purchase-step3-complete:active { background: var(--cv-brand-primary-active, #1E40AF); }
+.ads-purchase-step3-complete:focus-visible { outline: 3px solid var(--cv-brand-focus-soft, #DBEAFE); outline-offset: 2px; }
+
+@media (max-width: 1050px) {
+  .ads-purchase-payment-grid { grid-template-columns: 1fr; }
+  .ads-purchase-payment-qr-col { justify-self: center; width: min(280px, 100%); }
+}
+
+.ads-purchase-tier-grid { min-height: 244px; position: relative; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 13px; }
+/* PRO — migrated to the ONE global AdsMeta-inspired blue brand system (deep
+   navy foundation + electric-blue decorative accent), geometry untouched.
+   PRIORITY (.is-priority overrides right below each rule) keeps its own
+   existing gold/amber identity exactly as before — explicitly NOT part of
+   this migration (task: "Priority giữ nguyên, không áp rule mọi card phải
+   blue"). Two spots (.is-selected border, .ads-purchase-selected-label)
+   previously had NO .is-priority override at all, so selecting Priority
+   silently inherited Pro's shared color — that was never a deliberate part
+   of Priority's identity, just a gap; giving Priority its own gold value
+   there (matching its already-established badge/copy gold) completes its
+   identity instead of leaking Pro's brand into it. */
+.ads-purchase-tier-grid > button:not(.ads-purchase-tier-swap) { min-width: 0; min-height: 244px; padding: 25px 30px; position: relative; overflow: hidden; border: 1px solid #1D4ED8; border-radius: 18px; background: radial-gradient(circle at 80% 25%, rgba(59, 130, 246, .22), transparent 38%), linear-gradient(120deg, #0B1F3A, #071426); color: #fff; text-align: left; cursor: pointer; }
+.ads-purchase-tier-grid > button.is-priority { border-color: #866a1f; background: radial-gradient(circle at 80% 25%, rgba(255, 211, 66, .2), transparent 38%), linear-gradient(120deg, #4b3506, #1b1302); color: #fff1ae; }
+.ads-purchase-tier-grid > button.is-selected { border: 5px solid var(--cv-purchase-tier-selected-border, #3B82F6); padding: 21px 26px; }
+.ads-purchase-tier-grid > button.is-priority.is-selected { border-color: #f4d46c; }
+.ads-purchase-tier-label { min-height: 32px; padding: 0 13px; position: absolute; left: 27px; top: 24px; display: inline-flex; align-items: center; border: 1px solid currentColor; border-radius: 999px; color: #60A5FA; font-size: 12px; font-weight: 700; }
+.is-priority .ads-purchase-tier-label { color: #f4d46c; }
+.ads-purchase-selected-label { min-height: 34px; padding: 0 15px; position: absolute; z-index: 2; right: 13px; top: -2px; display: inline-flex; align-items: center; border-radius: 0 0 17px 17px; background: #3B82F6; color: #fff; font-size: 11px; font-weight: 700; }
+.is-priority .ads-purchase-selected-label { background: #f4d46c; color: #3f2d00; }
+.ads-purchase-tier-art { width: 255px; height: 290px; position: absolute; right: 15px; top: -28px; opacity: .9; filter: drop-shadow(0 0 18px rgba(59, 130, 246, .34)); transform: rotate(7deg); }
+.ads-purchase-tier-art i { position: absolute; display: block; border-radius: 8px; background: linear-gradient(145deg, #1D4ED8, #60A5FA 50%, #2563EB); box-shadow: inset 8px 6px 10px rgba(255, 255, 255, .28), inset -9px -8px 15px rgba(11, 31, 58, .32); transform: skew(-24deg); }
+.ads-purchase-tier-art i:first-child { width: 82px; height: 285px; left: 102px; top: -8px; }
+.ads-purchase-tier-art i:last-child { width: 190px; height: 78px; left: 22px; bottom: 37px; }
+.is-priority .ads-purchase-tier-art { filter: drop-shadow(0 0 18px rgba(255, 203, 36, .3)); opacity: .95; }
+.is-priority .ads-purchase-tier-art i { background: linear-gradient(145deg, #bc7d00, #ffe35c 51%, #c98900); box-shadow: inset 8px 6px 10px rgba(255, 255, 255, .34), inset -9px -8px 15px rgba(94, 48, 0, .33); }
+.ads-purchase-tier-copy { position: absolute; z-index: 2; left: 31px; bottom: 30px; display: grid; gap: 5px; }
+.ads-purchase-tier-copy strong { color: #60A5FA; font-size: 19px; }
+.is-priority .ads-purchase-tier-copy strong { color: #ffe486; }
+.ads-purchase-tier-copy small { color: rgba(255, 255, 255, .84); font-size: 13px; }
+.ads-purchase-tier-swap { width: 50px; height: 50px; position: absolute; z-index: 3; left: 50%; top: 50%; display: grid; place-items: center; border: 6px solid #fff; border-radius: 50%; background: #f8ca3f; color: #1b2b1e; cursor: pointer; transform: translate(-50%, -50%); box-shadow: 0 5px 16px rgba(54, 40, 0, .18); }
+
+.ads-purchase-bundle,
+.ads-purchase-control-hub { position: relative; display: flex; align-items: center; border: 1px solid #e5c452; border-radius: 15px; background: #fffdf0; cursor: pointer; }
+.ads-purchase-bundle { min-height: 57px; padding: 0 18px; justify-content: space-between; }
+.ads-purchase-bundle > span { display: flex; align-items: center; gap: 9px; }
+.ads-purchase-bundle > span:first-child strong { font-size: 14px; }
+.ads-purchase-bundle > span:first-child b { padding: 4px 8px; border-radius: 999px; background: #f2cf57; color: #553f00; font-size: 10px; }
+.ads-purchase-bundle > span:nth-child(2) { margin-left: auto; margin-right: 14px; }
+.ads-purchase-bundle > span:nth-child(2) strong { font-size: 14px; }
+.ads-purchase-bundle small { font-size: 10px; }
+.ads-purchase-bundle input,
+.ads-purchase-control-hub input,
+.ads-purchase-feature-card input,
+.ads-purchase-consent-agree input {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.ads-purchase-checkbox { width: 18px; height: 18px; display: grid; place-items: center; border: 1px solid #c7d8cb; border-radius: 5px; background: #fff; color: transparent; }
+.ads-purchase-bundle input:checked ~ .ads-purchase-checkbox,
+.ads-purchase-control-hub input:checked ~ .ads-purchase-checkbox,
+.ads-purchase-feature-card input:checked + .ads-purchase-checkbox,
+.ads-purchase-consent-agree input:checked + .ads-purchase-checkbox { border-color: var(--cv-purchase-checkbox-border, #2563EB); background: var(--cv-purchase-checkbox-bg, #3B82F6); color: #fff; }
+.ads-purchase-bundle:focus-within,
+.ads-purchase-control-hub:focus-within,
+.ads-purchase-feature-card:focus-within,
+.ads-purchase-consent-agree:focus-within { outline: 3px solid var(--cv-brand-primary, #2563EB); outline-offset: 2px; box-shadow: 0 0 0 5px #fff; }
+
+.ads-purchase-control-hub { min-height: 92px; padding: 0 18px 0 110px; border-color: var(--cv-purchase-card-border, #3B82F6); background: #fff; }
+.ads-purchase-control-hub.is-selected { box-shadow: inset 0 0 0 2px rgba(37, 99, 235, .13); }
+.ads-purchase-phone-art { width: 78px; height: 105px; position: absolute; left: 14px; bottom: 0; overflow: hidden; border: 6px solid #0B1F3A; border-bottom: 0; border-radius: 20px 20px 0 0; background: var(--cv-purchase-card-bg, #F0F7FF); transform: rotate(-5deg); }
+.ads-purchase-phone-art i { height: 7px; margin: 11px 8px 0; display: block; border-radius: 5px; background: #60A5FA; }
+.ads-purchase-phone-art i:first-child { height: 24px; margin-top: 7px; background: #2563EB; }
+.ads-purchase-control-copy { min-width: 0; display: grid; gap: 8px; }
+.ads-purchase-control-copy strong { display: flex; align-items: center; gap: 7px; font-size: 15px; }
+.ads-purchase-control-copy strong > svg { color: var(--cv-purchase-accent, #2563EB); }
+/* "Đã dùng" — real status badge (semantic success), kept green per spec;
+   everything else about this card (border/selection/icons/illustration
+   above) is brand/interactive and follows the AdsMeta Blue system. */
+.ads-purchase-control-copy strong b { padding: 3px 8px; border-radius: 999px; background: #dcf5df; color: #076226; font-size: 10px; }
+.ads-purchase-control-copy small { display: flex; align-items: center; color: #39433b; font-size: 11px; }
+.ads-purchase-control-copy small svg { color: var(--cv-purchase-accent, #2563EB); }
+.ads-purchase-control-price { margin-left: auto; margin-right: 13px; display: flex; align-items: baseline; gap: 7px; white-space: nowrap; }
+.ads-purchase-control-price strong { font-size: 14px; }
+.ads-purchase-control-price s { color: #59625b; font-size: 11px; }
+.ads-purchase-control-price small { font-size: 10px; }
+
+.ads-purchase-feature-section { padding: 17px; border-radius: 18px; background: #fff; }
+.ads-purchase-feature-section > h2 { margin: 0 0 15px; display: flex; align-items: center; gap: 8px; font-size: 14px; }
+.ads-purchase-feature-section > h2 svg { color: var(--cv-purchase-section-icon, #2563EB); }
+
+.ads-purchase-asset-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.ads-purchase-feature-card { min-width: 0; min-height: 208px; padding: 22px; position: relative; display: block; border-radius: 18px; background: #f7f7f7; color: #141a15; cursor: pointer; scroll-margin-top: 72px; }
+.ads-purchase-feature-card.is-selected { box-shadow: inset 0 0 0 2px var(--cv-purchase-card-border, #3B82F6); background: var(--cv-purchase-card-bg, #F0F7FF); }
+.ads-purchase-feature-card > .ads-purchase-checkbox { position: absolute; right: 18px; top: 18px; }
+.ads-purchase-feature-icon { width: 34px; height: 34px; margin-bottom: 12px; display: grid; place-items: center; border-radius: 10px; color: var(--cv-purchase-accent, #2563EB); background: var(--cv-purchase-accent-icon-bg, #EFF6FF); }
+.ads-purchase-feature-card > strong { min-height: 20px; display: block; padding-right: 26px; font-size: 14px; font-weight: 650; }
+.ads-purchase-feature-card > div { min-height: 29px; margin-top: 10px; display: flex; align-items: baseline; gap: 6px; white-space: nowrap; }
+.ads-purchase-feature-card > div b { font-size: 18px; font-weight: 750; }
+.ads-purchase-feature-card > div small { color: #59645b; font-size: 11px; font-weight: 500; }
+.ads-purchase-feature-card > div s { color: #98a29a; font-size: 10px; }
+.ads-purchase-feature-count { min-height: 25px; margin-top: 8px; padding: 0 9px; display: inline-flex; align-items: center; border-radius: 999px; background: #eee; font-size: 9px; }
+.ads-purchase-feature-card p { margin: 12px 0 0; display: flex; align-items: flex-start; gap: 6px; color: #333d35; font-size: 10px; line-height: 1.35; }
+.ads-purchase-feature-card p svg { flex: none; color: #f3a800; }
+
+.ads-purchase-feature-rows { display: grid; gap: 8px; }
+.ads-purchase-feature-row { min-height: 52px; padding: 0 16px; position: relative; display: flex; align-items: center; gap: 10px; border-radius: 13px; background: #f7f7f7; color: #141a15; cursor: pointer; }
+.ads-purchase-feature-row.is-selected { box-shadow: inset 0 0 0 2px var(--cv-purchase-card-border, #3B82F6); background: var(--cv-purchase-card-bg, #F0F7FF); }
+.ads-purchase-feature-row-icon { width: 26px; height: 26px; flex: none; display: grid; place-items: center; border-radius: 8px; color: var(--cv-purchase-accent, #2563EB); background: var(--cv-purchase-accent-icon-bg, #EFF6FF); }
+.ads-purchase-feature-row > strong { min-width: 0; flex: 1; font-size: 12px; font-weight: 600; }
+.ads-purchase-feature-row-price { margin-left: auto; display: flex; align-items: baseline; gap: 5px; white-space: nowrap; }
+.ads-purchase-feature-row-price b { font-size: 13px; font-weight: 700; }
+.ads-purchase-feature-row-price small { color: #59645b; font-size: 10px; }
+.ads-purchase-feature-row > .ads-purchase-checkbox { position: static; flex: none; }
+
+.ads-purchase-priority-note { min-width: 0; margin-top: 12px; padding: 15px; display: grid; align-content: center; justify-items: start; border-radius: 15px; color: #725812; background: #fff7da; }
+.ads-purchase-priority-note p { margin: 9px 0 0; display: flex; align-items: flex-start; gap: 6px; color: #333d35; font-size: 9px; line-height: 1.35; }
+.ads-purchase-priority-note > svg { color: #dda915; }
+.ads-purchase-priority-note strong { margin-top: 8px; font-size: 12px; }
+
+.ads-purchase-session-heading { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 15px; }
+.ads-purchase-session-heading > h2 { margin: 0; }
+.ads-purchase-session-gift { padding: 7px 12px; display: inline-flex; align-items: center; gap: 6px; border-radius: 999px; color: var(--cv-purchase-accent, #2563EB); background: var(--cv-purchase-accent-icon-bg, #EFF6FF); font-size: 11px; font-weight: 600; }
+.ads-purchase-session-options { display: flex; flex-wrap: wrap; gap: 10px; }
+.ads-purchase-session-options button { min-width: 140px; flex: 1; padding: 12px 14px; display: grid; gap: 4px; border: 1px solid #e2e8e3; border-radius: 13px; background: #f7f7f7; color: #141a15; text-align: left; cursor: pointer; }
+.ads-purchase-session-options button > i { width: 15px; height: 15px; display: block; border: 1px solid #c7d8cb; border-radius: 50%; background: #fff; }
+.ads-purchase-session-options button strong { font-size: 12px; font-weight: 600; }
+.ads-purchase-session-options button small { color: #59645b; font-size: 10px; }
+.ads-purchase-session-options button.is-selected { border-color: var(--cv-purchase-card-border, #3B82F6); background: var(--cv-purchase-card-bg, #F0F7FF); }
+.ads-purchase-session-options button.is-selected > i { border-color: var(--cv-purchase-accent, #2563EB); background: var(--cv-purchase-accent, #2563EB); box-shadow: inset 0 0 0 3px #fff; }
+.ads-purchase-session-options button.is-selected strong { color: var(--cv-purchase-accent, #2563EB); }
+
+.ads-purchase-builder-status { min-height: 16px; color: #5b7761; font-size: 10px; }
+
+.ads-purchase-summary { min-width: 0; min-height: 0; height: 100%; padding: 0 22px 24px; overflow: auto; border: 1px solid #cadacc; border-radius: 16px; background: var(--cv-brand-subtle, #F0F7FF); scrollbar-width: thin; scrollbar-color: #b8cdbd transparent; }
+.ads-purchase-summary > header { height: 64px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid var(--purchase-line); }
+.ads-purchase-summary > header svg { color: var(--cv-purchase-accent, #2563EB); }
+.ads-purchase-summary > header h2 { margin: 0; font-size: 16px; }
+.ads-purchase-summary-card,
+.ads-purchase-summary-section,
+.ads-purchase-total-card { margin-top: 18px; padding: 18px; border-radius: 19px; background: #fff; }
+.ads-purchase-summary-count { padding-bottom: 15px; display: flex; justify-content: space-between; border-bottom: 1px dashed #d9e4db; }
+.ads-purchase-summary-count > span { display: grid; gap: 4px; }
+.ads-purchase-summary-count > span:last-child { text-align: right; }
+.ads-purchase-summary-count strong { font-size: 13px; }
+.ads-purchase-summary-count strong i { color: #59645b; font-size: 10px; font-style: normal; font-weight: 400; }
+.ads-purchase-summary-count small { color: #69736c; font-size: 10px; }
+.ads-purchase-summary-product { min-height: 52px; padding-top: 14px; display: flex; align-items: center; gap: 10px; }
+.ads-purchase-summary-product > svg { color: var(--cv-purchase-accent, #2563EB); }
+.ads-purchase-summary-product span { display: grid; gap: 3px; }
+.ads-purchase-summary-product strong { font-size: 12px; }
+.ads-purchase-summary-product small { color: #59645b; font-size: 10px; }
+.ads-purchase-duration { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.ads-purchase-duration button { min-height: 44px; padding: 0 8px; border: 1px solid transparent; border-radius: 999px; background: #f4f4f4; color: #1c231e; font-size: 11px; font-weight: 600; cursor: pointer; }
+.ads-purchase-duration button.is-selected { border-color: var(--cv-purchase-duration-border, #3B82F6); background: var(--cv-purchase-duration-bg, #F0F7FF); }
+.ads-purchase-duration button:hover:not(.is-selected) { border-color: var(--cv-brand-border, #BFDBFE); background: var(--cv-brand-subtle, #F0F7FF); }
+.ads-purchase-duration button:focus-visible { outline: 3px solid var(--cv-brand-focus-soft, #DBEAFE); outline-offset: 2px; }
+.ads-purchase-daily-cost { margin: 10px 0 0; color: #5a6b60; font-size: 10.5px; line-height: 1.5; }
+.ads-purchase-daily-cost b { color: #202721; font-weight: 700; }
+.ads-purchase-coupon-section { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 9px; }
+.ads-purchase-coupon { min-width: 0; min-height: 45px; padding: 0 13px; display: flex; align-items: center; gap: 8px; border-radius: 999px; background: #f4f4f4; color: var(--cv-purchase-accent, #2563EB); }
+.ads-purchase-coupon:focus-within { outline: 3px solid var(--cv-brand-focus-soft, #DBEAFE); outline-offset: 2px; }
+.ads-purchase-coupon input { min-width: 0; width: 100%; border: 0; outline: 0; background: transparent; color: #202721; font-size: 12px; }
+.ads-purchase-coupon-section > button { min-height: 45px; padding: 0 18px; border: 0; border-radius: 999px; background: var(--cv-brand-soft, #EFF6FF); color: var(--cv-brand-primary-hover, #1D4ED8); font-size: 11px; font-weight: 650; cursor: pointer; transition: background-color .15s ease; }
+.ads-purchase-coupon-section > button:hover { background: var(--cv-brand-soft-strong, #DBEAFE); }
+.ads-purchase-coupon-section > button:focus-visible { outline: 3px solid var(--cv-brand-focus-soft, #DBEAFE); outline-offset: 2px; }
+.ads-purchase-coupon-status { min-height: 14px; grid-column: 1 / -1; color: #5f6c62; font-size: 9px; }
+.ads-purchase-total-card > div { display: flex; align-items: center; justify-content: space-between; min-height: 40px; font-size: 12px; }
+.ads-purchase-total-card > div strong { font-size: 12px; }
+.ads-purchase-payable { margin-top: 10px; padding-top: 10px; border-top: 1px dashed #d8e4da; }
+.ads-purchase-payable span,
+.ads-purchase-payable strong { font-size: 16px !important; font-weight: 700; }
+.ads-purchase-total-card > button { width: 100%; min-height: 46px; margin-top: 8px; display: flex; align-items: center; justify-content: center; gap: 7px; border: 0; border-radius: 999px; background: var(--cv-brand-primary, #2563EB); color: #fff; font-size: 12px; font-weight: 750; cursor: pointer; transition: background-color .15s ease; }
+.ads-purchase-total-card > button:hover:not(:disabled) { background: var(--cv-brand-primary-hover, #1D4ED8); }
+.ads-purchase-total-card > button:active:not(:disabled) { background: var(--cv-brand-primary-active, #1E40AF); }
+.ads-purchase-total-card > button:focus-visible { outline: 3px solid var(--cv-brand-focus-soft, #DBEAFE); outline-offset: 2px; }
+.ads-purchase-total-card > button:disabled { opacity: .55; cursor: not-allowed; }
+
+/* Step 2 footer — Quay lại (secondary) + Tiến hành thanh toán (primary),
+   same brand tokens as the Step 1 single-button CTA above. */
+.ads-purchase-step2-actions { width: 100%; margin-top: 8px; display: flex; gap: 10px; }
+.ads-purchase-step3-actions { width: 100%; margin-top: 18px; display: flex; flex-direction: column; align-items: stretch; gap: 11px; }
+.ads-purchase-step2-actions button,
+.ads-purchase-step3-actions button { min-height: 46px; display: flex; align-items: center; justify-content: center; gap: 7px; border: 0; border-radius: 999px; padding: 0 18px; font-size: 12px; font-weight: 750; white-space: nowrap; cursor: pointer; transition: background-color .15s ease; }
+.ads-purchase-step2-actions button { flex: 1; }
+.ads-purchase-step3-actions button { width: 100%; }
+.ads-purchase-step2-actions .is-secondary,
+.ads-purchase-step3-actions .is-secondary { background: #f1f6f2; color: #445048; }
+.ads-purchase-step2-actions .is-secondary:hover,
+.ads-purchase-step3-actions .is-secondary:hover { background: #e5ede7; }
+.ads-purchase-step2-actions .is-primary,
+.ads-purchase-step3-actions .is-primary { background: var(--cv-brand-primary, #2563EB); color: #fff; }
+.ads-purchase-step2-actions .is-primary:hover:not(:disabled),
+.ads-purchase-step3-actions .is-primary:hover:not(:disabled) { background: var(--cv-brand-primary-hover, #1D4ED8); }
+.ads-purchase-step2-actions .is-primary:active:not(:disabled),
+.ads-purchase-step3-actions .is-primary:active:not(:disabled) { background: var(--cv-brand-primary-active, #1E40AF); }
+.ads-purchase-step2-actions .is-primary:focus-visible,
+.ads-purchase-step2-actions .is-secondary:focus-visible,
+.ads-purchase-step3-actions .is-primary:focus-visible,
+.ads-purchase-step3-actions .is-secondary:focus-visible { outline: 3px solid var(--cv-brand-focus-soft, #DBEAFE); outline-offset: 2px; }
+.ads-purchase-step2-actions .is-primary:disabled,
+.ads-purchase-step3-actions .is-primary:disabled { opacity: .55; cursor: not-allowed; }
+
+/* Purchase consent modal — shares the global `.ads-advanced-filter-backdrop`
+   (dim + blur, no click-through) from ads-check-adaccounts-column-menu.css;
+   Category B (important/blocking), closable only via the explicit close
+   button or Escape, same as .ads-pro-confirm-dialog. */
+.ads-purchase-consent-modal {
+  width: min(440px, 92vw);
+  max-height: 88vh;
+  padding: 28px 26px 24px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  overflow-y: auto;
+  text-align: center;
+  border: 1px solid #cadacc;
+  border-radius: 24px;
+  background: #fff;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, .3);
+  color: #17281b;
+}
+.ads-purchase-consent-close { width: 30px; height: 30px; position: absolute; right: 14px; top: 14px; display: grid; place-items: center; border: 0; border-radius: 50%; background: #f1f6f2; color: #445048; cursor: pointer; }
+.ads-purchase-consent-illustration { width: 60px; height: 60px; margin-bottom: 6px; position: relative; display: grid; place-items: center; border-radius: 50%; background: var(--cv-brand-icon-badge-bg, #DBEAFE); color: var(--cv-brand-primary-hover, #1D4ED8); }
+.ads-purchase-consent-illustration-badge { width: 22px; height: 22px; position: absolute; right: -4px; bottom: -4px; display: grid; place-items: center; border: 2px solid #fff; border-radius: 50%; background: #f7a828; color: #fff; }
+.ads-purchase-consent-modal h2 { margin: 4px 0 0; font-size: 17px; font-weight: 700; }
+.ads-purchase-consent-body { margin-top: 12px; display: grid; gap: 10px; text-align: left; }
+.ads-purchase-consent-body p { margin: 0; color: #4a564d; font-size: 12.5px; line-height: 1.6; }
+.ads-purchase-consent-agree { width: 100%; min-height: 20px; margin-top: 16px; padding: 2px 0; position: relative; display: flex; align-items: center; gap: 9px; cursor: pointer; }
+.ads-purchase-consent-agree span { color: #202721; font-size: 12.5px; font-weight: 550; text-align: left; }
+.ads-purchase-consent-continue { width: 100%; min-height: 46px; margin-top: 16px; display: flex; align-items: center; justify-content: center; border: 0; border-radius: 999px; background: var(--cv-brand-primary, #2563EB); color: #fff; font-size: 13px; font-weight: 700; cursor: pointer; transition: background-color .15s ease; }
+.ads-purchase-consent-continue:hover:not(:disabled) { background: var(--cv-brand-primary-hover, #1D4ED8); }
+.ads-purchase-consent-continue:active:not(:disabled) { background: var(--cv-brand-primary-active, #1E40AF); }
+.ads-purchase-consent-continue:focus-visible { outline: 3px solid var(--cv-brand-focus-soft, #DBEAFE); outline-offset: 2px; }
+.ads-purchase-consent-continue:disabled { opacity: .5; cursor: not-allowed; }
+.ads-purchase-consent-terms { margin: 12px 0 0; color: #6b756e; font-size: 10.5px; line-height: 1.5; }
+.ads-purchase-consent-link { color: var(--cv-brand-primary-hover, #1D4ED8); font-weight: 600; text-decoration: underline; text-underline-offset: 2px; }
+
+/* Step 2 → Step 3 domestic-bank-transfer acknowledgement (Modal 2) —
+   deliberately more compact than the Modal 1 consent dialog above.
+   Warning icon stays semantic orange (#f7a828, same value already used
+   by the Modal 1 illustration badge) regardless of color version; only
+   the border/number-circles/confirm button follow the active brand. */
+.ads-purchase-bank-warning-modal {
+  width: min(400px, 92vw);
+  padding: 22px 22px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  border: 1.5px solid var(--cv-brand-primary, #2563EB);
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, .3);
+  color: #17281b;
+}
+.ads-purchase-bank-warning-header { display: flex; align-items: center; gap: 8px; }
+.ads-purchase-bank-warning-icon { color: #f7a828; }
+.ads-purchase-bank-warning-header h2 { margin: 0; font-size: 16px; font-weight: 700; color: #17281b; }
+.ads-purchase-bank-warning-list { margin: 0; padding: 0; display: grid; gap: 10px; list-style: none; }
+.ads-purchase-bank-warning-list li { display: flex; align-items: flex-start; gap: 10px; }
+.ads-purchase-bank-warning-index { width: 20px; height: 20px; flex: none; display: grid; place-items: center; border-radius: 50%; background: var(--cv-brand-primary, #2563EB); color: #fff; font-size: 11px; font-weight: 700; }
+.ads-purchase-bank-warning-list p { margin: 1px 0 0; color: #3d4a41; font-size: 12.5px; line-height: 1.5; }
+.ads-purchase-bank-warning-confirm { width: 100%; min-height: 46px; margin-top: 4px; border: 0; border-radius: 999px; background: var(--cv-brand-primary, #2563EB); color: #fff; font-size: 12.5px; font-weight: 700; cursor: pointer; transition: background-color .15s ease; }
+.ads-purchase-bank-warning-confirm:hover { background: var(--cv-brand-primary-hover, #1D4ED8); }
+.ads-purchase-bank-warning-confirm:active { background: var(--cv-brand-primary-active, #1E40AF); }
+.ads-purchase-bank-warning-confirm:focus-visible { outline: 3px solid var(--cv-brand-focus-soft, #DBEAFE); outline-offset: 2px; }
+.ads-purchase-bank-warning-close { width: 100%; min-height: 44px; border: 0; border-radius: 999px; background: #f1f6f2; color: #445048; font-size: 12.5px; font-weight: 600; cursor: pointer; }
+.ads-purchase-bank-warning-close:hover { background: #e5ede7; }
+.ads-purchase-bank-warning-close:focus-visible { outline: 3px solid var(--cv-brand-focus-soft, #DBEAFE); outline-offset: 2px; }
+
+/* Modal 3 — Lưu ý khi tiến hành thanh toán. Reuses the illustration
+   (.ads-purchase-consent-illustration) and Modal 2's numbered-list /
+   circle / CTA styling (.ads-purchase-bank-warning-*) as-is; only the
+   outer panel wrapper is new. Neutral border per spec — the numbered
+   circles + CTA already carry the brand accent. */
+.ads-purchase-payment-notice-modal {
+  width: min(440px, 92vw);
+  max-height: 88vh;
+  padding: 26px 24px 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  overflow-y: auto;
+  text-align: center;
+  border: 1px solid #cadacc;
+  border-radius: 22px;
+  background: #fff;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, .3);
+  color: #17281b;
+}
+.ads-purchase-payment-notice-modal h2 { margin: 0; font-size: 16px; font-weight: 700; }
+.ads-purchase-payment-notice-modal .ads-purchase-bank-warning-list { width: 100%; margin-top: 2px; text-align: left; }
+.ads-purchase-payment-notice-modal .ads-purchase-bank-warning-confirm { margin-top: 6px; }
+
+.ads-billing-workspace-frame > div:not([hidden]) > .ads-billing-panel:not(.ads-purchase-panel) { min-height: 100%; padding: 74px 24px 28px; overflow: auto; background: transparent; }
+.ads-billing-checkout-card { max-width: 920px; margin: 0 auto; }
+
+@media (max-width: 1450px) {
+  .ads-billing-tabs { width: calc(66% - 1px); }
+  .ads-purchase-layout { grid-template-columns: minmax(0, 1.95fr) minmax(360px, 1fr); }
+  .ads-billing-plan-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 1050px) {
+  .ads-billing-page { height: auto; overflow: visible; }
+  .ads-billing-tabs { width: 100%; height: auto; min-height: 52px; position: sticky; top: 0; flex-wrap: wrap; border-radius: 16px 16px 0 0; }
+  .ads-billing-tabs-trailing { flex-basis: 100%; margin-left: 0; margin-top: 6px; justify-content: flex-end; }
+  .ads-billing-workspace-frame > div:not(.ads-billing-tabs):not([hidden]) { height: auto; }
+  .ads-purchase-layout { height: auto; grid-template-columns: 1fr; }
+  .ads-purchase-builder { padding-top: 64px; overflow: visible; border-radius: 16px; }
+  .ads-purchase-summary { height: auto; min-height: 620px; overflow: visible; border-radius: 16px; }
+}
+
+@media (max-width: 767px) {
+  .ads-billing-tabs { height: auto; padding: 6px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .ads-billing-tabs > button { min-width: 0; min-height: 44px; padding: 0 8px; justify-content: center; font-size: 10px; white-space: nowrap; transform: none; }
+  .ads-billing-tabs > button + button { margin-left: 4px; }
+  .ads-billing-tabs > button svg { display: none; }
+  .ads-billing-tabs-trailing { grid-column: 1 / -1; margin-left: 0; margin-top: 6px; justify-content: flex-end; }
+  .ads-purchase-builder { padding: 58px 10px 14px; gap: 10px; }
+  .ads-purchase-progress { width: 100%; right: 0; top: 5px; justify-content: center; gap: 2px; }
+  .ads-purchase-progress button { min-height: 44px; padding: 0 4px; font-size: 9px; }
+  .ads-purchase-bank-step { padding: 14px; }
+  .ads-purchase-bank-row { padding: 0 14px; min-height: 58px; }
+  .ads-purchase-tier-grid { grid-template-columns: 1fr; }
+  .ads-purchase-tier-grid > button:not(.ads-purchase-tier-swap) { min-height: 210px; }
+  .ads-purchase-tier-swap { top: 50%; transform: translate(-50%, -50%) rotate(90deg); }
+  .ads-purchase-bundle { padding: 10px 12px; align-items: flex-start; }
+  .ads-purchase-bundle > span:first-child { align-items: flex-start; flex-direction: column; gap: 4px; }
+  .ads-purchase-bundle > span:nth-child(2) { margin-right: 8px; flex-direction: column; align-items: flex-end; gap: 0; }
+  .ads-purchase-control-hub { min-height: 145px; padding: 18px 12px 14px 92px; align-items: flex-start; flex-wrap: wrap; }
+  .ads-purchase-phone-art { width: 65px; height: 105px; }
+  .ads-purchase-control-copy { max-width: calc(100% - 24px); }
+  .ads-purchase-control-copy small { display: block; }
+  .ads-purchase-control-price { margin: 8px 24px 0 0; flex-wrap: wrap; }
+  .ads-purchase-control-hub > .ads-purchase-checkbox { position: absolute; right: 12px; top: 14px; }
+  .ads-purchase-feature-section { padding: 12px; }
+  .ads-purchase-asset-grid { grid-template-columns: 1fr; }
+  .ads-purchase-feature-card { min-height: 170px; padding: 16px; }
+  .ads-purchase-session-options button { min-width: 0; flex-basis: calc(50% - 5px); }
+  .ads-purchase-summary { min-height: 0; padding: 0 10px 16px; }
+  .ads-purchase-summary > header { height: 56px; }
+  .ads-purchase-summary-card,
+  .ads-purchase-summary-section,
+  .ads-purchase-total-card { margin-top: 10px; padding: 13px; border-radius: 15px; }
+  .ads-purchase-duration { gap: 4px; }
+  .ads-purchase-duration button { padding-inline: 4px; font-size: 10px; }
+  .ads-purchase-coupon input { font-size: 16px; }
+  .ads-billing-workspace-frame > div:not([hidden]) > .ads-billing-panel:not(.ads-purchase-panel) { padding: 64px 10px 16px; }
+  .ads-billing-plan-cards { grid-template-columns: 1fr; }
+  .ads-billing-plan-toolbar { width: 100%; }
+  .ads-billing-plan-search { width: auto; flex: 1; }
+  .ads-billing-session-toolbar { flex-direction: column; align-items: stretch; }
+  .ads-billing-session-toolbar .ads-billing-add-session { width: 100%; }
+  .ads-billing-session-summary-foot { flex-direction: column; gap: 6px; }
+  .ads-billing-session-summary-foot div:last-child { text-align: left; }
+}
+
+/* Quản lý gói cước — brand-controlled elements re-themed via the SAME
+   global --cv-* tokens already used across Mua gói (V1–V5), overriding the
+   hardcoded greens in ads-check-payment-screens.css / -source-fidelity.css.
+   Deliberately NOT touched: .ads-billing-managed-plan > header span.is-active
+   ("Đang dùng") and .ads-billing-session-list article > span.is-current
+   ("Phiên hiện tại") — both are real status indicators (semantic success),
+   not brand actions, so they keep their existing green regardless of version. */
+.ads-payment-step { border-color: var(--cv-brand-border, rgba(59, 130, 246, .18)); color: var(--cv-brand-primary-hover, #1D4ED8); background: var(--cv-brand-icon-badge-bg, #DBEAFE); }
+.ads-billing-add-session { border-color: var(--cv-brand-border, #BFDBFE); color: var(--cv-brand-primary-hover, #1D4ED8); background: var(--cv-brand-icon-badge-bg, #DBEAFE); }
+.ads-billing-add-session:hover { background: var(--cv-brand-soft, #EFF6FF); }
+.ads-billing-add-session:focus-visible { outline: 3px solid var(--cv-brand-focus-soft, #DBEAFE); outline-offset: 2px; }
+
+/* Quản lý gói cước — visual refinement pass (LEFT feature cards + toolbar,
+   RIGHT session summary/toolbar/bulk-select/list). Replaces the earlier,
+   too-heavy "generic dashboard" version: compact card rhythm, one coherent
+   session-summary card instead of 4 KPI boxes, denser session rows. Panel
+   surfaces stay neutral/white — theme shows only through the few explicitly
+   brand-tokenized controls below (Nâng cấp / Mua thêm phiên / Giftcode /
+   filter / focus rings / checkboxes), never as a full-panel tint. Feature
+   icon badges are intentionally NOT brand-tokenized (see featureAccent in
+   the page component) so each feature keeps its own identity color instead
+   of every icon turning into the active version's brand hue. "Đã mua" stays
+   fixed semantic green in every version (see .ads-billing-plan-badge below). */
+.ads-billing-plan-cards { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-bottom: 14px; }
+
+/* Giftcode/search/filter now render INSIDE .ads-billing-tabs (the shared tab
+   row, absolute z-index:20 above Curve D), right-aligned via margin-left:
+   auto — not a 4th tab, not measured by Curve D (which only ever queries
+   [role="tab"] buttons — see the useLayoutEffect in AdsCheckBillingPage). */
+.ads-billing-tabs-trailing { margin-left: auto; margin-right: 12px; display: flex; align-items: center; gap: 6px; }
+.ads-billing-plan-toolbar { display: flex; align-items: center; gap: 6px; }
+/* Giftcode is now a trigger BUTTON (opens AdsCheckBillingGiftcodeModal) —
+   the actual code input lives inside that modal, per the reference
+   screenshots, not inline in the toolbar pill anymore. */
+.ads-billing-giftcode-trigger,
+.ads-billing-plan-search { min-height: 32px; padding: 0 9px; display: flex; align-items: center; gap: 6px; border: 1px solid #dbe5dc; border-radius: 999px; background: #fff; color: #5f6c62; }
+.ads-billing-giftcode-trigger { flex: none; font-size: 11.5px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+.ads-billing-giftcode-trigger:hover { background: var(--cv-brand-soft, #EFF6FF); }
+.ads-billing-plan-search { width: 190px; }
+.ads-billing-plan-search input { min-width: 0; flex: 1; border: 0; outline: 0; background: transparent; color: #202721; font-size: 11.5px; }
+/* Prefixed with .ads-billing-tabs-trailing so this always outranks the
+   pre-existing unscoped `.ads-billing-tabs button` rules (this file's own,
+   now `> button`-scoped, above — and ads-check-payment-source-fidelity.css's
+   own unscoped one) which would otherwise leak their dark tab-pill
+   background/color/padding onto this button too, since it lives inside
+   .ads-billing-tabs for layout. */
+.ads-billing-tabs-trailing .ads-billing-plan-filter { width: 32px; height: 32px; margin: 0; padding: 0; flex: none; display: inline-flex; align-items: center; justify-content: center; border: 1px solid #dbe5dc; border-radius: 999px; background: #fff; color: var(--cv-brand-primary-hover, #1D4ED8); line-height: 0; cursor: pointer; }
+/* Explicit `display:block` + `flex-shrink:0` on the glyph itself — an
+   inline SVG's own baseline/vertical-align never gets a chance to nudge it
+   off-center once flex centering (above) fully governs its box. */
+.ads-billing-tabs-trailing .ads-billing-plan-filter svg { display: block; flex-shrink: 0; }
+.ads-billing-tabs-trailing .ads-billing-plan-filter:hover,
+.ads-billing-tabs-trailing .ads-billing-plan-filter[aria-expanded='true'] { background: var(--cv-brand-soft, #EFF6FF); }
+.ads-billing-giftcode-trigger:focus-visible,
+.ads-billing-plan-search:focus-within,
+.ads-billing-tabs-trailing .ads-billing-plan-filter:focus-visible { border-color: var(--cv-brand-primary, #2563EB); outline: 3px solid var(--cv-brand-focus-soft, #DBEAFE); outline-offset: 1px; }
+.ads-billing-giftcode-trigger svg,
+.ads-billing-plan-search svg { flex: none; color: var(--cv-brand-primary-hover, #1D4ED8); }
+
+.ads-billing-managed-plan { padding: 16px; display: grid; align-content: start; gap: 6px; border: 1px solid #e2e8e3; border-radius: 14px; background: #fff; transition: border-color .15s ease, box-shadow .15s ease; }
+/* Subtle brand-tokenized hover — the only theme-controlled thing about the
+   card surface itself; default border/background stay neutral (section 5/11). */
+.ads-billing-managed-plan:hover { border-color: var(--cv-brand-border, #BFDBFE); box-shadow: 0 0 0 1px var(--cv-brand-border, #BFDBFE); }
+.ads-billing-plan-logo { width: 32px; height: 32px; display: grid; place-items: center; border-radius: 9px; }
+.ads-billing-managed-plan h3 { margin: 2px 0 0; font-size: 12.5px; font-weight: 650; color: #1c231e; }
+.ads-billing-plan-badge { justify-self: start; padding: 2px 8px; border-radius: 999px; color: #0f7a3c; background: #e4f6e8; font-size: 9px; font-weight: 800; }
+/* `.ads-billing-plan-expiry` scoped with the `.ads-billing-managed-plan`
+   parent class so it always outranks ads-check-payment-screens.css's
+   pre-existing `.ads-billing-managed-plan p` (0,1,1) — it's a bare `<p>`
+   element selector left over from the original dark-theme card layout,
+   which is otherwise MORE specific than a single class alone and would win
+   the cascade despite loading first (see the same issue on
+   .ads-billing-plan-upgrade below, where it actually broke V1–V5 theming). */
+.ads-billing-managed-plan .ads-billing-plan-expiry { margin: 0; display: flex; align-items: center; gap: 5px; color: #6b756e; font-size: 10px; }
+.ads-billing-plan-expiry svg { flex: none; color: #939e96; }
+/* Scoped with the `.ads-billing-managed-plan >` parent for the SAME reason —
+   ads-check-payment-screens.css / ads-check-payment-source-fidelity.css both
+   still carry a legacy `.ads-billing-managed-plan > button` rule (from the
+   original dark-card layout, before this card was rebuilt) at specificity
+   (0,1,1), which OUTRANKS a bare `.ads-billing-plan-upgrade` class (0,1,0)
+   regardless of load order. That legacy rule was winning silently — the CTA
+   was actually rendering with ITS hardcoded width/height/border/color/
+   background (a fixed muted green) on every version, not the brand tokens
+   below, which is exactly the "Nâng cấp vẫn Green" bug. Every property the
+   legacy rule sets is re-asserted explicitly here (not just color/border/
+   background) so nothing is left for it to still win. */
+.ads-billing-managed-plan > .ads-billing-plan-upgrade {
+  width: 100%;
+  height: auto;
+  min-height: 30px;
+  margin-top: 4px;
+  border: 1px solid var(--cv-brand-border, #BFDBFE);
+  border-radius: 8px;
+  color: var(--cv-brand-primary-hover, #1D4ED8);
+  background: var(--cv-brand-icon-badge-bg, #DBEAFE);
+  font-size: 10.5px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.ads-billing-managed-plan > .ads-billing-plan-upgrade:hover { background: var(--cv-brand-soft, #EFF6FF); }
+.ads-billing-managed-plan > .ads-billing-plan-upgrade:active { background: var(--cv-brand-soft-strong, #DBEAFE); }
+.ads-billing-managed-plan > .ads-billing-plan-upgrade:focus-visible { outline: 3px solid var(--cv-brand-focus-soft, #DBEAFE); outline-offset: 2px; }
+.ads-billing-plan-cards > .ads-billing-empty { grid-column: 1 / -1; min-height: 120px; }
+.ads-billing-plan-cards > .ads-billing-empty p { margin: 0; }
+
+/* padding-top only (not translateY, not per-child margins) so the whole
+   column — header, separator, stats card, helper text, toolbar, bulk row,
+   session list — shifts down together as one group; internal gaps between
+   them are untouched. box-sizing:border-box (global.css) means this simply
+   shrinks the flex content area by 16px, which .ads-billing-session-list's
+   own flex:1/min-height:0/overflow-y:auto already absorbs — no overflow. */
+.ads-billing-session-card { height: 100%; padding-top: 16px; display: flex; flex-direction: column; min-height: 0; }
+
+/* RIGHT panel header — icon+title cluster only, no subtitle/badge/action.
+   Icon follows V1–V5 (brand-tokenized, same tokens as the rest of this
+   panel); title stays neutral dark text; separator is intentionally subtle
+   (translucent neutral, not brand) so it reads as a soft divider, not the
+   header's most prominent element. */
+.ads-billing-session-header { flex: none; padding: 3px 0 12px; margin-bottom: 0; border-bottom: 1px solid rgba(20, 30, 24, .08); }
+.ads-billing-session-title-group { display: flex; align-items: center; gap: 9px; }
+.ads-billing-session-title-icon { width: 33px; height: 33px; flex: none; display: grid; place-items: center; border-radius: 10px; color: var(--cv-brand-primary-hover, #1D4ED8); background: var(--cv-brand-icon-badge-bg, #DBEAFE); }
+.ads-billing-session-title { margin: 0; font-size: 15.5px; font-weight: 650; line-height: 1.2; color: #1c231e; }
+
+.ads-billing-session-summary { flex: none; margin-top: 14px; padding: 14px; display: grid; gap: 8px; border-radius: 14px; background: #f5f7f5; }
+.ads-billing-session-summary-top { display: flex; align-items: baseline; justify-content: space-between; }
+.ads-billing-session-summary-top span { color: #59645b; font-size: 11px; }
+.ads-billing-session-summary-top strong { font-size: 18px; font-weight: 800; color: #1c231e; }
+.ads-billing-session-summary-ip { display: flex; align-items: center; justify-content: space-between; padding-top: 8px; border-top: 1px dashed #dbe5dc; }
+.ads-billing-session-summary-ip span { color: #59645b; font-size: 10.5px; }
+.ads-billing-session-summary-ip strong { font-size: 11.5px; font-weight: 700; color: #202721; }
+.ads-billing-session-summary-foot { display: flex; justify-content: space-between; gap: 10px; padding-top: 8px; border-top: 1px dashed #dbe5dc; }
+.ads-billing-session-summary-foot div { display: grid; gap: 2px; }
+.ads-billing-session-summary-foot div:last-child { text-align: right; }
+.ads-billing-session-summary-foot span { color: #8b968f; font-size: 9.5px; }
+.ads-billing-session-summary-foot strong { font-size: 12px; font-weight: 700; color: #202721; }
+.ads-billing-session-stats-note { flex: none; display: block; margin-top: 6px; color: #8b968f; font-size: 9.5px; line-height: 1.4; }
+
+.ads-billing-session-toolbar { flex: none; display: flex; align-items: center; gap: 8px; margin-top: 12px; }
+.ads-billing-session-search { min-width: 0; flex: 1; min-height: 34px; padding: 0 10px; display: flex; align-items: center; gap: 7px; border: 1px solid #dbe5dc; border-radius: 999px; background: #fff; color: #5f6c62; }
+.ads-billing-session-search input { min-width: 0; flex: 1; border: 0; outline: 0; background: transparent; color: #202721; font-size: 11.5px; }
+.ads-billing-session-search:focus-within { border-color: var(--cv-brand-primary, #2563EB); outline: 3px solid var(--cv-brand-focus-soft, #DBEAFE); outline-offset: 1px; }
+.ads-billing-session-search svg { flex: none; color: var(--cv-brand-primary-hover, #1D4ED8); }
+.ads-billing-session-toolbar .ads-billing-add-session { flex: none; min-height: 34px; padding: 0 12px; font-size: 10.5px; }
+
+.ads-billing-session-bulk { flex: none; display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 10px; padding: 0 2px; }
+.ads-billing-session-bulk label { display: flex; align-items: center; gap: 6px; color: #4a564d; font-size: 11px; font-weight: 600; cursor: pointer; }
+.ads-billing-session-bulk input[type='checkbox'] { accent-color: var(--cv-brand-primary, #2563EB); }
+.ads-billing-session-bulk button { min-height: 28px; padding: 0 11px; display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--cv-brand-border, #BFDBFE); border-radius: 8px; color: var(--cv-brand-primary-hover, #1D4ED8); background: var(--cv-brand-icon-badge-bg, #DBEAFE); font-size: 10.5px; font-weight: 700; cursor: pointer; }
+.ads-billing-session-bulk button:hover:not(:disabled) { background: var(--cv-brand-soft, #EFF6FF); }
+.ads-billing-session-bulk button:disabled { opacity: .5; cursor: not-allowed; }
+
+.ads-billing-session-list { flex: 1; min-height: 0; margin-top: 8px; padding-right: 2px; display: grid; align-content: start; gap: 5px; overflow-y: auto; scrollbar-width: thin; scrollbar-color: #b8cdbd transparent; }
+.ads-billing-session-list article { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 10px; min-height: 42px; padding: 7px 10px; border: 1px solid #edf1ee; border-radius: 9px; background: #fff; }
+.ads-billing-session-list article.is-current { border-color: var(--cv-brand-border, rgba(59, 130, 246, .18)); background: var(--cv-brand-icon-badge-bg, #DBEAFE); }
+.ads-billing-session-list article.is-revoked { opacity: .45; }
+.ads-billing-session-check input,
+.ads-billing-session-bulk input[type='checkbox'] { accent-color: var(--cv-brand-primary, #2563EB); }
+.ads-billing-session-id { min-width: 0; display: grid; gap: 1px; }
+.ads-billing-session-id strong { display: block; overflow: hidden; color: #1c231e; font-size: 11.5px; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; }
+.ads-billing-session-id small { display: block; color: #79867e; font-size: 9.5px; }
+.ads-billing-session-time { text-align: right; display: grid; gap: 1px; }
+.ads-billing-session-time strong { display: block; color: #1c231e; font-size: 10.5px; font-weight: 700; }
+.ads-billing-session-time small { display: block; color: #79867e; font-size: 9px; }
+
+/* Giftcode modal — Category B (AdsProModalBackdrop, no backdrop-dismiss,
+   same as the 3 checkout modals), compact centered surface per reference. */
+.ads-giftcode-modal {
+  width: min(450px, 92vw);
+  max-height: 88vh;
+  padding: 20px 22px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  overflow-y: auto;
+  text-align: left;
+  border: 1px solid #cadacc;
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, .3);
+  color: #17281b;
+}
+.ads-giftcode-header { display: flex; align-items: center; gap: 9px; }
+.ads-giftcode-header-icon { width: 33px; height: 33px; flex: none; display: grid; place-items: center; border-radius: 10px; color: var(--cv-brand-primary-hover, #1D4ED8); background: var(--cv-brand-icon-badge-bg, #DBEAFE); }
+.ads-giftcode-header h2 { margin: 0; flex: 1; font-size: 15.5px; font-weight: 650; color: #1c231e; }
+.ads-giftcode-close { width: 28px; height: 28px; flex: none; display: grid; place-items: center; border: 0; border-radius: 50%; background: #f1f6f2; color: #445048; cursor: pointer; }
+.ads-giftcode-close:hover { background: #e5ede7; }
+
+.ads-giftcode-tabs { display: flex; gap: 6px; padding-bottom: 12px; border-bottom: 1px solid #e2e8e3; }
+.ads-giftcode-tabs button { min-height: 32px; padding: 0 14px; border: 0; border-radius: 999px; background: transparent; color: #6b756e; font-size: 12px; font-weight: 600; cursor: pointer; }
+.ads-giftcode-tabs button.is-active { color: var(--cv-brand-primary-hover, #1D4ED8); background: var(--cv-brand-icon-badge-bg, #DBEAFE); }
+
+.ads-giftcode-panel { display: grid; gap: 14px; }
+.ads-giftcode-instructions { margin: 0; padding: 0; display: grid; gap: 6px; list-style: none; }
+.ads-giftcode-instructions li { padding-left: 14px; position: relative; color: var(--cv-brand-primary-hover, #1D4ED8); font-size: 12px; line-height: 1.5; }
+.ads-giftcode-instructions li::before { content: ''; width: 4px; height: 4px; position: absolute; left: 2px; top: 8px; border-radius: 50%; background: currentColor; }
+.ads-giftcode-input-row { display: flex; gap: 8px; }
+.ads-giftcode-input { min-width: 0; flex: 1; min-height: 42px; padding: 0 12px; display: flex; align-items: center; gap: 8px; border: 1px solid #dbe5dc; border-radius: 999px; background: #fafcfa; }
+.ads-giftcode-input input { min-width: 0; flex: 1; border: 0; outline: 0; background: transparent; color: #202721; font-size: 12.5px; }
+.ads-giftcode-input svg { flex: none; color: #9aa6a0; }
+.ads-giftcode-input:focus-within { border-color: var(--cv-brand-primary, #2563EB); outline: 3px solid var(--cv-brand-focus-soft, #DBEAFE); outline-offset: 1px; }
+.ads-giftcode-check { flex: none; min-height: 42px; padding: 0 18px; border: 0; border-radius: 999px; background: var(--cv-brand-primary, #2563EB); color: #fff; font-size: 12px; font-weight: 700; cursor: pointer; white-space: nowrap; }
+.ads-giftcode-check:hover:not(:disabled) { background: var(--cv-brand-primary-hover, #1D4ED8); }
+.ads-giftcode-check:disabled { opacity: .5; cursor: not-allowed; }
+.ads-giftcode-status { margin: 0; color: var(--cv-brand-primary-hover, #1D4ED8); font-size: 11px; line-height: 1.5; }
+
+.ads-giftcode-history { min-height: 160px; display: grid; place-items: center; }
+.ads-giftcode-history p { margin: 0; color: #8b968f; font-size: 12.5px; text-align: center; }
+
+/* Filter popover — anchored (createPortal + position:fixed, see
+   AdsCheckBillingFilterMenu), never a full-screen backdrop. No Apply/
+   Cancel/Reset: each option commits immediately. */
+.ads-billing-filter-menu {
+  width: 296px;
+  position: fixed;
+  /* Between the toolbar (z-20) and the modal backdrop (.ads-advanced-filter-
+     backdrop, z-50) — matches .ads-column-menu's own convention (z-40) for
+     the same anchored-popover-vs-modal ordering. */
+  z-index: 40;
+  padding: 14px;
+  display: grid;
+  gap: 14px;
+  border: 1px solid var(--cv-brand-border, #BFDBFE);
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 18px 44px rgba(0, 0, 0, .16);
+  color: #17281b;
+}
+.ads-billing-filter-group { display: grid; gap: 4px; }
+.ads-billing-filter-group h3 { margin: 0 0 4px; color: #6b756e; font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .03em; }
+.ads-billing-filter-group button { min-height: 38px; padding: 0 12px; display: flex; align-items: center; justify-content: space-between; gap: 10px; border: 1px solid transparent; border-radius: 12px; background: transparent; color: #202721; font-size: 12.5px; font-weight: 550; text-align: left; cursor: pointer; }
+.ads-billing-filter-group button:hover { background: #f5f7f5; }
+.ads-billing-filter-group button.is-selected { border-color: var(--cv-brand-border, #BFDBFE); background: var(--cv-brand-soft, #EFF6FF); color: var(--cv-brand-primary-hover, #1D4ED8); }
+.ads-billing-filter-radio { width: 16px; height: 16px; flex: none; display: grid; place-items: center; border: 1.5px solid #c7d8cb; border-radius: 50%; background: #fff; }
+.ads-billing-filter-group button.is-selected .ads-billing-filter-radio { border-color: var(--cv-brand-primary, #2563EB); }
+.ads-billing-filter-group button.is-selected .ads-billing-filter-radio::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--cv-brand-primary, #2563EB); }
+
+/* Lịch sử giao dịch — toolbar controls (Filter/Toàn thời gian/Search reuse
+   the shared .ads-billing-plan-filter / .ads-billing-plan-search classes
+   from Quản lý gói cước's own toolbar, same sizing/centering/brand-hover
+   already fixed there), table, status filter popover, date-range picker.
+   Status pill colors are semantic (never theme-tokenized, see STATUS_META
+   in ads-check-billing-history-panel.tsx); everything else brand-controlled
+   below follows the same --cv-brand-* tokens as the rest of Billing. */
+.ads-billing-daterange-trigger { min-height: 32px; padding: 0 11px; display: inline-flex; align-items: center; gap: 6px; border: 1px solid #dbe5dc; border-radius: 999px; background: #fff; color: #5f6c62; font-size: 11.5px; font-weight: 600; white-space: nowrap; cursor: pointer; }
+.ads-billing-daterange-trigger svg:first-child { flex: none; color: var(--cv-brand-primary-hover, #1D4ED8); }
+.ads-billing-daterange-trigger svg:last-child { flex: none; color: #9aa6a0; }
+.ads-billing-daterange-trigger:hover { background: var(--cv-brand-soft, #EFF6FF); }
+.ads-billing-daterange-trigger.is-active { border-color: var(--cv-brand-border, #BFDBFE); color: var(--cv-brand-primary-hover, #1D4ED8); background: var(--cv-brand-icon-badge-bg, #DBEAFE); }
+.ads-billing-daterange-trigger:focus-visible { border-color: var(--cv-brand-primary, #2563EB); outline: 3px solid var(--cv-brand-focus-soft, #DBEAFE); outline-offset: 1px; }
+
+.ads-billing-history-panel { display: flex; flex-direction: column; height: 100%; }
+.ads-billing-history-table-wrap { flex: 1; min-height: 0; overflow: auto; border: 1px solid #e2e8e3; border-radius: 16px; background: #fff; }
+.ads-billing-history-table { width: 100%; min-width: 920px; border-collapse: collapse; }
+.ads-billing-history-table th,
+.ads-billing-history-table td { padding: 11px 14px; font-size: 12px; text-align: left; }
+.ads-billing-history-table thead th { position: sticky; top: 0; z-index: 1; color: #6b756e; font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .03em; background: #fafcfa; border-bottom: 1px solid #e2e8e3; }
+.ads-billing-history-table tbody tr { border-bottom: 1px solid #edf1ee; }
+.ads-billing-history-table tbody tr:last-child { border-bottom: 0; }
+.ads-billing-history-table .col-stt { width: 48px; color: #8b968f; }
+.ads-billing-history-table .col-date { width: 150px; white-space: nowrap; }
+.ads-billing-history-table .col-date strong { color: #1c231e; font-weight: 650; }
+.ads-billing-history-table .col-date small { color: #8b968f; }
+.ads-billing-history-table td.col-feature { display: flex; align-items: center; gap: 8px; color: #1c231e; font-weight: 550; }
+.ads-billing-history-table .col-duration { width: 110px; color: #5f6c62; }
+.ads-billing-history-table .col-amount { width: 150px; }
+.ads-billing-history-table .col-amount strong { color: #1c231e; font-weight: 700; }
+.ads-billing-history-table .col-status { width: 140px; }
+.ads-billing-history-table .col-action { width: 70px; text-align: center; }
+.ads-billing-history-feature-icon { width: 24px; height: 24px; flex: none; display: grid; place-items: center; border-radius: 7px; }
+.ads-billing-history-feature-more { flex: none; padding: 1px 7px; border-radius: 999px; color: var(--cv-brand-primary-hover, #1D4ED8); background: var(--cv-brand-icon-badge-bg, #DBEAFE); font-size: 9.5px; font-weight: 700; }
+.ads-billing-history-status-pill { display: inline-block; padding: 3px 9px; border-radius: 999px; font-size: 10px; font-weight: 700; white-space: nowrap; }
+.ads-billing-history-action { width: 30px; height: 30px; margin: 0 auto; padding: 0; display: inline-flex; align-items: center; justify-content: center; border: 1px solid #e2e8e3; border-radius: 999px; background: #f7f8f7; color: #5f6c62; cursor: pointer; }
+.ads-billing-history-action:hover { border-color: var(--cv-brand-border, #BFDBFE); color: var(--cv-brand-primary-hover, #1D4ED8); background: var(--cv-brand-icon-badge-bg, #DBEAFE); }
+.ads-billing-history-action:focus-visible { outline: 3px solid var(--cv-brand-focus-soft, #DBEAFE); outline-offset: 2px; }
+
+.ads-billing-history-footer { flex: none; margin-top: 12px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.ads-billing-history-footer > span:first-child { color: #8b968f; font-size: 10.5px; }
+.ads-billing-history-pagination { display: flex; align-items: center; gap: 8px; color: #4a564d; font-size: 11px; font-weight: 700; }
+.ads-billing-history-pagination button { width: 26px; height: 26px; padding: 0; display: grid; place-items: center; border: 0; border-radius: 999px; background: #f1f6f2; color: #5f6c62; cursor: pointer; }
+.ads-billing-history-pagination button:disabled { opacity: .45; cursor: not-allowed; }
+
+/* Status filter popover (multi-select) — outer border/checkbox accent are
+   brand; the status pills inside reuse .ads-billing-history-status-pill
+   (semantic, inline-styled, untouched by version). */
+.ads-billing-history-status-menu {
+  width: 270px;
+  position: fixed;
+  z-index: 40;
+  padding: 12px;
+  display: grid;
+  gap: 4px;
+  border: 1px solid var(--cv-brand-border, #BFDBFE);
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 18px 44px rgba(0, 0, 0, .16);
+  color: #17281b;
+}
+.ads-billing-history-status-menu h3 { margin: 0 0 4px; color: #6b756e; font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .03em; }
+.ads-billing-history-status-row { min-height: 34px; padding: 4px; display: flex; align-items: center; justify-content: space-between; gap: 10px; border-radius: 9px; cursor: pointer; }
+.ads-billing-history-status-row:hover { background: #f5f7f5; }
+.ads-billing-history-status-row input[type='checkbox'] { accent-color: var(--cv-brand-primary, #2563EB); }
+
+/* Date-range picker — same algorithm/structure as AdsProTkqcDateRangePicker
+   (ads-check-adaccounts-tkqc-round1.css), ported with Billing's own class
+   names (see ads-check-billing-history-date-picker.tsx module comment).
+   Outer panel/preset-list/calendar surface stay neutral; only the selected
+   preset, in-range wash, selected day, and Áp dụng follow V1–V5. */
+.ads-billing-daterange-panel {
+  width: 460px;
+  max-width: 92vw;
+  position: fixed;
+  z-index: 40;
+  border: 1px solid #d8e6da;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 24px 56px rgba(15, 60, 25, .2);
+  overflow: hidden;
+}
+.ads-billing-daterange-body { display: flex; }
+.ads-billing-daterange-presets { width: 150px; flex: none; padding: 10px; display: flex; flex-direction: column; gap: 2px; border-right: 1px solid #eef3ef; }
+.ads-billing-daterange-preset { height: 32px; padding: 0 10px; border: 0; border-radius: 8px; background: transparent; color: #445048; font-size: 12px; text-align: left; cursor: pointer; }
+.ads-billing-daterange-preset:hover { background: #f1f8f2; }
+.ads-billing-daterange-preset.is-selected { background: var(--cv-brand-icon-badge-bg, #DBEAFE); color: var(--cv-brand-primary, #2563EB); font-weight: 600; }
+.ads-billing-daterange-calendar { min-width: 0; flex: 1; padding: 12px; }
+.ads-billing-daterange-calendar header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.ads-billing-daterange-calendar header button { width: 26px; height: 26px; display: grid; place-items: center; border: 0; border-radius: 999px; background: #f1f8f2; color: #445048; cursor: pointer; }
+.ads-billing-daterange-calendar header strong { font-size: 12.5px; color: #17281b; }
+.ads-billing-daterange-weekdays,
+.ads-billing-daterange-grid { display: grid; grid-template-columns: repeat(7, 1fr); }
+.ads-billing-daterange-weekdays span { padding: 4px 0; color: #8ba393; font-size: 11px; text-align: center; }
+.ads-billing-daterange-cell { height: 30px; border: 0; border-radius: 8px; background: transparent; color: #17281b; font-size: 12px; cursor: pointer; }
+.ads-billing-daterange-cell:hover { background: #f1f8f2; }
+.ads-billing-daterange-cell.is-in-range { background: var(--cv-brand-soft, #EFF6FF); }
+.ads-billing-daterange-cell.is-edge { background: var(--cv-brand-primary, #2563EB); color: #fff; font-weight: 600; }
+.ads-billing-daterange-cell.is-today:not(.is-edge) { box-shadow: inset 0 0 0 1px var(--cv-brand-border, #BFDBFE); font-weight: 700; }
+.ads-billing-daterange-cell.is-empty { cursor: default; }
+.ads-billing-daterange-fields { padding: 10px 14px; display: flex; align-items: center; gap: 8px; border-top: 1px solid #eef3ef; }
+.ads-billing-daterange-field { min-width: 0; flex: 1; min-height: 32px; padding: 0 12px; display: flex; align-items: center; border: 1px solid #e2e8e3; border-radius: 999px; background: #fafcfa; color: #445048; font-size: 11.5px; }
+.ads-billing-daterange-field-arrow { flex: none; color: #9aa6a0; }
+.ads-billing-daterange-panel footer { padding: 10px 14px; display: flex; align-items: center; justify-content: flex-end; gap: 8px; border-top: 1px solid #eef3ef; background: #f8faf8; }
+.ads-billing-daterange-panel footer .is-secondary { height: 32px; padding: 0 14px; border: 0; border-radius: 999px; background: #eef2ef; color: #445048; font-size: 12px; cursor: pointer; }
+.ads-billing-daterange-panel footer .is-primary { height: 32px; padding: 0 16px; border: 0; border-radius: 999px; background: var(--cv-brand-primary, #2563EB); color: #fff; font-size: 12px; font-weight: 600; cursor: pointer; }
+.ads-billing-daterange-panel footer .is-primary:hover { background: var(--cv-brand-primary-hover, #1D4ED8); }
+
+@media (max-width: 767px) {
+  .ads-billing-daterange-body { flex-direction: column; }
+  .ads-billing-daterange-presets { width: 100%; flex-direction: row; flex-wrap: wrap; border-right: 0; border-bottom: 1px solid #eef3ef; }
+}

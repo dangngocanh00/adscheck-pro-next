@@ -1,0 +1,227 @@
+.ads-device-login-layer,
+.ads-account-detail-layer {
+  position: fixed;
+  z-index: 98;
+  inset: 0;
+  padding: 16px;
+  display: grid;
+  place-items: center;
+  background: rgba(4, 10, 20, .68);
+  backdrop-filter: blur(9px);
+}
+
+.ads-device-login-dialog {
+  width: min(460px, calc(100vw - 28px));
+  position: relative;
+  padding: 30px;
+  border: 1px solid rgba(96, 165, 250, .3);
+  border-radius: 24px;
+  background: radial-gradient(circle at 100% 0, rgba(59, 130, 246, .2), transparent 36%), linear-gradient(145deg, #071426, #0B1F3A 75%);
+  color: #fff;
+  box-shadow: 0 30px 85px rgba(0, 0, 0, .48);
+}
+
+.ads-device-login-close,
+.ads-account-detail-close {
+  width: 36px;
+  height: 36px;
+  position: absolute;
+  right: 16px;
+  top: 16px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .1);
+  color: inherit;
+  cursor: pointer;
+}
+
+.ads-device-login-icon {
+  width: 50px;
+  height: 50px;
+  display: grid;
+  place-items: center;
+  border-radius: 15px;
+  background: linear-gradient(135deg, #3B82F6, #93C5FD);
+  color: #0B1F3A;
+  box-shadow: 0 10px 30px rgba(37, 99, 235, .22);
+}
+
+.ads-device-login-dialog header {
+  margin-top: 17px;
+}
+
+.ads-device-login-dialog header > span {
+  color: #60A5FA;
+  font-size: 10px;
+  font-weight: 750;
+  letter-spacing: .11em;
+}
+
+.ads-device-login-dialog h2 {
+  margin: 6px 0 0;
+  font-size: 25px;
+  line-height: 1.2;
+  font-weight: 620;
+  letter-spacing: -.02em;
+}
+
+.ads-device-login-dialog header p {
+  margin: 7px 0 0;
+  color: rgba(255, 255, 255, .68);
+  font-size: 13px;
+}
+
+.ads-device-login-balance {
+  min-height: 42px;
+  margin-top: 18px;
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid rgba(255, 218, 91, .25);
+  border-radius: 11px;
+  background: rgba(255, 221, 105, .08);
+  color: #f9dc76;
+  font-size: 12px;
+}
+
+.ads-device-login-actions {
+  margin-top: 12px;
+  display: grid;
+  gap: 9px;
+}
+
+.ads-device-login-actions button {
+  min-height: 68px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid rgba(59, 130, 246, .2);
+  border-radius: 13px;
+  background: rgba(255, 255, 255, .08);
+  color: #fff;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color .18s ease, background .18s ease, transform .18s ease;
+}
+
+.ads-device-login-actions button:first-child {
+  border-color: transparent;
+  background: linear-gradient(90deg, #1D4ED8, #3B82F6);
+}
+
+.ads-device-login-actions button:hover {
+  border-color: rgba(96, 165, 250, .55);
+  transform: translateY(-1px);
+}
+
+.ads-device-login-actions button > svg {
+  flex: none;
+}
+
+.ads-device-login-actions button span,
+.ads-device-login-actions button strong,
+.ads-device-login-actions button small {
+  display: block;
+}
+
+.ads-device-login-actions button strong {
+  font-size: 13px;
+}
+
+.ads-device-login-actions button small {
+  margin-top: 3px;
+  color: rgba(255, 255, 255, .7);
+  font-size: 10px;
+}
+
+.ads-account-detail-layer {
+  z-index: 99;
+}
+
+.ads-account-detail-dialog {
+  width: min(450px, calc(100vw - 28px));
+  position: relative;
+  padding: 27px;
+  border: 1px solid #E2E8F0;
+  border-radius: 22px;
+  background: #F8FAFC;
+  color: #0F172A;
+  box-shadow: 0 28px 80px rgba(11, 31, 58, .35);
+}
+
+.ads-account-detail-close {
+  background: #EFF6FF;
+  color: #334155;
+}
+
+.ads-account-detail-icon {
+  width: 46px;
+  height: 46px;
+  margin-bottom: 15px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  background: #DBEAFE;
+  color: #1D4ED8;
+}
+
+.ads-account-detail-dialog h2 {
+  margin: 0;
+  font-size: 23px;
+}
+
+.ads-account-detail-dialog h3 {
+  margin: 7px 0 18px;
+  color: #1D4ED8;
+  font-size: 14px;
+  font-weight: 650;
+}
+
+.ads-account-detail-dialog dl {
+  margin: 0;
+  display: grid;
+  gap: 1px;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.ads-account-detail-dialog dl div {
+  min-height: 42px;
+  padding: 9px 11px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: #fff;
+}
+
+.ads-account-detail-dialog dt {
+  color: #64748B;
+  font-size: 11px;
+}
+
+.ads-account-detail-dialog dd {
+  margin: 0;
+  color: #1E293B;
+  font-size: 12px;
+  font-weight: 600;
+  text-align: right;
+}
+
+.ads-account-detail-done {
+  width: 100%;
+  height: 42px;
+  margin-top: 14px;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #1D4ED8, #3B82F6);
+  color: #fff;
+  font-weight: 650;
+  cursor: pointer;
+}
+

@@ -1,0 +1,243 @@
+/* Shared column-header dropdown (Batch Update Part E) — used by every asset
+   table's header cells. Portaled to document.body, position:fixed (see
+   AdsProColumnMenu), matching the Final Update dropdown/Tag-picker pattern
+   so it is never clipped by the table's own horizontal-scroll container. */
+.ads-column-menu-trigger {
+  width: 18px;
+  height: 18px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: #8ba393;
+  cursor: pointer;
+}
+.ads-column-menu-trigger:hover { background: var(--cv-brand-tint-08, rgba(0, 163, 46, .08)); color: var(--cv-brand-primary, #0d9f39); }
+.ads-column-menu-trigger[aria-expanded="true"] { background: var(--cv-brand-tint-12, rgba(0, 163, 46, .12)); color: var(--cv-brand-primary, #0d9f39); }
+
+.ads-column-menu {
+  width: 200px;
+  padding: 6px;
+  position: fixed;
+  z-index: 40;
+  display: grid;
+  gap: 2px;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 16px 32px rgba(15, 60, 25, .16);
+  font-size: 12.5px;
+}
+
+.ads-column-menu button[role="menuitem"] {
+  min-height: 34px;
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #17281b;
+  cursor: pointer;
+  text-align: left;
+}
+.ads-column-menu button[role="menuitem"]:hover:not(:disabled) { background: var(--cv-brand-soft, #EFF6FF); }
+.ads-column-menu button[role="menuitem"].is-active { background: var(--cv-brand-icon-badge-bg, #e3f3e7); color: var(--cv-brand-primary, #0d9f39); }
+.ads-column-menu button[role="menuitem"]:disabled { color: #b7c4b9; cursor: not-allowed; }
+
+/* Advanced Filter Builder (Correction Batch 2 Part C) — centered modal,
+   dimmed backdrop, replaces the earlier inline text/min-max dropdown
+   section entirely. */
+.ads-advanced-filter-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  background: rgba(10, 30, 16, .45);
+  backdrop-filter: blur(2px);
+}
+
+.ads-advanced-filter-modal {
+  width: min(440px, 92vw);
+  max-height: 86vh;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border: 1px solid #cadacc;
+  border-radius: 22px;
+  background: #fff;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, .3);
+  color: #17281b;
+}
+
+.ads-advanced-filter-modal header { display: flex; align-items: center; gap: 8px; }
+.ads-advanced-filter-icon { color: var(--cv-brand-primary, #0d9f39); flex: none; }
+.ads-advanced-filter-modal h2 { min-width: 0; flex: 1; margin: 0; font-size: 15px; font-weight: 600; }
+.ads-advanced-filter-close {
+  width: 26px;
+  height: 26px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 999px;
+  background: #f1f6f2;
+  color: #445048;
+  cursor: pointer;
+}
+.ads-advanced-filter-close:hover { background: var(--cv-brand-icon-badge-bg, #e3f3e7); color: var(--cv-brand-primary, #0d9f39); }
+
+.ads-advanced-filter-match select {
+  width: 100%;
+  height: 38px;
+  padding: 0 12px;
+  border: 1px solid #dce8de;
+  border-radius: 999px;
+  background: #f5f7f5;
+  color: #17281b;
+  font: inherit;
+}
+
+.ads-advanced-filter-conditions { display: grid; gap: 8px; max-height: 40vh; overflow-y: auto; }
+.ads-advanced-filter-condition {
+  padding: 10px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 32px;
+  gap: 8px;
+  align-items: center;
+  border: 1px solid #cadacc;
+  border-radius: 16px;
+  background: #f4faf5;
+}
+.ads-advanced-filter-condition.has-range { grid-template-columns: 1fr 1fr 1fr 32px; }
+.ads-advanced-filter-condition select,
+.ads-advanced-filter-condition input {
+  width: 100%;
+  height: 32px;
+  padding: 0 8px;
+  border: 1px solid #dce8de;
+  border-radius: 8px;
+  background: #fff;
+  color: #17281b;
+  font: inherit;
+  font-size: 12.5px;
+}
+.ads-advanced-filter-condition button {
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: #b7c4b9;
+  cursor: pointer;
+}
+.ads-advanced-filter-condition button:hover:not(:disabled) { background: #fdeceb; color: #d63b34; }
+.ads-advanced-filter-condition button:disabled { opacity: .35; cursor: not-allowed; }
+
+.ads-advanced-filter-add {
+  height: 34px;
+  padding: 0 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  align-self: flex-start;
+  border: 0;
+  border-radius: 999px;
+  background: #f1f6f2;
+  color: var(--cv-brand-primary, #0d9f39);
+  font-size: 12.5px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.ads-advanced-filter-add:hover { background: var(--cv-brand-icon-badge-bg, #e3f3e7); }
+
+.ads-advanced-filter-modal footer { display: flex; justify-content: flex-end; gap: 8px; }
+.ads-advanced-filter-modal footer .is-secondary {
+  height: 36px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 999px;
+  background: #f1f6f2;
+  color: #445048;
+  font-size: 13px;
+  cursor: pointer;
+}
+.ads-advanced-filter-modal footer .is-primary {
+  height: 36px;
+  padding: 0 20px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--cv-brand-primary, #0d9f39);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+/* Column drag handle (Correction Batch 2 Part D) — visible on hover/focus
+   only, does not shift header width when it appears (reserved gap always
+   present via .ads-sort-label's flex gap). */
+.ads-column-drag-handle {
+  flex: none;
+  color: #b7c4b9;
+  font-size: 12px;
+  line-height: 1;
+  cursor: grab;
+  opacity: 0;
+}
+th:hover .ads-column-drag-handle,
+th:focus-within .ads-column-drag-handle { opacity: 1; }
+
+/* Column resize handle (Correction Batch 3 Part B) — a SEPARATE control
+   from the drag handle above, sitting on the header cell's right edge.
+   Subtle/near-invisible at rest (Part B2), a visible divider on hover or
+   while actively dragging/keyboard-focused. th already has position:sticky
+   (an established containing block), so this positions against it with no
+   extra wrapper needed. */
+.ads-column-resize-handle {
+  width: 8px;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  /* Stays fully INSIDE this th's own box (not centered on the border) —
+     two sibling <th> elements are separate stacking contexts at the same
+     z-index, so anything overflowing past this cell's own right edge would
+     be painted over by the next header and become unclickable there. */
+  right: 0;
+  z-index: 4;
+  background: transparent;
+  cursor: col-resize;
+  touch-action: none;
+}
+/* BM Round 1 Shared Rule #7 — a SHARP, prominent green vertical line at
+   the real boundary, not a wide translucent wash/shadow (the previous
+   8px rgba background read as a blurry/soft glow, which the user
+   explicitly disliked). Deliberately distinct from the frozen-boundary
+   shadow (`.is-frozen-boundary`, soft depth shadow) — this is a hard-edge
+   2px solid line with no blur/glow, shown only on hover/focus/active drag. */
+.ads-column-resize-handle::after {
+  content: '';
+  width: 2px;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  background: transparent;
+}
+.ads-column-resize-handle:hover::after,
+.ads-column-resize-handle:focus-visible::after,
+.ads-column-resize-handle.is-active::after {
+  background: var(--cv-brand-primary, #0d9f39);
+}
+.ads-column-resize-handle:focus-visible { outline: none; }
+/* While a resize is in progress, keep the column-resize cursor everywhere
+   (the pointer can move faster than the row under it) and suppress text
+   selection app-wide (Part B3). */
+body.is-resizing-column { cursor: col-resize; user-select: none; }

@@ -1,0 +1,57 @@
+import { ClockAlert, FileCheck2, FilePenLine, FilePlus2, FileSignature, LockKeyhole, Search } from 'lucide-react'
+import { useMemo, useState, type FormEvent } from 'react'
+import { Modal } from '@/components/ui/modal'
+import { DocumentDetail } from '@/features/documents/document-detail'
+import { getSignatureProgress } from '@/lib/people-ops'
+import { employees } from '@/mocks/hrm-data'
+import { canAccessPeopleDocument, canManageDocuments, useAppStore } from '@/store/app-store'
+import type { PeopleDocument, PeopleDocumentStatus } from '@/types/people-ops'
+
+type DocumentFilter = 'all' | PeopleDocumentStatus
+const filterLabels: Array<{ id: DocumentFilter; label: string }> = [{ id: 'all', label: 'Tất cả' }, { id: 'waiting', label: 'Chờ ký' }, { id: 'expiring', label: 'Sắp hết hạn' }, { id: 'draft', label: 'Bản nháp' }, { id: 'signed', label: 'Đã ký' }]
+const statusLabels: Record<PeopleDocumentStatus, string> = { draft: 'Bản nháp', waiting: 'Chờ ký', signed: 'Đã ký', expiring: 'Sắp hết hạn' }
+
+function downloadDocument(document: PeopleDocument) { const content = `FUN AGENCY\n${document.code}\n${document.title}\nNhân sự: ${document.employee}\nHiệu lực: ${document.effectiveDate}\nTrạng thái: ${statusLabels[document.status]}`; const link = window.document.createElement('a'); link.href = URL.createObjectURL(new Blob([content], { type: 'text/plain;charset=utf-8' })); link.download = `${document.code.toLocaleLowerCase('vi')}.txt`; link.click(); URL.revokeObjectURL(link.href) }
+
+export default function DocumentsPage() {
+  const role = useAppStore((state) => state.role)
+  const documents = useAppStore((state) => state.peopleDocuments)
+  const addDocument = useAppStore((state) => state.addPeopleDocument)
+  const updateDocument = useAppStore((state) => state.updatePeopleDocument)
+  const createdEmployees = useAppStore((state) => state.createdEmployees)
+  const showToast = useAppStore((state) => state.showToast)
+  const [filter, setFilter] = useState<DocumentFilter>('all')
+  const [query, setQuery] = useState('')
+  const [selectedId, setSelectedId] = useState<string | null>(null)
+  const [createOpen, setCreateOpen] = useState(false)
+  const [draft, setDraft] = useState({ title: '', employeeId: 'emp-001', type: 'Hợp đồng', effectiveDate: '2026-09-01', owner: 'Vận hành' })
+  const employeeOptions = [...createdEmployees, ...employees]
+  const scopedDocuments = useMemo(() => documents.filter((document) => canAccessPeopleDocument(role, document)), [documents, role])
+  const visible = useMemo(() => scopedDocuments.filter((document) => (filter === 'all' || document.status === filter) && `${document.code} ${document.title} ${document.employee} ${document.type}`.toLocaleLowerCase('vi').includes(query.trim().toLocaleLowerCase('vi'))), [filter, query, scopedDocuments])
+  const selected = scopedDocuments.find((document) => document.id === selectedId) ?? null
+  const counts = { waiting: scopedDocuments.filter((document) => document.status === 'waiting').length, expiring: scopedDocuments.filter((document) => document.status === 'expiring').length, draft: scopedDocuments.filter((document) => document.status === 'draft').length, signed: scopedDocuments.filter((document) => document.status === 'signed').length }
+  const dataQuality = Math.round(scopedDocuments.filter((document) => document.owner && document.updatedAt && document.effectiveDate).length / Math.max(1, scopedDocuments.length) * 100)
+  const availableTypes = role === 'accountant' ? ['Hợp đồng', 'Phụ lục', 'Đánh giá'] : ['Hợp đồng', 'Phụ lục', 'Cam kết', 'Biên bản', 'Đánh giá']
+  if (!canManageDocuments(role)) return <section className="surface permission-state"><div><LockKeyhole size={28}/></div><h1>Không có quyền quản lý tài liệu</h1><p>Phân hệ này dành cho CEO, Quản lý, Vận hành và Kế toán.</p></section>
+
+  const primaryAction = (document: PeopleDocument) => { if (document.status === 'signed') { downloadDocument(document); showToast('Đã tải bản tài liệu đã ký'); return } if (document.status === 'draft') { updateDocument(document.id, { status: 'waiting', updatedAt: '24/08 · vừa xong' }); showToast(`Đã gửi yêu cầu ký cho ${document.employee}`); return } if (document.status === 'waiting') { updateDocument(document.id, { updatedAt: '24/08 · vừa nhắc' }); showToast(`Đã nhắc người chưa ký ${document.code}`); return } const suffix = String(Date.now()).slice(-6); const renewal: PeopleDocument = { ...document, id: `doc-${Date.now()}`, code: `PL-${suffix}`, title: `Gia hạn · ${document.title}`, status: 'draft', updatedAt: '24/08 · vừa tạo', signed: 0, effectiveDate: '01/09/2026' }; addDocument(renewal); setSelectedId(renewal.id); showToast(`Đã tạo bản gia hạn cho ${document.employee}`) }
+  const submit = (event: FormEvent) => {
+    event.preventDefault()
+    const title = draft.title.trim()
+    const employee = employeeOptions.find((item) => item.id === draft.employeeId)
+    if (!title || !employee || !draft.effectiveDate) { showToast('Nhập tên tài liệu, nhân sự và ngày hiệu lực'); return }
+    const suffix = String(Date.now()).slice(-6)
+    const document: PeopleDocument = { id: `doc-${Date.now()}`, employeeId: employee.id, code: `TL-${suffix}`, title, employee: employee.fullName, type: draft.type, status: 'draft', updatedAt: '24/08 · vừa tạo', effectiveDate: draft.effectiveDate.split('-').reverse().join('/'), signers: 2, signed: 0, owner: draft.owner }
+    addDocument(document); setCreateOpen(false); setSelectedId(document.id); setDraft({ title: '', employeeId: 'emp-001', type: 'Hợp đồng', effectiveDate: '2026-09-01', owner: 'Vận hành' }); showToast(`Đã tạo bản nháp ${document.code}`)
+  }
+
+  return <>
+    <div className="page-heading documents-heading"><div><span className="page-eyebrow">HỒ SƠ ĐIỆN TỬ · CÓ LỊCH SỬ PHIÊN BẢN</span><h1>Tài liệu & chữ ký</h1><p>Phát hành, theo dõi ký và cảnh báo hiệu lực tài liệu nhân sự.</p></div><button className="btn btn-primary" onClick={() => setCreateOpen(true)}><FilePlus2 size={16}/>Tạo tài liệu</button></div>
+    <section className="document-health" aria-label="Tình trạng tài liệu"><DocumentMetric icon={FilePenLine} label="Chờ ký" value={counts.waiting} tone="blue"/><DocumentMetric icon={ClockAlert} label="Sắp hết hạn" value={counts.expiring} tone="warning"/><DocumentMetric icon={FileSignature} label="Bản nháp" value={counts.draft} tone="neutral"/><DocumentMetric icon={FileCheck2} label="Đã ký" value={counts.signed} tone="success"/><div className="document-health-note"><strong>{dataQuality}%</strong><span>tài liệu có đủ ngày hiệu lực và người chịu trách nhiệm</span></div></section>
+    <section className="surface document-library"><div className="document-toolbar"><label className="search-field"><Search size={16}/><input aria-label="Tìm tài liệu" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Tìm mã, nhân sự hoặc loại tài liệu…"/></label><div className="segmented-control document-filters" aria-label="Lọc tài liệu">{filterLabels.map((item) => <button key={item.id} className={filter === item.id ? 'active' : ''} aria-pressed={filter === item.id} onClick={() => setFilter(item.id)}>{item.label}</button>)}</div></div><div className="data-table-wrap document-table-wrap"><table className="data-table document-table"><thead><tr><th>MÃ</th><th>TÀI LIỆU</th><th>NHÂN SỰ</th><th>HIỆU LỰC</th><th>TIẾN ĐỘ KÝ</th><th>TRẠNG THÁI</th><th>THAO TÁC</th></tr></thead><tbody>{visible.map((document) => { const progress = getSignatureProgress(document); return <tr key={document.id}><td><strong>{document.code}</strong></td><td><strong>{document.title}</strong><small>{document.type} · {document.owner}</small></td><td>{document.employee}</td><td>{document.effectiveDate}<small>{document.updatedAt}</small></td><td><span className="signature-count"><i role="progressbar" aria-label={`Tiến độ ký ${document.code}`} aria-valuemin={0} aria-valuemax={100} aria-valuenow={progress.percentage}><b style={{ width: `${progress.percentage}%` }}/></i>{progress.signed}/{progress.total}</span></td><td><span className={`badge document-status status-${document.status}`}>{statusLabels[document.status]}</span></td><td><button className="btn btn-secondary" aria-pressed={selectedId === document.id} onClick={() => setSelectedId(document.id)}>Xem luồng ký</button></td></tr> })}</tbody></table><div className="document-mobile-list">{visible.map((document) => { const progress = getSignatureProgress(document); return <button key={document.id} aria-pressed={selectedId === document.id} onClick={() => setSelectedId(document.id)}><span><strong>{document.code}</strong><i className={`badge document-status status-${document.status}`}>{statusLabels[document.status]}</i></span><b>{document.title}</b><small>{document.employee} · {progress.signed}/{progress.total} chữ ký</small><small>Hiệu lực {document.effectiveDate}</small></button> })}</div>{!visible.length && <div className="ops-empty"><FileSignature size={28}/><strong>Không tìm thấy tài liệu</strong><span>Thử đổi từ khóa hoặc bộ lọc trạng thái.</span></div>}</div></section>
+    <Modal open={Boolean(selected)} onClose={() => setSelectedId(null)} title={selected ? `${selected.code} · ${selected.title}` : 'Chi tiết tài liệu'} description={selected ? `${selected.employee} · cập nhật ${selected.updatedAt}` : undefined} size="lg">{selected && <DocumentDetail document={selected} onClose={() => setSelectedId(null)} onDownload={() => { downloadDocument(selected); showToast('Đã tải bản xem trước') }} onPrimaryAction={() => primaryAction(selected)}/>}</Modal>
+    <Modal open={createOpen} onClose={() => setCreateOpen(false)} title="Tạo tài liệu nhân sự" description="Tạo bản nháp trước khi chọn mẫu và gửi ký." footer={<><button className="btn btn-secondary" onClick={() => setCreateOpen(false)}>Hủy</button><button className="btn btn-primary" form="create-people-document" type="submit">Tạo bản nháp</button></>}><form id="create-people-document" className="form-grid" onSubmit={submit}><label className="field full-span"><span>Tên tài liệu *</span><input required value={draft.title} onChange={(event) => setDraft({ ...draft, title: event.target.value })} placeholder="Ví dụ: Phụ lục điều chỉnh thu nhập"/></label><label className="field"><span>Nhân sự *</span><select required value={draft.employeeId} onChange={(event) => setDraft({ ...draft, employeeId: event.target.value })}>{employeeOptions.map((employee) => <option key={employee.id} value={employee.id}>{employee.code} · {employee.fullName}</option>)}</select></label><label className="field"><span>Loại tài liệu</span><select value={draft.type} onChange={(event) => setDraft({ ...draft, type: event.target.value })}>{availableTypes.map((type) => <option key={type}>{type}</option>)}</select></label><label className="field"><span>Ngày hiệu lực *</span><input required type="date" value={draft.effectiveDate} onChange={(event) => setDraft({ ...draft, effectiveDate: event.target.value })}/></label><label className="field"><span>Người phụ trách</span><select value={draft.owner} onChange={(event) => setDraft({ ...draft, owner: event.target.value })}><option>Vận hành</option><option>KT</option><option>Leader trực tiếp</option><option>IT & Tài sản</option></select></label></form></Modal>
+  </>
+}
+
+function DocumentMetric({ icon: Icon, label, value, tone }: { icon: typeof FileSignature; label: string; value: number; tone: string }) { return <div><span className={`document-metric-icon ${tone}`}><Icon size={18}/></span><span><small>{label}</small><strong>{String(value).padStart(2, '0')}</strong></span></div> }

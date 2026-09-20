@@ -1,0 +1,11 @@
+/* Final operational UI guardrails: metadata remains readable after component overrides. */
+.app-layout small,
+.app-layout .page-eyebrow,
+.app-layout .drawer-eyebrow,
+.app-layout .metric-delta,
+.app-layout .badge,
+.app-layout .avatar,
+.app-layout .lifecycle-avatar,
+.app-layout .hr-flow-ribbon li > i {
+  font-size: 12px;
+}

@@ -1,0 +1,248 @@
+.ads-brand .ads-brand-mobile-copy {
+  display: none;
+}
+
+.ads-save-app.is-ads-check-pro .ads-topbar {
+  height: 42px;
+}
+
+.ads-save-app.is-ads-check-pro .ads-brand-header-logo {
+  width: 24px;
+  height: 24px;
+}
+
+.ads-save-app.is-ads-check-pro .ads-brand strong {
+  font-size: 12px;
+}
+
+.ads-save-app.is-ads-check-pro .ads-top-actions {
+  gap: 7px;
+}
+
+.ads-save-app.is-ads-check-pro .ads-buy-button {
+  height: 26px;
+  padding: 0 13px;
+}
+
+.ads-save-app.is-ads-check-pro .ads-profile {
+  height: 26px;
+  padding: 0 8px 0 12px;
+  font-size: 11.5px;
+}
+
+.ads-workspace:has(.ads-pro-workspace-shape) .ads-rail {
+  width: 58px;
+  z-index: 20;
+  padding: 12px 0 16px;
+}
+
+.ads-workspace:has(.ads-pro-workspace-shape) .ads-rail-button {
+  width: 36px;
+}
+
+.ads-workspace:has(.ads-pro-workspace-shape) .ads-main-panel,
+.ads-workspace:has(.ads-pro-workspace-shape) .ads-product-main {
+  z-index: 1;
+}
+
+/* This reserved 58px right margin houses BOTH Curve C's indentation AND the
+   reopen rail — mirrors .ads-rail's 58px on the left. Production:
+   pl-[58px] pr-[58px] on the same host-shell content wrapper. Scoped to the
+   ads-check-pro shell only (via :has(.ads-pro-workspace-shape)) so plain Ads
+   Save keeps its unreserved 8px right inset.
+   Keyed off the explicit reservation signal used together with Curve C in
+   states 00/10/01 (see reserveRailSpace/CurveShellState). Only state 11
+   and VIA (no right-panel system) actually reclaim the space. */
+.ads-workspace:has(.ads-pro-workspace-shape.has-rail-reservation) .ads-main-panel {
+  right: 58px;
+}
+
+.ads-pro-workspace-shape {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  pointer-events: none;
+  filter: drop-shadow(0 24px 80px rgba(0, 0, 0, .28));
+}
+
+.ads-workspace:has(.ads-pro-workspace-shape) {
+  box-shadow: none;
+}
+
+.ads-linked-destination-page {
+  min-height: 100dvh;
+  padding: 24px;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(circle at 50% 0, rgba(59, 130, 246, .3), transparent 42%), #071426;
+  color: #0F172A;
+  font-family: "Google Sans Flex", "Be Vietnam Pro", system-ui, sans-serif;
+}
+
+.ads-linked-destination-page main {
+  width: min(520px, 100%);
+  padding: 40px;
+  border-radius: 24px;
+  background: #F0F7FF;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, .3);
+  text-align: center;
+}
+
+.ads-linked-destination-page span {
+  color: #2563EB;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.ads-linked-destination-page h1 {
+  margin: 8px 0 10px;
+  font-size: 28px;
+}
+
+.ads-linked-destination-page p {
+  margin: 0 0 24px;
+  color: #475569;
+  line-height: 1.6;
+}
+
+.ads-linked-destination-page a {
+  min-height: 44px;
+  padding: 0 18px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #1D4ED8, #3B82F6);
+  color: #fff;
+  font-weight: 600;
+}
+
+.ads-mobile-drawer nav > a {
+  width: 100%;
+  min-height: 48px;
+  padding: 0 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-radius: 12px;
+  background: transparent;
+  color: #1E293B;
+  text-align: left;
+}
+
+.ads-mobile-drawer nav > a.is-active {
+  background: #DBEAFE;
+  color: #1E40AF;
+  font-weight: 600;
+}
+
+.ads-drawer-tools > a {
+  width: 100%;
+  min-height: 46px;
+  padding: 0 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-radius: 12px;
+  background: transparent;
+  color: #1E293B;
+  text-align: left;
+}
+
+.ads-smit-account-card {
+  min-height: 96px !important;
+}
+
+.ads-smit-account-card > div:first-child {
+  min-width: 0;
+  display: grid;
+  gap: 3px;
+}
+
+.ads-smit-account-card strong {
+  color: #0F172A;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.ads-smit-account-card span {
+  max-width: 180px;
+  overflow: hidden;
+  color: #475569;
+  font-size: 11px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ads-smit-account-card small {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #2563EB;
+  font-size: 11px;
+}
+
+.ads-account-body .ads-account-icon-actions {
+  display: flex;
+  gap: 5px;
+}
+
+.ads-account-body .ads-account-icon-actions button {
+  width: 34px;
+  min-width: 34px;
+  height: 34px;
+  min-height: 34px;
+  padding: 0;
+  border-color: #DBEAFE;
+  background: #F0F7FF;
+  color: #2563EB;
+}
+
+.ads-account-body .ads-account-icon-actions button:last-child {
+  color: #b54c4c;
+}
+
+@media (max-width: 420px) {
+  .ads-smit-account-card {
+    align-items: flex-start !important;
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 767px) {
+  .ads-workspace {
+    overflow: visible;
+  }
+
+  .ads-save-app.is-ads-check-pro .ads-brand-desktop-copy {
+    display: none;
+  }
+
+  .ads-save-app.is-ads-check-pro .ads-brand-mobile-copy {
+    display: inline;
+  }
+
+  .ads-save-app.is-ads-check-pro .ads-install-heading {
+    height: auto;
+    padding: 18px 8px 14px;
+  }
+
+  .ads-save-app.is-ads-check-pro .ads-install-heading h1 {
+    position: static;
+    width: auto;
+    height: auto;
+    margin: 0;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
+    transform: none;
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .ads-save-app.is-ads-check-pro .ads-install-heading p {
+    margin: 5px 0 0;
+  }
+}

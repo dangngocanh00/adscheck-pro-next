@@ -1,0 +1,34 @@
+.ads-version-welcome-layer{z-index:95;background:rgba(4,10,20,.62);backdrop-filter:blur(8px)}
+.ads-version-welcome-modal{width:min(700px,calc(100vw - 30px));position:relative;padding:20px 22px 22px;border:4px solid rgba(191,219,254,.7);border-radius:30px;background:radial-gradient(circle at 8% 82%,rgba(59,130,246,.24),transparent 35%),radial-gradient(circle at 87% 11%,rgba(37,99,235,.2),transparent 37%),linear-gradient(145deg,#0B1F3A,#071426 70%,#1E3A8A);color:#fff;box-shadow:0 24px 75px rgba(11,31,58,.5);overflow:hidden}
+.ads-version-welcome-modal::before{content:'';position:absolute;inset:0;pointer-events:none;background-image:radial-gradient(rgba(96,165,250,.28) .7px,transparent .8px);background-size:24px 24px;opacity:.16}
+.ads-version-welcome-modal>header{height:38px;position:relative;z-index:1;display:flex;align-items:flex-start;gap:10px}
+.ads-version-welcome-modal>header h2{margin:2px 0 0;display:flex;align-items:center;gap:9px;font-size:17px;line-height:24px;font-weight:550}
+.ads-version-welcome-modal>header h2 svg{color:#60A5FA}
+.ads-version-welcome-modal>header>button{width:32px;height:32px;margin:-4px -5px 0 auto;display:grid;place-items:center;border:0;border-radius:50%;background:rgba(219,234,254,.78);color:#334155;cursor:pointer}
+.ads-version-choice-panel{position:relative;z-index:1;margin-top:2px;padding:20px;display:grid;grid-template-columns:1fr 1fr;gap:12px;border-radius:20px;background:rgba(219,234,254,.24);box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
+.ads-version-choice-panel>button{min-height:158px;position:relative;padding:54px 26px 20px;display:flex;flex-direction:column;align-items:flex-start;border:2px solid transparent;border-radius:14px;background:#f8faf8;color:#151a16;font:inherit;text-align:left;box-shadow:0 2px 5px rgba(0,0,0,.07);cursor:pointer;transition:border-color .18s ease,box-shadow .18s ease,transform .18s ease}
+.ads-version-choice-panel>button:hover{transform:translateY(-1px)}
+.ads-version-choice-panel>button.is-selected{border-color:#3B82F6;box-shadow:0 0 0 2px rgba(59,130,246,.24),0 5px 18px rgba(11,31,58,.12)}
+.ads-version-choice-badge{position:absolute;left:25px;top:22px;padding:4px 12px;border-radius:999px;background:#2563EB;color:#EFF6FF;font-size:11px;font-weight:650}
+.ads-version-choice-badge.is-old{background:#171a18}
+.ads-version-choice-panel button>i{position:absolute;right:22px;top:23px;width:24px;height:24px;border:2px solid #c8cfca;border-radius:50%;background:#fff}
+.ads-version-choice-panel button.is-selected>i{border-color:#2563EB;box-shadow:inset 0 0 0 6px #fff;background:#2563EB}
+.ads-version-choice-panel strong{font-size:30px;line-height:1.1;letter-spacing:-.025em}
+.ads-version-choice-panel button.is-selected strong{color:#1D4ED8}
+.ads-version-choice-panel small{margin-top:11px;color:#475569;font-size:13px;line-height:1.35}
+.ads-version-remember{min-height:54px;position:relative;z-index:1;margin:10px 4px 0;display:flex;align-items:center;gap:11px;color:#EFF6FF;font-size:15px;font-weight:550;cursor:pointer}
+.ads-version-remember input{width:18px;height:18px;flex:none;accent-color:var(--cv-checkbox-accent-4, #59e66c)}
+.ads-version-confirm{width:100%;height:42px;position:relative;z-index:1;border:0;border-radius:999px;background:linear-gradient(90deg,#1D4ED8,#3B82F6);color:#fff;font:inherit;font-size:14px;font-weight:650;box-shadow:inset 0 1px 0 rgba(255,255,255,.45);cursor:pointer}
+
+@media(max-width:600px){
+  .ads-version-welcome-modal{width:calc(100vw - 18px);max-height:calc(100dvh - 18px);padding:16px 14px 16px;border-width:3px;border-radius:23px;overflow-y:auto}
+  .ads-version-welcome-modal>header{height:42px}.ads-version-welcome-modal>header h2{font-size:15px}
+  .ads-version-choice-panel{padding:12px;grid-template-columns:1fr;gap:9px;border-radius:16px}
+  .ads-version-choice-panel>button{min-height:127px;padding:46px 20px 16px;border-radius:12px}
+  .ads-version-choice-badge{left:20px;top:16px}.ads-version-choice-panel button>i{right:18px;top:16px}
+  .ads-version-choice-panel strong{font-size:25px}.ads-version-choice-panel small{margin-top:7px;font-size:12px}
+  .ads-version-remember{min-height:56px;margin-inline:2px;font-size:13px;line-height:1.35}
+  .ads-version-confirm{height:46px}
+}
+
+@media(prefers-reduced-motion:reduce){.ads-version-choice-panel>button{transition:none}}

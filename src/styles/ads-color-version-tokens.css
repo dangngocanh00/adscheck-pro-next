@@ -1,0 +1,198 @@
+/* Ads Check global brand palette — AdsMeta-inspired royal/electric blue
+   SaaS direction (replaces the removed V1-V5 "color version preview"
+   system; this is now the ONE fixed theme, not a switchable preview).
+   Every real color consumption site reads these via
+   `var(--cv-x, <fallback>)` — the fallback literals still baked into each
+   call site are inert now that this file always defines every token; they
+   were the old "if this file were ever missing" safety net and are kept
+   only because rewriting every call site's fallback has zero visual
+   effect (the var always resolves here first). Geometry/spacing/
+   typography are NEVER defined here — only color. */
+
+:root {
+  /* Application shell */
+  --cv-app-bg-dark: #071426;
+  --cv-app-bg-dark-2: #0B1F3A;
+  --cv-app-ambient: rgba(59, 130, 246, .20);
+  --cv-app-ambient-mobile: rgba(59, 130, 246, .28);
+  /* Same hue as --cv-app-ambient at alpha 0 — used as a radial-gradient's
+     fade-out stop so the fade never passes through a mismatched hue (was
+     hardcoded to the old green's RGB channel before this migration). */
+  --cv-app-ambient-transparent: rgba(59, 130, 246, 0);
+
+  /* Workspace */
+  --cv-workspace-bg-1: #ffffff;
+  --cv-workspace-bg-2: #F0F7FF;
+  --cv-workspace-bg-3: #DBEAFE;
+  --cv-workspace-surface: #fff;
+  --cv-workspace-soft-surface: #F0F7FF;
+  --cv-product-workspace-surface: #F0F7FF;
+  --cv-product-workspace-ambient: rgba(59, 130, 246, .16);
+
+  /* Brand — royal/electric blue, AdsMeta-inspired. --cv-brand-soft is the
+     lighter of two soft tiers (subtle hover washes); --cv-brand-soft-strong
+     is the stronger tier (selected/pressed states) — kept deliberately
+     distinct, mirroring the same 2-tier relationship the old green palette
+     had. */
+  --cv-brand-primary: #2563EB;
+  --cv-brand-primary-hover: #1D4ED8;
+  --cv-brand-primary-active: #1E40AF;
+  --cv-brand-soft: #EFF6FF;
+  --cv-brand-soft-strong: #DBEAFE;
+  --cv-brand-subtle: #F0F7FF;
+  --cv-brand-border: #BFDBFE;
+  --cv-brand-border-strong: #60A5FA;
+  --cv-brand-icon: #3B82F6;
+  --cv-brand-mark: #3B82F6;
+  --cv-brand-icon-badge-bg: #DBEAFE;
+  --cv-illustration-core-1: #F0F7FF;
+  --cv-illustration-core-2: #DBEAFE;
+  --cv-illustration-dot: #3B82F6;
+  --cv-primary-cta-start: #3B82F6;
+  --cv-primary-cta-end: #2563EB;
+  --cv-brand-hover-soft: #DBEAFE;
+  --cv-brand-focus-soft: #DBEAFE;
+  --cv-panel-soft-bg: #F0F7FF;
+  --cv-fw-pin-active-start: #60A5FA;
+  --cv-fw-pin-active-end: #2563EB;
+  --cv-asset-tab-active-2-start: #60A5FA;
+  --cv-asset-tab-active-2-end: #1D4ED8;
+  --cv-asset-tab-active-solid: #2563EB;
+  --cv-asset-tab-active-glow: rgba(37, 99, 235, .26);
+  --cv-checkbox-accent-2: #3B82F6;
+  --cv-checkbox-accent-3: #3B82F6;
+  --cv-checkbox-accent-4: #3B82F6;
+  --cv-brand-tint-06: rgba(37, 99, 235, .06);
+  --cv-brand-tint-08: rgba(37, 99, 235, .08);
+  --cv-brand-tint-10: rgba(37, 99, 235, .1);
+  --cv-brand-tint-12: rgba(37, 99, 235, .12);
+  --cv-brand-solid-2: #2563EB;
+  --cv-billing-tab-active-start: #1D4ED8;
+  --cv-billing-tab-active-end: #2563EB;
+  --cv-purchase-checkbox-border: #2563EB;
+  --cv-purchase-checkbox-bg: #3B82F6;
+  --cv-purchase-duration-border: #3B82F6;
+  --cv-purchase-duration-bg: #F0F7FF;
+  --cv-purchase-tier-selected-border: #3B82F6;
+  --cv-purchase-section-icon: #2563EB;
+  --cv-purchase-accent: #2563EB;
+  --cv-purchase-accent-icon-bg: #EFF6FF;
+  --cv-purchase-card-border: #3B82F6;
+  --cv-purchase-card-bg: #F0F7FF;
+  --cv-utility-menu-hover: #EFF6FF;
+  --cv-utility-menu-checked: #2563EB;
+  --cv-utility-menu-checked-ring: #93C5FD;
+  --cv-toast-bg: #0B1F3A;
+  --cv-toast-success-bg: #1E40AF;
+  --cv-workspace-wash-strong: rgba(59, 130, 246, .06);
+  --cv-workspace-wash-soft: rgba(59, 130, 246, .02);
+  --cv-rail-icon-gradient-start: #60A5FA;
+  --cv-rail-icon-gradient-end: #2563EB;
+  --cv-story-kicker-text: #2563EB;
+  --cv-story-progress-border: #BFDBFE;
+  --cv-story-progress-text: #1E40AF;
+  --cv-story-cta-start: #2563EB;
+  --cv-story-cta-end: #60A5FA;
+  --cv-story-cta-glow: rgba(37, 99, 235, .2);
+  --cv-story-benefit-icon: #3B82F6;
+  --cv-story-video-frame: #BFDBFE;
+  --cv-story-video-bg: #071426;
+  --cv-story-video-shadow: rgba(11, 31, 58, .3);
+  --cv-video-glow-1: rgba(59, 130, 246, .7);
+  --cv-video-glow-2: #3B82F6;
+  --cv-video-bg-start: #071426;
+  --cv-video-bg-mid: #1D4ED8;
+  --cv-video-bg-end: #60A5FA;
+  --cv-video-logo-bg: rgba(7, 20, 38, .62);
+  --cv-story-back-border: #BFDBFE;
+  --cv-story-back-text: #1E40AF;
+  --cv-folder-active-1: rgba(37, 99, 235, .1);
+  --cv-folder-active-2: rgba(59, 130, 246, .06);
+  --cv-folder-add-hover: #2563EB;
+
+  /* Extended Payment */
+  --cv-ext-brand-text: #1D4ED8;
+  --cv-ext-brand-border: #3B82F6;
+  --cv-ext-toggle-on: #2563EB;
+  --cv-ext-icon-1: #3B82F6;
+  --cv-ext-icon-2: #3B82F6;
+  --cv-ext-icon-3: #3B82F6;
+  --cv-ext-icon-4: #3B82F6;
+  --cv-ext-icon-5: #60A5FA;
+  --cv-ext-icon-badge-bg: #EFF6FF;
+  --cv-ext-check: #2563EB;
+  --cv-ext-field-border: #60A5FA;
+  --cv-ext-toolbar-active-bg: #DBEAFE;
+  --cv-ext-save-text: #1D4ED8;
+  --cv-ext-brand-glow: rgba(59, 130, 246, .38);
+  --cv-ext-shell-1: #1D4ED8;
+  --cv-ext-shell-2: #1E3A8A;
+  --cv-ext-shell-3: #0B1F3A;
+  --cv-ext-shell-ring: rgba(29, 78, 216, .7);
+  --cv-ext-dark-control-bg: rgba(11, 31, 58, .38);
+  --cv-ext-agency-icon: #60A5FA;
+  --cv-ext-agency-icon-bg: #0B1F3A;
+  --cv-ext-disabled-overlay-bg: rgba(240, 247, 255, .92);
+  --cv-ext-disabled-text: #1E3A5F;
+  --cv-ext-blockquote-border: #60A5FA;
+  --cv-ext-page-bg: #DCEAFB;
+  --cv-ext-panel-border: #BFDBFE;
+  --cv-ext-panel-bg: rgba(240, 247, 255, .97);
+  --cv-ext-scrollbar: #BFD7FE;
+  --cv-ext-scrollbar-2: #A8C8FE;
+  --cv-ext-modal-shadow: rgba(11, 31, 58, .28);
+  --cv-ext-mini-mark-1: #3B82F6;
+  --cv-ext-mini-mark-2: #93C5FD;
+  --cv-ext-logo-1: #2563EB;
+  --cv-ext-logo-2: #60A5FA;
+  --cv-ext-rate-active-bg: #EFF6FF;
+
+  /* Dashboard intro/onboarding — ads-check-dashboard-source-fidelity.css
+     (loads AFTER ads-check-shell-dashboard.css, same specificity, so it
+     is the file that actually renders on screen — see that file's own
+     header comment). */
+  --cv-dash-ambient-1: rgba(37, 99, 235, .28);
+  --cv-dash-ambient-2: rgba(29, 78, 216, .24);
+  --cv-dash-ambient-3: rgba(59, 130, 246, .1);
+  --cv-dash-bg-1: #020509;
+  --cv-dash-bg-2: #071426;
+  --cv-dash-bg-3: #0B1F3A;
+  --cv-dash-dot-1: rgba(147, 197, 253, .72);
+  --cv-dash-dot-2: rgba(147, 197, 253, .45);
+  --cv-dash-accent: #60A5FA;
+  --cv-dash-progress-active: #3B82F6;
+  --cv-dash-progress-inactive: #1D4ED8;
+  --cv-dash-headline: #3B82F6;
+  --cv-dash-card-tint: rgba(59, 130, 246, .025);
+  --cv-dash-card-icon: #60A5FA;
+  --cv-dash-video-border: rgba(59, 130, 246, .65);
+  --cv-dash-video-bg: #020509;
+  --cv-dash-rays: rgba(59, 130, 246, .26);
+  --cv-dash-canvas-glow: rgba(37, 99, 235, .34);
+  --cv-dash-canvas-bg-1: #0B1F3A;
+  --cv-dash-canvas-bg-2: #010509;
+  --cv-dash-play: #3B82F6;
+  --cv-dash-play-glow: rgba(37, 99, 235, .3);
+  --cv-dash-back-border: rgba(59, 130, 246, .22);
+  --cv-dash-list-active: rgba(37, 99, 235, .08);
+  --cv-dash-list-number: #60A5FA;
+
+  /* Sidebar (rail) */
+  --cv-sidebar-hover: rgba(59, 130, 246, .12);
+  --cv-sidebar-active-start: #3B82F6;
+  --cv-sidebar-active-end: #2563EB;
+  --cv-sidebar-active-icon: #071426;
+
+  /* Shell CTA buttons (2 distinct existing gradients, kept distinct) */
+  --cv-buy-button-start: #3B82F6;
+  --cv-buy-button-end: #2563EB;
+  --cv-cta-button-start: #3B82F6;
+  --cv-cta-button-end: #2563EB;
+  --cv-outline-border: #BFDBFE;
+  --cv-outline-text: #2563EB;
+
+  /* Modal / tinted surfaces */
+  --cv-modal-mint-1: #F0F7FF;
+  --cv-modal-mint-2: #DBEAFE;
+  --cv-modal-border: #BFDBFE;
+}

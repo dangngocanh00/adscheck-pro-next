@@ -1,0 +1,81 @@
+/* Ads Save — download-history modal + its single-date picker. Reuses the
+   shared `.ads-advanced-filter-backdrop` (dim + blur, no click-through)
+   via AdsProModalBackdrop, same as the create-config modal. */
+
+.ads-save-history-modal {
+  width: min(720px, 94vw);
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #cfe0d2;
+  border-radius: 22px;
+  background: linear-gradient(180deg, #f3fbf5, #eef8f0 60%);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, .3);
+  color: #17281b;
+  overflow: hidden;
+}
+
+.ads-save-history-header { flex: none; padding: 16px 18px; display: flex; align-items: center; gap: 10px; }
+.ads-save-history-header-icon { display: grid; place-items: center; color: var(--cv-brand-icon, #0cbd42); }
+.ads-save-history-header h2 { margin: 0; font-size: 15.5px; font-weight: 650; }
+.ads-save-history-subtitle { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #5c6b60; font-size: 12.5px; }
+.ads-save-history-close { flex: none; width: 26px; height: 26px; display: grid; place-items: center; border: 0; border-radius: 999px; background: rgba(10, 30, 16, .06); color: #445048; cursor: pointer; }
+.ads-save-history-close:hover { background: rgba(10, 30, 16, .1); }
+
+.ads-save-history-content { flex: 1; min-height: 0; margin: 0 18px 18px; padding: 4px; overflow-y: auto; border-radius: 16px; background: #fff; }
+.ads-save-history-table { width: 100%; border-collapse: collapse; }
+.ads-save-history-table th { padding: 12px 16px; text-align: left; color: #7c8a7f; font-size: 11.5px; font-weight: 650; text-transform: uppercase; letter-spacing: .02em; border-bottom: 1px solid #eef3ef; }
+.ads-save-history-table td { padding: 11px 16px; color: #17281b; font-size: 12.5px; border-bottom: 1px solid #f3f6f4; }
+.ads-save-history-table tbody tr:last-child td { border-bottom: 0; }
+.ads-save-history-empty { margin: 0; padding: 48px 16px; text-align: center; color: #7c8a7f; font-size: 12.5px; }
+
+/* Single-date picker */
+.ads-save-date-picker { position: relative; flex: none; }
+.ads-save-date-picker-trigger {
+  height: 32px;
+  padding: 0 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid #e1e9e2;
+  border-radius: 999px;
+  background: #f5f7f5;
+  color: #17281b;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.ads-save-date-picker-trigger svg:first-child { color: var(--cv-brand-primary-hover, #0a7a34); }
+.ads-save-date-picker-trigger svg:last-child { color: #7c8a7f; }
+.ads-save-date-picker-panel {
+  position: absolute;
+  z-index: 10;
+  right: 0;
+  top: calc(100% + 6px);
+  width: 240px;
+  padding: 10px;
+  border: 1px solid #e1e9e2;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, .16);
+}
+.ads-save-date-picker-panel header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; font-size: 12.5px; font-weight: 650; color: #17281b; }
+.ads-save-date-picker-panel header button { width: 24px; height: 24px; display: grid; place-items: center; border: 0; border-radius: 50%; background: none; color: #5c6b60; cursor: pointer; }
+.ads-save-date-picker-panel header button:hover { background: var(--cv-brand-soft, #EFF6FF); }
+.ads-save-date-picker-weekdays,
+.ads-save-date-picker-grid { display: grid; grid-template-columns: repeat(7, 1fr); }
+.ads-save-date-picker-weekdays span { padding: 2px 0; text-align: center; color: #7c8a7f; font-size: 10.5px; }
+.ads-save-date-picker-grid button {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: #17281b;
+  font-size: 12px;
+  cursor: pointer;
+}
+.ads-save-date-picker-grid button:hover { background: var(--cv-brand-soft, #EFF6FF); }
+.ads-save-date-picker-grid button.is-selected { background: var(--cv-brand-primary, #0d9f39); color: #fff; }

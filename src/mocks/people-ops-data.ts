@@ -1,0 +1,18 @@
+import type { OpsTask, PeopleDocument } from '@/types/people-ops'
+
+export const initialOpsTasks: OpsTask[] = [
+  { id: 'ops-001', employeeId: 'emp-001', title: 'Bổ sung tài khoản và phân quyền', subject: 'Nguyễn Minh Quân', category: 'onboarding', owner: 'Vận hành', dueDate: '2026-08-24T10:30:00+07:00', priority: 'urgent', status: 'open', progress: 67, description: 'Tài khoản Google Workspace đã tạo. Còn thiếu quyền CRM và kho tài nguyên Media.', sourcePath: '/employees/emp-001' },
+  { id: 'ops-002', employeeId: 'emp-004', title: 'Chuẩn bị phụ lục gia hạn', subject: 'Phạm Ngọc Anh', category: 'contract', owner: 'KT + Vận hành', dueDate: '2026-08-25T16:00:00+07:00', priority: 'high', status: 'open', progress: 42, description: 'Hợp đồng hết hạn ngày 29/08. Cần xác nhận mức lương mới trước khi gửi ký.', sourcePath: '/documents' },
+  { id: 'ops-003', employeeId: 'emp-010', title: 'Xác minh lượt thiếu check-out', subject: 'Ngô Tuấn Kiệt', category: 'attendance', owner: 'Leader CSKH', dueDate: '2026-08-24T15:00:00+07:00', priority: 'high', status: 'blocked', progress: 25, description: 'Thiếu check-out ngày 22/08. Đang chờ nhân sự gửi ảnh và giải trình.', sourcePath: '/attendance' },
+  { id: 'ops-004', employeeId: 'emp-014', title: 'Đánh giá kết thúc thử việc', subject: 'Tạ Minh Khôi', category: 'approval', owner: 'Leader Media', dueDate: '2026-08-27T17:30:00+07:00', priority: 'normal', status: 'open', progress: 45, description: 'Chờ Leader hoàn tất đánh giá năng lực và đề xuất chuyển chính thức.', sourcePath: '/approvals' },
+  { id: 'ops-005', employeeId: 'emp-007', title: 'Thu hồi thiết bị và khóa quyền truy cập', subject: 'Bùi Gia Hân', category: 'offboarding', owner: 'Vận hành + KT', dueDate: '2026-08-30T11:00:00+07:00', priority: 'high', status: 'open', progress: 60, description: 'Đã nhận biên bản bàn giao. Còn MacBook, DJI Mic và quyền truy cập kho nội dung.', sourcePath: '/hr-center' },
+  { id: 'ops-006', employeeId: 'emp-006', title: 'Phê duyệt đơn làm việc từ xa', subject: 'Đặng Thùy Linh', category: 'approval', owner: 'Quản lý miền Nam', dueDate: '2026-08-24T16:30:00+07:00', priority: 'normal', status: 'open', progress: 80, description: 'Đơn đã qua Leader, chờ phê duyệt cấp vùng để đồng bộ sang bảng công.', sourcePath: '/approvals' },
+]
+
+export const initialPeopleDocuments: PeopleDocument[] = [
+  { id: 'doc-001', employeeId: 'emp-004', code: 'HĐ-0089', title: 'Hợp đồng lao động 2025–2026', employee: 'Phạm Ngọc Anh', type: 'Hợp đồng', status: 'expiring', updatedAt: '24/08 · 09:18', effectiveDate: '29/08/2026', signers: 2, signed: 2, owner: 'Vận hành' },
+  { id: 'doc-002', employeeId: 'emp-014', code: 'TV-0102', title: 'Biên bản đánh giá thử việc', employee: 'Tạ Minh Khôi', type: 'Đánh giá', status: 'waiting', updatedAt: '24/08 · 08:46', effectiveDate: '27/08/2026', signers: 3, signed: 1, owner: 'Leader Media' },
+  { id: 'doc-003', employeeId: 'emp-001', code: 'BB-0214', title: 'Biên bản bàn giao thiết bị', employee: 'Nguyễn Minh Quân', type: 'Bàn giao', status: 'waiting', updatedAt: '23/08 · 16:20', effectiveDate: '25/08/2026', signers: 2, signed: 1, owner: 'IT & Tài sản' },
+  { id: 'doc-004', employeeId: 'emp-005', code: 'PL-0064', title: 'Phụ lục điều chỉnh thu nhập', employee: 'Vũ Đức Long', type: 'Phụ lục', status: 'draft', updatedAt: '23/08 · 14:05', effectiveDate: '01/09/2026', signers: 2, signed: 0, owner: 'KT' },
+  { id: 'doc-005', employeeId: 'emp-022', code: 'CS-0017', title: 'Cam kết bảo mật thông tin', employee: 'Trần Mỹ Duyên', type: 'Cam kết', status: 'signed', updatedAt: '22/08 · 11:34', effectiveDate: '22/08/2026', signers: 2, signed: 2, owner: 'Vận hành' },
+]

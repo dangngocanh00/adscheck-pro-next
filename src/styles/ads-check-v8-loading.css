@@ -1,0 +1,104 @@
+.ads-v8-loading-shell {
+  min-height: 100dvh;
+  padding: 8px;
+  display: flex;
+  position: relative;
+  overflow: hidden;
+  background: radial-gradient(circle at 50% -20%, var(--cv-app-ambient, rgba(59, 130, 246, .24)), transparent 42%), linear-gradient(135deg, var(--cv-app-bg-dark, #071426), var(--cv-app-bg-dark-2, #0B1F3A));
+  font-family: "Google Sans Flex", "Be Vietnam Pro", system-ui, sans-serif;
+}
+
+.ads-v8-loading-rail { width: 58px; flex: none; }
+
+/* CORRECTION x2 — "data" variant is mounted inside a table/content panel
+   (.ads-pro-refresh-overlay, itself absolute/inset:0 inside
+   .ads-pro-asset-panel) that already supplies border-radius +
+   overflow:hidden, so this variant must fill that box EXACTLY — every
+   level here is pinned with its own `position:absolute; inset:0` instead
+   of relying on flex-grow/stretch (which a shrink-to-fit ancestor could
+   otherwise undersize into a small centered "card"), so the background
+   genuinely covers the table's full visual surface, edge to edge, no
+   matter the panel's real height. Drops the splash-only ambient gradient
+   (would otherwise peek at the edges before the cover-image paints) and
+   lets the panel's own radius do the corner-clipping (no separate canvas
+   radius needed). */
+.ads-v8-loading-shell.is-data {
+  position: absolute;
+  inset: 0;
+  display: block;
+  min-height: 0;
+  padding: 0;
+  background: none;
+}
+.ads-v8-loading-shell.is-data .ads-v8-loading-canvas {
+  position: absolute;
+  inset: 0;
+  border-radius: 0;
+}
+
+.ads-v8-loading-text {
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, .5);
+}
+
+.ads-v8-loading-canvas {
+  flex: 1;
+  min-width: 0;
+  position: relative;
+  overflow: hidden;
+  border-radius: 22px;
+  background-image: var(--ads-v8-loading-bg);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.ads-v8-loading-center {
+  width: max-content;
+  padding: 0 16px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  transform: translate(-50%, -50%);
+}
+
+.ads-v8-loading-progress {
+  width: 220px;
+  height: 6px;
+  display: block;
+  border-radius: 999px;
+  background: rgba(11, 31, 58, .38);
+  overflow: hidden;
+}
+
+.ads-v8-loading-progress i {
+  width: 40%;
+  height: 100%;
+  display: block;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #1D4ED8, #3B82F6);
+  animation: ads-v8-loading-slide 1.3s ease-in-out infinite;
+}
+
+@keyframes ads-v8-loading-slide {
+  0% { transform: translateX(-120%); }
+  50% { transform: translateX(160%); }
+  100% { transform: translateX(-120%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ads-v8-loading-progress i { width: 55%; animation: none; transform: none; }
+}
+
+@media (max-width: 767px) {
+  .ads-v8-loading-shell { padding: 8px 2px 24px; }
+  .ads-v8-loading-rail { display: none; }
+  .ads-v8-loading-canvas { border-radius: 18px; }
+  .ads-v8-loading-progress { width: 150px; height: 5px; }
+}

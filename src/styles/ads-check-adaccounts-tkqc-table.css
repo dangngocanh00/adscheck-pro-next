@@ -1,0 +1,309 @@
+/* TKQC full 31-column schema (Batch Update Part D) — column widths come
+   from ads-check-pro-tkqc-data.ts's TKQC_COLUMNS via <colgroup>, not the
+   nth-child rules in ads-check-adaccounts-table.css (neutralized there for
+   .is-tkqc-full).
+   Summary Cell Alignment Correction — the `.is-numeric` right-align rule
+   used to live here scoped to `.is-tkqc-full` only, so BM's own td.is-
+   numeric cells (same class, assigned by BM's own columnCellClass) were
+   never actually right-aligned — moved to the SHARED
+   ads-check-adaccounts-table.css (unscoped) so every table that assigns
+   this class gets the same real alignment, body and summary alike. */
+
+/* Sticky checkbox: moved to the SHARED ads-check-adaccounts-table.css
+   (BM Round 1 Final Correction #2) — this used to be scoped to
+   `.is-tkqc-full` only, which meant VIA/BM/Page/Pixel's checkbox column
+   was never actually sticky despite carrying the same class. */
+
+
+.ads-pro-status.is-disabled i { background: #b7c4b9; }
+.ads-pro-status.is-disabled { color: #6b756f; }
+.ads-pro-status.is-pending i { background: #e0a72f; }
+.ads-pro-status.is-pending { color: #a97a12; }
+
+.ads-tkqc-hover-cell { display: inline-flex; align-items: center; gap: 6px; max-width: 100%; }
+/* Always visible (not hover-only reveal) — keyboard/touch users need a
+   real, reachable target, matching the VIA table's own always-visible
+   note-edit button convention. */
+.ads-tkqc-cell-edit {
+  width: 20px;
+  height: 20px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: #8ba393;
+  cursor: pointer;
+}
+.ads-tkqc-cell-edit:hover { background: var(--cv-brand-tint-10, rgba(0, 163, 46, .1)); color: var(--cv-brand-primary, var(--cv-brand-primary, #0d9f39)); }
+
+/* Spend-limit cell (Correction Batch 2 Part E) — spent/limit/percent + a
+   thin bar, the whole cell is a button that opens the "Đặt giới hạn chi
+   tiêu" modal (Part F). No more inline editable number. */
+.ads-tkqc-spend-limit-cell {
+  width: 100%;
+  padding: 4px 2px;
+  display: grid;
+  gap: 4px;
+  border: 0;
+  background: transparent;
+  color: #17281b;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.ads-tkqc-spend-limit-cell:hover .ads-tkqc-spend-limit-fraction { color: var(--cv-brand-primary, #0d9f39); }
+.ads-tkqc-spend-limit-fraction { display: flex; align-items: center; gap: 6px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 11.5px; }
+.ads-tkqc-spend-limit-fraction b { flex: none; font-weight: 600; }
+
+.ads-tkqc-payment-methods { display: inline-flex; align-items: center; gap: 4px; }
+.ads-tkqc-payment-badge { flex: none; padding: 2px 8px; border-radius: 999px; background: #f1f6f2; color: #445048; font-size: 10.5px; font-weight: 600; }
+.ads-tkqc-payment-badge.is-visa { background: #dbeafe; color: #1d4ed8; }
+.ads-tkqc-payment-badge.is-mastercard { background: #fef1cf; color: #a97a12; }
+.ads-tkqc-payment-badge.is-jcb { background: #fdeceb; color: #d63b34; }
+.ads-tkqc-payment-more { flex: none; padding: 1px 6px; border-radius: 999px; background: #f1f6f2; color: #5a6b60; font-size: 10.5px; }
+
+.ads-tkqc-progress { display: inline-flex; align-items: center; gap: 6px; width: 100%; }
+.ads-tkqc-progress i { width: 60px; height: 6px; flex: none; position: relative; border-radius: 999px; background: #e3ede5; overflow: hidden; }
+.ads-tkqc-progress i::before { content: ''; position: absolute; inset: 0; width: inherit; border-radius: inherit; background: var(--cv-brand-primary, #0d9f39); }
+.ads-tkqc-progress small { color: #5a6b60; font-size: 10.5px; }
+/* Idle progress state (Correction Batch 2 Part G) — "-" only, no bar. */
+.ads-tkqc-progress-empty { color: #8ba393; }
+
+/* Shared Resource/Modal UX correction — ONE system style for every
+   clickable resource-count cell (ads-check-pro-resource-count-pill.tsx):
+   SL đối tác, SL Admin, SL Ad Account, SL Page, SL IG, SL WABA, and TKQC's
+   own admin pill. Reference visual is the pre-existing SL đối tác pill —
+   thin green border, white background, green text, compact capsule,
+   hugs its own content, no glow/shadow. `.ads-tkqc-admin-pill`/
+   `.ads-bm-resource-pill` are kept as aliases only so nothing outside
+   this file needs to change if it still references the old class names. */
+.ads-resource-count-pill,
+.ads-tkqc-admin-pill,
+.ads-bm-resource-pill {
+  height: 26px;
+  padding: 0 12px;
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--cv-brand-primary, #0d9f39);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--cv-brand-primary, #0d9f39);
+  font-size: 11.5px;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.ads-resource-count-pill:hover:not(:disabled),
+.ads-tkqc-admin-pill:hover:not(:disabled),
+.ads-bm-resource-pill:hover:not(:disabled) { background: var(--cv-brand-icon-badge-bg, #e3f3e7); }
+.ads-resource-count-pill:disabled,
+.ads-tkqc-admin-pill:disabled,
+.ads-bm-resource-pill:disabled { border-color: #cadacc; color: #8ba393; cursor: not-allowed; }
+/* Page Round 1 Part #4 — a resource-count pill with no real click target
+   (e.g. Page's SL Admin, no admin-list data model) uses the SAME visual
+   shell but as plain, non-interactive content. */
+.ads-resource-count-pill.is-static { cursor: default; }
+
+/* BM Round 1 Part 16 — both states now render a real icon (see
+   VerifiedCell in ads-check-pro-bm-table.tsx), so this only needs to
+   center it and set the color; the old pale #b7c4b9 "red" was barely
+   visible next to the green check — now a real, clearly-visible red at
+   full opacity, comparable stroke weight to the green check. */
+.ads-bm-verified { display: inline-flex; align-items: center; justify-content: center; }
+.ads-bm-verified.is-verified { color: #0aa241; }
+.ads-bm-verified.is-unverified { color: #e5484d; }
+
+.ads-tkqc-holdneed-check {
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 999px;
+  background: #f1f6f2;
+  color: #5a6b60;
+  cursor: pointer;
+}
+.ads-tkqc-holdneed-check:hover { background: var(--cv-brand-icon-badge-bg, #e3f3e7); color: var(--cv-brand-primary, #0d9f39); }
+.ads-tkqc-holdneed { font-size: 11.5px; font-weight: 500; }
+/* Semantic "OK" hold-need health status — intentionally NOT themed by
+   V2 Blue. */
+.ads-tkqc-holdneed.is-ok { color: #0d9f39; }
+.ads-tkqc-holdneed.is-error { color: #d63b34; }
+.ads-tkqc-holdneed.is-muted { color: #8ba393; }
+.ads-tkqc-holdneed.is-checking { color: #a97a12; }
+
+/* FINAL CORRECTION A — unauthorized section divider, a row INSIDE the
+   table's own scrolling container (.ads-pro-table-scroll), between the
+   authorized and unauthorized <table>s. `position: sticky; left: 0`
+   pins it horizontally (vertically it scrolls normally with the rows
+   around it, since sticky only constrains the axis it's given an inset
+   for); `viewportWidth` (measured off the scroll container's own
+   clientWidth via ResizeObserver) caps its width to the visible viewport
+   instead of stretching to the ~1080px+ scrollable content width — a
+   sticky element's WIDTH still comes from normal layout, so without this
+   "Xem" would render far past the visible right edge. */
+.ads-tkqc-restricted-divider {
+  position: sticky;
+  left: 0;
+  z-index: 4;
+  min-height: 45px;
+  flex: none;
+  display: flex;
+  align-items: center;
+  border-top: 1px solid var(--pro-line, rgba(23, 93, 69, .08));
+  border-bottom: 1px solid var(--pro-line, rgba(23, 93, 69, .08));
+  background: #fff;
+}
+.ads-pro-restricted-summary {
+  min-width: 0;
+  flex: 1 1 auto;
+  min-height: 45px;
+  padding: 0 8px 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 0;
+  background: transparent;
+  color: #343b36;
+  font-weight: 600;
+  font-size: 12px;
+  text-align: left;
+  cursor: pointer;
+}
+.ads-pro-restricted-help {
+  width: 15px;
+  height: 15px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: #f1f6f2;
+  color: #5a6b60;
+  font-size: 10px;
+  cursor: help;
+}
+/* Round 1 #1 — a more prominent badge (filled pill, not a plain muted
+   number) so the unauthorized count reads clearly at a glance. */
+.ads-pro-restricted-badge {
+  min-width: 20px;
+  height: 20px;
+  padding: 0 7px;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 999px;
+  background: #fdeceb;
+  color: #c1443b;
+  font-size: 11px;
+  font-weight: 700;
+}
+.ads-pro-restricted-view {
+  flex: none;
+  height: 30px;
+  margin: 0 12px;
+  padding: 0 16px;
+  border: 1px solid #cfe3d2;
+  border-radius: 999px;
+  background: #f1f8f2;
+  color: var(--cv-brand-primary, #0d9f39);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.ads-pro-restricted-view:hover { background: var(--cv-brand-icon-badge-bg, #e3f3e7); }
+.ads-pro-table.is-restricted { opacity: .82; }
+
+.ads-pro-table-empty-row { text-align: center; }
+.ads-pro-table-empty-row td,
+td.ads-pro-table-empty-row { padding: 24px 8px; color: #8ba393; }
+
+/* Summary Above Pagination — the bottom block is now a FIXED overlay
+   pinned to the bottom of `.ads-pro-table-shell` (already position:
+   relative; overflow:hidden — see the top of ads-check-adaccounts-
+   table.css), not a normal flex sibling below `.ads-pro-table-scroll`.
+   This is what keeps Summary AND Pagination visible during vertical
+   scroll: the shell itself never scrolls, only `.ads-pro-table-scroll`
+   does, so an absolutely-positioned child of the shell simply always
+   renders in place regardless of the scroll container's internal
+   scrollTop. Each table's own `.ads-pro-table-scroll` reserves matching
+   bottom padding (SUMMARY_ROW_HEIGHT + PAGINATION_ROW_HEIGHT, inline
+   style) so the last real row can still scroll fully into view above
+   this block instead of hiding behind it. Order inside is Summary FIRST,
+   Pagination SECOND (top-to-bottom = document order), touching with zero
+   gap. The summary row's own horizontal geometry/scroll-sync is
+   unchanged from the previous round (useTableScrollSync +
+   AdsProTableSummaryRow) — still the same column keys/order/widths/
+   frozen-state/sticky-offsets as header/body, via the SAME
+   useColumnConfig instance. */
+.ads-pro-table-footer.is-tkqc-full {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 5;
+  flex-direction: column;
+  align-items: stretch;
+  height: auto;
+  min-height: 0;
+  padding: 0;
+  gap: 0;
+  overflow: hidden;
+}
+.ads-tkqc-footer-summary-track {
+  flex: none;
+  height: 38px;
+  overflow: hidden;
+  display: flex;
+  border-top: 1px solid var(--pro-line, rgba(23, 93, 69, .08));
+  background: #fff;
+  color: #5a6b60;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+/* Summary Cell Alignment Correction — a flex `<span>` has no `text-align`
+   equivalent for its own single text node the way a `<td>` does, so
+   alignment here is expressed via `justify-content` instead — but it must
+   resolve from the SAME per-column signal the body cell uses (the
+   `is-numeric` class, from the identical `columnCellClass`/`frozenClass`
+   helper each table already passes to both body <td> and this span — see
+   each table's own `cellClassName` prop on <AdsProTableSummaryRow>).
+   Default is flex-start (LEFT), matching the table's own default
+   `text-align: left`; `.is-numeric` overrides to flex-end (RIGHT),
+   matching `td.is-numeric { text-align: right }` above; the checkbox
+   column has no real content so it's centered for visual balance only,
+   matching `td:first-child { text-align: center }`. */
+.ads-tkqc-footer-summary-track span { flex: none; width: 120px; padding: 0 8px; display: flex; align-items: center; justify-content: flex-start; border-right: 1px solid var(--pro-line, rgba(23, 93, 69, .08)); }
+.ads-tkqc-footer-summary-track span.is-numeric { justify-content: flex-end; }
+/* Pixel #2 correction — same `is-stat-centered` marker as the body <td>
+   override in ads-check-adaccounts-table.css: the footer total for Người
+   dùng/TKQC/Đối tác is a plain count, not currency, so it centers instead
+   of right-aligning like every other `is-numeric` footer total. */
+.ads-tkqc-footer-summary-track span.is-numeric.is-stat-centered { justify-content: center; }
+.ads-tkqc-footer-summary-track span:first-child { width: 44px; }
+.ads-tkqc-footer-summary-track span.is-sticky-checkbox { position: sticky; left: 0; z-index: 2; background: #fff; justify-content: center; }
+.ads-tkqc-footer-summary-track span.is-frozen { position: sticky; z-index: 1; background: #fff; }
+/* BM Round 1 Shared Rule #6 — same boundary-only shadow rule as the main
+   table (see ads-check-adaccounts-table.css): only the LAST frozen footer
+   span gets the soft depth shadow, not every frozen span (not a second,
+   summary-specific shadow mechanism). */
+.ads-tkqc-footer-summary-track span.is-frozen-boundary { box-shadow: 6px 0 10px -6px rgba(15, 40, 22, .22); }
+.ads-tkqc-footer-overlay {
+  flex: none;
+  height: 38px;
+  padding: 0 0 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: #fff;
+  color: #777f79;
+  font-size: 11px;
+}
+.ads-tkqc-footer-overlay label,
+.ads-tkqc-footer-overlay > span { display: flex; align-items: center; gap: 4px; }
+.ads-tkqc-footer-overlay > span { padding: 0 4px; gap: 2px; }
+.ads-tkqc-footer-overlay select { height: 28px; border: 0; background: transparent; color: inherit; font: inherit; }
+.ads-tkqc-footer-overlay button { width: 24px; height: 24px; display: grid; place-items: center; border: 0; border-radius: 999px; background: transparent; color: #8d9690; }
+.ads-tkqc-footer-overlay button svg { width: 13px; height: 13px; }
+.ads-tkqc-footer-overlay strong { flex: none; padding-right: 12px; color: #454d47; font-weight: 500; white-space: nowrap; }

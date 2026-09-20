@@ -1,0 +1,131 @@
+@media (max-width: 1600px) {
+  .ads-pro-footer-totals { display: none; }
+}
+
+/* VIA Final Correction Part B — traced production (references/remotes/
+   adaccounts/558.02b0004f.js module 60754, and 436.e5c83aa9.js's
+   WorkspaceTabFrame/FolderWorkspaceLayout): production has exactly ONE
+   real breakpoint for this whole region, `max-width:767px`. From 768px
+   upward — our ENTIRE required 768-1920 target matrix — Folder/Function/
+   Workflow stay INLINE desktop panels (Folder pushes the table column as
+   a collapsed-rail-or-expanded aside; Function/Workflow are side panels
+   in the grid), never absolute-positioned overlays. The previous
+   `max-width:1180px` tier below was an earlier round's own unevidenced
+   guess (not traced) that turned Folder/Function/Workflow into
+   position:absolute drawers anywhere from 768-1180px — exactly the
+   "Folder/Function/Workflow bị mất" bug this batch fixes. Removed; the
+   plain desktop grid rules in ads-check-adaccounts-workspace.css now
+   apply uniformly down to 768px, same as they already did at 1920/1440
+   (already proven to work there, incl. with Folder+Function+Workflow all
+   open at once — the table's own existing horizontal scroll absorbs the
+   squeeze, nothing new to build). */
+
+@media (max-width: 900px) {
+  .ads-pro-search { min-width: 150px; width: min(210px, 32vw); }
+}
+
+@media (max-width: 767px) {
+  .ads-pro-workspace { position: relative; }
+  .ads-pro-mobile-panel-buttons { display: flex; gap: 5px; margin-right: auto; }
+  .ads-pro-mobile-panel-buttons button { display: grid; }
+  .ads-function-library,
+  .ads-workflow-panel {
+    width: min(340px, 90vw);
+    position: absolute;
+    z-index: 20;
+    inset: 48px 0 0 auto;
+    border-left: 1px solid #bcd5c0;
+    box-shadow: -18px 0 45px rgba(12, 59, 26, .17);
+  }
+  .ads-workflow-panel { width: min(390px, 92vw); z-index: 22; }
+  .ads-pro-folders {
+    width: min(280px, 86vw);
+    position: absolute;
+    z-index: 24;
+    inset: 48px auto 0 0;
+    display: none;
+    box-shadow: 18px 0 45px rgba(12, 59, 26, .17);
+  }
+  .ads-pro-folders.is-open { display: flex; }
+  /* Below 768px Function/Workflow become position:absolute drawers (see
+     rules right above), so the outer grid must NOT reserve a 300/360px
+     column for them — that would just steal width from main content for
+     a track nothing occupies. Selectors match the specificity of
+     ads-check-adaccounts-workspace.css's combo rules exactly (same
+     :not() chains) so this reset actually wins regardless of source
+     order — a plain `.ads-pro-workspace` selector here would lose to
+     those higher-specificity combo rules. */
+  .ads-pro-workspace:not(.has-function-panel):not(.has-workflow-panel),
+  .ads-pro-workspace.has-function-panel:not(.has-workflow-panel),
+  .ads-pro-workspace.has-workflow-panel:not(.has-function-panel),
+  .ads-pro-workspace.has-function-panel.has-workflow-panel {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "tabs" "body";
+  }
+  .ads-pro-workspace.has-folder-panel .ads-pro-main-region,
+  .ads-pro-main-region { grid-template-columns: minmax(0, 1fr); }
+  .ads-save-app.is-ads-check-pro .ads-main-panel:has(.ads-pro-workspace) { overflow: hidden; }
+  .ads-asset-tabs { height: 48px; padding-inline: 6px; }
+  .ads-asset-tabs button { min-width: 70px; height: 38px; padding-inline: 13px; }
+  .ads-pro-toolbar { min-height: 96px; padding: 7px; flex-wrap: wrap; justify-content: flex-start; align-content: center; }
+  .ads-pro-mobile-panel-buttons { order: 1; }
+  .ads-pro-load-button { order: 2; margin-left: auto; min-height: 44px; }
+  .ads-pro-toolbar > .ads-pro-icon-button { width: 44px; height: 44px; order: 3; }
+  .ads-pro-search { width: 100%; height: 44px; order: 4; }
+  .ads-pro-search input,
+  .ads-function-search input { font-size: 16px; }
+  .ads-pro-mix { display: none; }
+  .ads-pro-mobile-panel-buttons button { width: 44px; height: 44px; }
+  .ads-function-library,
+  .ads-workflow-panel,
+  .ads-pro-folders { top: 48px; bottom: 0; }
+  .ads-function-library { width: min(360px, 94vw); }
+  .ads-workflow-panel { width: 100%; }
+  .ads-pro-table.is-via,
+  .ads-pro-table.is-ad-account:not(.is-tkqc-full) { display: none; }
+  .ads-pro-table-scroll:has(.ads-pro-table.is-via),
+  .ads-pro-table-scroll:has(.ads-pro-table.is-ad-account:not(.is-tkqc-full)) { display: none; }
+  /* TKQC's 31-column schema (Batch Update Part D) has no bespoke mobile-card
+     layout — same horizontal-scroll table as BM/Page/Pixel already use on
+     mobile, so its .ads-pro-table-scroll stays visible here. */
+  .ads-pro-mobile-cards { min-height: 0; margin: 0; padding: 10px; display: grid; gap: 9px; flex: 1; overflow-y: auto; list-style: none; background: #f4faf5; }
+  .ads-pro-mobile-cards li { padding: 13px; border: 1px solid #d6e7d9; border-radius: 15px; background: #fff; box-shadow: 0 8px 22px rgba(16, 74, 30, .05); }
+  .ads-pro-mobile-cards header { display: grid; grid-template-columns: 25px minmax(0, 1fr); align-items: center; gap: 7px; }
+  .ads-pro-mobile-cards header strong { overflow: hidden; font-size: 13px; text-overflow: ellipsis; white-space: nowrap; }
+  .ads-pro-mobile-cards header .ads-pro-status { margin: 8px 0 0 32px; grid-column: 1 / -1; font-size: 11px; }
+  .ads-pro-mobile-cards dl { margin: 12px 0 0; padding-top: 10px; display: grid; gap: 7px; border-top: 1px solid #e5eee7; }
+  .ads-pro-mobile-cards dl div { display: flex; justify-content: space-between; gap: 15px; }
+  .ads-pro-mobile-cards dt,
+  .ads-pro-mobile-cards dd { font-size: 11px; }
+  .ads-pro-mobile-cards dt { color: #7a847c; }
+  .ads-pro-mobile-cards dd { margin: 0; color: #27332a; text-align: right; }
+  .ads-pro-mobile-cards footer { margin-top: 11px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .ads-pro-mobile-cards footer button { min-height: 44px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; border: 1px solid #DBEAFE; border-radius: 10px; background: #F0F7FF; color: #1D4ED8; }
+  .ads-pro-mobile-cards footer button:last-child { color: #b3434e; }
+  .ads-pro-mobile-cards li.is-restricted { border-color: #f0cfd4; background: #fffafa; }
+  .ads-pro-mobile-cards li.is-restricted header { grid-template-columns: minmax(0, 1fr); }
+  .ads-pro-mobile-cards li.is-restricted p { margin: 10px 0 3px; color: #9b4651; font-size: 12px; }
+  .ads-pro-mobile-cards li.is-restricted > small { color: #858e87; }
+  .ads-pro-table-footer { min-height: 48px; height: auto; padding: 7px 10px; justify-content: space-between; gap: 7px; flex-wrap: wrap; }
+  .ads-pro-table-footer button { width: 40px; height: 40px; }
+  .ads-pro-table-footer strong { width: 100%; order: 3; text-align: center; }
+  .ads-pro-selection-bar { width: calc(100% - 20px); min-height: 50px; bottom: 52px; justify-content: center; overflow-x: auto; }
+  .ads-pro-selection-bar button { min-height: 40px; }
+  .ads-pro-empty-state { min-height: 380px; }
+  .ads-pro-local-dialog { padding: 22px 17px 17px; border-radius: 19px; }
+  .ads-pro-local-dialog textarea { font-size: 16px; }
+  .ads-pro-local-dialog footer button { min-height: 44px; }
+  .ads-function-row { min-height: 44px; grid-template-columns: 13px 15px minmax(0, 1fr) 30px 30px 30px; font-size: 13px; }
+  .ads-function-guide-button,
+  .ads-function-row-pin,
+  .ads-function-row-trailing { width: 30px; height: 30px; opacity: 1; }
+  .ads-function-row-add { opacity: 1; }
+  .ads-function-group-heading { min-height: 48px; }
+  .ads-function-pin-filter { height: 40px; }
+  .ads-workflow-actions button { min-height: 44px; }
+}
+
+@media (max-width: 390px) {
+  .ads-pro-load-button { max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .ads-pro-toolbar > .ads-pro-icon-button:nth-last-of-type(-n + 2) { display: none; }
+}

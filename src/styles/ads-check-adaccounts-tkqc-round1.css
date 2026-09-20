@@ -1,0 +1,266 @@
+/* TKQC Round 1 — currency filter, date-range picker, "Tải TK" config
+   modal, payment popover, progress cell, Meta links, run-log + global
+   history modals. Reuses the established portal/anchor-rect popover
+   pattern and the `.ads-advanced-filter-backdrop` centered-modal pattern
+   already used across this codebase. */
+
+/* Meta navigation links (Parts 2/14) — only the value is clickable, not
+   the whole cell; visually a plain hover-underline, not a generic <a>
+   blue, matching the surrounding cell typography. */
+.ads-tkqc-meta-link { color: inherit; text-decoration: none; cursor: pointer; }
+.ads-tkqc-meta-link:hover { color: var(--cv-brand-primary, #0d9f39); text-decoration: underline; }
+
+/* Currency filter trigger + panel (Part 8) */
+.ads-pro-currency-trigger {
+  height: 32px;
+  padding: 0 12px;
+  flex: none;
+  border: 0;
+  border-radius: 999px;
+  background: #fff;
+  color: #111b14;
+  font-size: 12px;
+  font-weight: 600;
+  box-shadow: 0 1px 2px rgba(15, 60, 25, .08);
+  cursor: pointer;
+}
+.ads-pro-currency-trigger.is-active { background: var(--cv-brand-soft, #EFF6FF); color: var(--cv-brand-primary-hover, #1D4ED8); }
+.ads-pro-currency-panel {
+  width: 200px;
+  max-height: 320px;
+  position: fixed;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #d8e6da;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 20px 48px rgba(15, 60, 25, .18);
+  overflow: hidden;
+}
+.ads-pro-currency-search { padding: 8px; display: flex; align-items: center; gap: 6px; border-bottom: 1px solid #eef3ef; color: #5a6b60; }
+.ads-pro-currency-search input { min-width: 0; flex: 1; border: 0; background: transparent; color: #17281b; font: inherit; }
+.ads-pro-currency-list { margin: 0; padding: 4px; min-height: 0; overflow-y: auto; list-style: none; }
+.ads-pro-currency-option {
+  width: 100%;
+  height: 32px;
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #17281b;
+  font-size: 12.5px;
+  cursor: pointer;
+}
+.ads-pro-currency-option:hover { background: #EFF6FF; }
+.ads-pro-currency-option.is-selected { background: var(--cv-brand-icon-badge-bg, #e3f3e7); color: var(--cv-brand-primary, #0d9f39); font-weight: 600; }
+.ads-pro-currency-empty { padding: 12px; color: #8ba393; font-size: 12px; text-align: center; }
+
+/* Date-range picker (Part 6) */
+.ads-pro-daterange-panel {
+  width: 460px;
+  max-width: 92vw;
+  position: fixed;
+  z-index: 60;
+  border: 1px solid #d8e6da;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 24px 56px rgba(15, 60, 25, .2);
+  overflow: hidden;
+}
+.ads-pro-daterange-body { display: flex; }
+.ads-pro-daterange-presets { width: 150px; flex: none; padding: 10px; display: flex; flex-direction: column; gap: 2px; border-right: 1px solid #eef3ef; }
+.ads-pro-daterange-preset { height: 32px; padding: 0 10px; border: 0; border-radius: 8px; background: transparent; color: #445048; font-size: 12px; text-align: left; cursor: pointer; }
+.ads-pro-daterange-preset:hover { background: #EFF6FF; }
+.ads-pro-daterange-preset.is-selected { background: var(--cv-brand-icon-badge-bg, #e3f3e7); color: var(--cv-brand-primary, #0d9f39); font-weight: 600; }
+.ads-pro-daterange-calendar { min-width: 0; flex: 1; padding: 12px; }
+.ads-pro-daterange-calendar header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.ads-pro-daterange-calendar header button { width: 26px; height: 26px; display: grid; place-items: center; border: 0; border-radius: 999px; background: #EFF6FF; color: #445048; cursor: pointer; }
+.ads-pro-daterange-calendar header strong { font-size: 12.5px; color: #17281b; }
+.ads-pro-daterange-weekdays,
+.ads-pro-daterange-grid { display: grid; grid-template-columns: repeat(7, 1fr); }
+.ads-pro-daterange-weekdays span { padding: 4px 0; color: #8ba393; font-size: 11px; text-align: center; }
+.ads-pro-daterange-cell { height: 30px; border: 0; border-radius: 8px; background: transparent; color: #17281b; font-size: 12px; cursor: pointer; }
+.ads-pro-daterange-cell:hover { background: #EFF6FF; }
+.ads-pro-daterange-cell.is-in-range { background: var(--cv-brand-hover-soft, #eafbee); }
+.ads-pro-daterange-cell.is-edge { background: var(--cv-brand-primary, #0d9f39); color: #fff; font-weight: 600; }
+.ads-pro-daterange-cell.is-empty { cursor: default; }
+.ads-pro-daterange-panel footer { padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; gap: 12px; border-top: 1px solid #eef3ef; background: #f8faf8; }
+.ads-pro-daterange-display { min-width: 0; color: #445048; font-size: 12px; }
+.ads-pro-daterange-actions { flex: none; display: flex; gap: 8px; }
+.ads-pro-daterange-actions .is-secondary { height: 32px; padding: 0 14px; border: 0; border-radius: 999px; background: #eef2ef; color: #445048; font-size: 12px; cursor: pointer; }
+.ads-pro-daterange-actions .is-primary { height: 32px; padding: 0 16px; border: 0; border-radius: 999px; background: var(--cv-brand-primary, #0d9f39); color: #fff; font-size: 12px; font-weight: 600; cursor: pointer; }
+
+/* "Tải TK" configuration modal (Part 5) */
+.ads-tkqc-load-modal {
+  width: min(440px, 92vw);
+  max-height: 88vh;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow-y: auto;
+  border: 1px solid #cadacc;
+  border-radius: 22px;
+  background: #fff;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, .3);
+  color: #17281b;
+}
+.ads-tkqc-load-modal header { display: flex; align-items: center; gap: 8px; }
+.ads-tkqc-load-modal h2 { min-width: 0; flex: 1; margin: 0; font-size: 15px; font-weight: 600; }
+.ads-tkqc-load-subtitle { margin: 0; color: #5a6b60; font-size: 12.5px; line-height: 1.5; }
+.ads-tkqc-load-field { display: grid; gap: 6px; font-size: 12.5px; color: #445048; }
+.ads-tkqc-load-field select,
+.ads-tkqc-load-field textarea {
+  padding: 10px 12px;
+  border: 1px solid #dce8de;
+  border-radius: 12px;
+  background: #fff;
+  color: #17281b;
+  font: inherit;
+  resize: vertical;
+}
+.ads-tkqc-load-cache { padding: 12px; display: grid; gap: 10px; border: 1px solid #e5eee7; border-radius: 14px; background: #f8faf8; }
+.ads-tkqc-load-cache-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+.ads-tkqc-load-cache-head strong { font-size: 13px; }
+.ads-tkqc-load-cache-head p { margin: 2px 0 0; color: #5a6b60; font-size: 11.5px; }
+.ads-tkqc-load-switch { position: relative; flex: none; width: 38px; height: 22px; }
+.ads-tkqc-load-switch input { position: absolute; inset: 0; margin: 0; opacity: 0; cursor: pointer; }
+.ads-tkqc-load-switch span { position: absolute; inset: 0; border-radius: 999px; background: #d4e5d7; transition: background .15s; }
+.ads-tkqc-load-switch span::before { content: ""; position: absolute; top: 3px; left: 3px; width: 16px; height: 16px; border-radius: 999px; background: #fff; transition: transform .15s; }
+.ads-tkqc-load-switch input:checked + span { background: var(--cv-brand-primary, #0d9f39); }
+.ads-tkqc-load-switch input:checked + span::before { transform: translateX(16px); }
+.ads-tkqc-load-cache-options { display: grid; gap: 8px; }
+.ads-tkqc-load-cache-options.is-disabled { opacity: .5; }
+.ads-tkqc-load-radio { display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: #17281b; }
+.ads-tkqc-load-cache-input { display: inline-flex; align-items: center; gap: 6px; margin-left: auto; }
+.ads-tkqc-load-cache-input input { width: 60px; padding: 4px 8px; border: 1px solid #dce8de; border-radius: 8px; font: inherit; }
+.ads-tkqc-load-modal footer { display: flex; justify-content: flex-end; gap: 8px; }
+.ads-tkqc-load-modal footer .is-secondary { height: 36px; padding: 0 16px; border: 0; border-radius: 999px; background: #f1f6f2; color: #445048; font-size: 13px; cursor: pointer; }
+.ads-tkqc-load-modal footer .is-primary { height: 36px; padding: 0 20px; border: 0; border-radius: 999px; background: var(--cv-brand-primary, #0d9f39); color: #fff; font-size: 13px; font-weight: 500; cursor: pointer; }
+
+/* Shared destructive-confirmation dialog (Shared Rule D) */
+.ads-pro-confirm-dialog {
+  width: min(360px, 92vw);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+  border: 1px solid #cadacc;
+  border-radius: 22px;
+  background: #fff;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, .3);
+  color: #17281b;
+}
+.ads-pro-confirm-illustration {
+  width: 56px;
+  height: 56px;
+  margin-bottom: 4px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: #fdeceb;
+  color: #d63b34;
+}
+.ads-pro-confirm-dialog h2 { margin: 0; font-size: 16px; font-weight: 600; }
+.ads-pro-confirm-dialog p { margin: 0; color: #5a6b60; font-size: 13px; line-height: 1.5; }
+.ads-pro-confirm-dialog footer { width: 100%; margin-top: 12px; display: flex; gap: 10px; }
+.ads-pro-confirm-dialog footer button { flex: 1; height: 40px; border: 0; border-radius: 999px; font-size: 13px; font-weight: 600; cursor: pointer; }
+.ads-pro-confirm-dialog footer .is-secondary { background: #f1f6f2; color: #445048; }
+.ads-pro-confirm-dialog footer .is-danger { background: #d63b34; color: #fff; }
+.ads-pro-confirm-dialog footer .is-danger:hover { background: #c1443b; }
+
+/* Payment popover (Part 3) — sizes to content, no reserved empty sections. */
+.ads-tkqc-payment-popover {
+  width: 260px;
+  position: fixed;
+  z-index: 60;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border: 1px solid #d8e6da;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 20px 48px rgba(15, 60, 25, .18);
+  font-size: 12.5px;
+}
+.ads-tkqc-payment-popover header { display: flex; align-items: center; gap: 8px; }
+.ads-tkqc-payment-popover h2 { min-width: 0; flex: 1; margin: 0; font-size: 13px; font-weight: 600; }
+.ads-tkqc-payment-popover-close { width: 22px; height: 22px; flex: none; display: grid; place-items: center; border: 0; border-radius: 999px; background: #f1f6f2; color: #445048; cursor: pointer; }
+.ads-tkqc-payment-popover-empty { margin: 0; color: #8ba393; font-size: 12px; }
+.ads-tkqc-payment-popover-section { margin-top: 2px; color: #8ba393; font-size: 10.5px; text-transform: uppercase; letter-spacing: .02em; }
+.ads-tkqc-payment-popover-list { margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; list-style: none; }
+.ads-tkqc-payment-popover-list li { display: flex; align-items: center; gap: 6px; padding: 6px 4px; border-radius: 8px; }
+.ads-tkqc-payment-popover-list.is-history li { opacity: .7; }
+.ads-tkqc-payment-popover-list li a,
+.ads-tkqc-payment-popover-list li button { flex: none; width: 22px; height: 22px; display: grid; place-items: center; border: 0; border-radius: 999px; background: transparent; color: #8d9690; cursor: pointer; }
+.ads-tkqc-payment-popover-list li a:hover { color: var(--cv-brand-primary, #0d9f39); background: var(--cv-brand-hover-soft, #eafbee); }
+.ads-tkqc-payment-popover-list li button:hover { color: #d63b34; background: #fdeceb; }
+.ads-tkqc-payment-popover-remove-all { width: 100%; height: 32px; border: 1px solid #f0c8c5; border-radius: 999px; background: #fdeceb; color: #c1443b; font-size: 12px; font-weight: 600; cursor: pointer; }
+
+/* Progress cell (Part 11) */
+.ads-tkqc-progress-run { display: inline-flex; align-items: center; gap: 6px; }
+.ads-tkqc-progress-run .ads-tkqc-progress { width: 56px; }
+.ads-tkqc-progress-run small { color: #5a6b60; font-variant-numeric: tabular-nums; }
+.ads-tkqc-progress-run button { width: 22px; height: 22px; flex: none; display: grid; place-items: center; border: 0; border-radius: 999px; background: transparent; color: #8d9690; cursor: pointer; }
+.ads-tkqc-progress-run button:hover { color: var(--cv-brand-primary, #0d9f39); background: var(--cv-brand-hover-soft, #eafbee); }
+
+/* Run-log + global history modals (Parts 11/12) */
+.ads-tkqc-run-log-modal,
+.ads-tkqc-history-modal {
+  width: min(720px, 94vw);
+  max-height: 84vh;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border: 1px solid #cadacc;
+  border-radius: 22px;
+  background: #fff;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, .3);
+  color: #17281b;
+}
+/* FINAL CORRECTION C — keep the modal's large screenshot-matched footprint
+   even when there's only one log entry (or none), rather than shrinking
+   to content. */
+.ads-tkqc-history-modal { width: min(920px, 96vw); height: 78vh; }
+.ads-tkqc-run-log-modal header,
+.ads-tkqc-history-modal header { display: flex; align-items: center; gap: 8px; }
+.ads-tkqc-run-log-modal h2,
+.ads-tkqc-history-modal h2 { min-width: 0; flex: 1; margin: 0; font-size: 15px; font-weight: 600; }
+.ads-tkqc-run-log-table-scroll,
+.ads-tkqc-history-table-scroll { min-height: 0; flex: 1; overflow: auto; border: 1px solid #eef3ef; border-radius: 12px; }
+.ads-tkqc-run-log-table,
+.ads-tkqc-history-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.ads-tkqc-run-log-table th,
+.ads-tkqc-history-table th { position: sticky; top: 0; padding: 8px 10px; background: #f8faf8; color: #5a6b60; font-weight: 600; text-align: left; }
+.ads-tkqc-run-log-table td,
+.ads-tkqc-history-table td { padding: 8px 10px; border-top: 1px solid #eef3ef; vertical-align: middle; }
+.ads-tkqc-run-log-empty,
+.ads-tkqc-history-empty { padding: 24px; color: #8ba393; text-align: center; }
+.ads-tkqc-run-log-result { font-weight: 600; }
+/* Semantic success color (log run result) — intentionally NOT themed by
+   V2 Blue; success stays green in both color versions. */
+.ads-tkqc-run-log-result.is-success { color: #0d9f39; }
+.ads-tkqc-run-log-result.is-error { color: #d63b34; }
+.ads-tkqc-history-run-row td { background: #f8faf8; }
+.ads-tkqc-history-run-row button { width: 22px; height: 22px; display: grid; place-items: center; border: 0; border-radius: 999px; background: transparent; color: #445048; cursor: pointer; }
+.ads-tkqc-history-account { display: grid; gap: 2px; }
+.ads-tkqc-history-account small { color: #8ba393; }
+.ads-tkqc-history-action { display: flex; align-items: center; gap: 6px; color: #445048; }
+.ads-tkqc-history-action svg { flex: none; color: #8ba393; }
+.ads-tkqc-history-status { display: inline-flex; height: 20px; padding: 0 8px; align-items: center; border-radius: 999px; background: #eef2ef; color: #445048; font-size: 11px; font-weight: 600; }
+.ads-tkqc-run-log-modal footer,
+.ads-tkqc-history-modal footer { display: flex; justify-content: flex-end; gap: 8px; }
+.ads-tkqc-run-log-modal footer .is-secondary,
+.ads-tkqc-history-modal footer .is-secondary { height: 36px; padding: 0 16px; border: 0; border-radius: 999px; background: #f1f6f2; color: #445048; font-size: 13px; cursor: pointer; }
+.ads-tkqc-run-log-modal footer .is-primary,
+.ads-tkqc-history-modal footer .is-primary { height: 36px; padding: 0 20px; border: 0; border-radius: 999px; background: var(--cv-brand-primary, #0d9f39); color: #fff; font-size: 13px; font-weight: 500; cursor: pointer; }
+.ads-tkqc-run-log-modal footer .is-primary:disabled,
+.ads-tkqc-history-modal footer .is-primary:disabled { background: #cfe3d2; color: #fff; cursor: not-allowed; }

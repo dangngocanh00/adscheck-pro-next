@@ -1,0 +1,39 @@
+/* Ads Save Empty State Round 1 — this file only styles the CONTENT slot
+   rendered inside the existing shared `<main class="ads-main-panel">`
+   (see ads-save.css for that shell: light mint radial-gradient
+   background, 20px rounded corners, rail-aware inset — all reused
+   as-is, nothing here duplicates or overrides it). Scoped, unique class
+   names throughout; no shared/global selector is touched, so Ads Check
+   Pro's own `.ads-main-panel` usage is unaffected. */
+
+.ads-save-workspace-panel { height: 100%; display: flex; flex-direction: column; }
+
+.ads-save-workspace-header { flex: none; height: 52px; padding: 0 22px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(8, 118, 45, .12); }
+.ads-save-workspace-header-icon { display: grid; place-items: center; color: var(--cv-brand-icon, #0cbd42); }
+.ads-save-workspace-header h1 { margin: 0; color: #12241a; font-size: 15px; font-weight: 650; letter-spacing: -.01em; }
+
+/* Centers within the REMAINING space below the header (flex:1 of the
+   column above), not the full viewport/sidebar. */
+.ads-save-empty-state { flex: 1; min-height: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; text-align: center; overflow: auto; }
+
+.ads-save-empty-illustration { width: 84px; height: 84px; margin-bottom: 18px; position: relative; display: grid; place-items: center; flex: none; }
+.ads-save-empty-illustration-core { width: 100%; height: 100%; display: grid; place-items: center; border-radius: 50%; color: var(--cv-brand-primary-hover, #0a7a34); background: radial-gradient(circle at 35% 28%, var(--cv-illustration-core-1, #eafff0), var(--cv-illustration-core-2, #d3f5df) 72%); box-shadow: inset 0 0 0 1px rgba(10, 122, 52, .14); }
+.ads-save-empty-illustration-badge { width: 26px; height: 26px; position: absolute; right: -2px; bottom: -2px; display: grid; place-items: center; border: 2px solid #fff; border-radius: 50%; color: #fff; background: var(--cv-brand-icon, #0cbd42); box-shadow: 0 3px 8px rgba(9, 74, 26, .28); }
+.ads-save-empty-dot { position: absolute; border-radius: 50%; background: var(--cv-illustration-dot, #7be495); opacity: .8; }
+.ads-save-empty-dot.is-a { width: 6px; height: 6px; top: 0; left: 6px; }
+.ads-save-empty-dot.is-b { width: 4px; height: 4px; top: 16px; right: -4px; }
+.ads-save-empty-dot.is-c { width: 5px; height: 5px; bottom: 12px; left: -7px; }
+
+.ads-save-empty-state h2 { margin: 0 0 8px; color: #12241a; font-size: 16px; font-weight: 700; }
+.ads-save-empty-state p { margin: 0 0 18px; max-width: 320px; color: #5c6b60; font-size: 13px; line-height: 1.55; }
+.ads-save-empty-cta { height: 40px; padding: 0 22px; flex: none; border: 0; border-radius: 999px; background: linear-gradient(135deg, var(--cv-primary-cta-start, #0cbd42), var(--cv-primary-cta-end, #35d95f)); color: #fff; font-size: 13px; font-weight: 600; cursor: pointer; }
+.ads-save-empty-cta:hover { filter: brightness(1.04); }
+.ads-save-empty-cta:active { transform: scale(.98); }
+
+@media (max-width: 767px) {
+  .ads-save-workspace-header { height: 46px; padding: 0 16px; }
+  .ads-save-empty-state { padding: 16px; }
+  .ads-save-empty-illustration { width: 68px; height: 68px; margin-bottom: 14px; }
+  .ads-save-empty-state h2 { font-size: 15px; }
+  .ads-save-empty-state p { font-size: 12.5px; max-width: 260px; }
+}
