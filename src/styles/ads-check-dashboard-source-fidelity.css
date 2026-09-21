@@ -55,6 +55,14 @@
 .ads-dashboard-content-stage > .ads-story-changes { flex: 0 0 auto; }
 
 .ads-story-heading { height: 197px; margin: 0; align-items: flex-end; }
+/* Transfer desktop intro whitespace from above to below the composition.
+   Its total height stays stable, so centering moves the entire hero equally
+   at every viewport height without resizing the media or feature cards. */
+@media (min-width: 1025px) {
+  .ads-dashboard-story.is-step-1 .ads-dashboard-content-stage { padding-bottom: 86px; }
+  .ads-dashboard-story.is-step-1 .ads-story-heading { height: 111px; }
+  .ads-dashboard-story.is-step-1 .ads-story-copy > button { top: 112px; }
+}
 .ads-story-kicker { color: #c2d8c6; font-size: 12px; font-weight: 500; }
 .ads-story-kicker svg { width: 9px; color: var(--cv-dash-accent, #5dff87); fill: var(--cv-dash-accent, #5dff87); }
 .ads-story-progress {

@@ -1,3 +1,4 @@
+import { AdsCheckModuleIsland } from '@/features/ads-check/ads-check-module-island'
 import { appLanguageOptions, getAppLanguageLabel, m, useAppLanguage, tx, t } from '@/i18n'
 import { useEffect, useRef, useState, type ComponentType, type ReactNode } from 'react'
 import {
@@ -5,6 +6,7 @@ import {
   Languages, Menu, Package, ShoppingCart, UserRound, X,
 } from 'lucide-react'
 import { AdsCheckProAppIcon } from '@/features/ads-check/ads-check-pro-app-icon'
+import { AdsCheckModuleIcon } from '@/features/ads-check/ads-check-module-icon'
 import { AdsCheckNavIcon } from '@/features/ads-check/ads-check-nav-icon'
 import { AdsCheckBrandMark } from '@/features/ads-check/ads-check-brand-mark'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
@@ -56,9 +58,8 @@ const routeTitles: Record<string, string> = {
 
 function RailLink({ item, active }: { item: NavigationItem; active: boolean }) {
   useAppLanguage();
-  const Icon = item.icon
   return <Link className={`ads-rail-button${active ? ' is-active' : ''}`} aria-label={tx(item.label)} aria-current={active ? 'page' : undefined} to={item.to} title={tx(item.label)}>
-    <Icon size={17} strokeWidth={1.9} />
+    <AdsCheckModuleIcon route={item.to} />
   </Link>
 }
 
@@ -112,6 +113,13 @@ export function AdsCheckProductShell({ activeNavigation, children }: AdsCheckPro
     if (!utilityPanel) return
     const menu = utilityMenuRef.current
     const trigger = document.querySelector<HTMLElement>(`[data-ads-shell-menu-trigger="${utilityPanel}"]`)
+    const positionMenu = () => {
+      if (!menu || !trigger?.classList.contains('ads-header-utility')) return
+      const rect = trigger.getBoundingClientRect()
+      Object.assign(menu.style, { position: 'fixed', top: (rect.bottom + 8) + 'px', bottom: 'auto', left: 'auto', right: Math.max(12, window.innerWidth - rect.right) + 'px' })
+    }
+    positionMenu()
+    window.addEventListener('resize', positionMenu)
     const focusTimer = window.requestAnimationFrame(() => {
       const selected = menu?.querySelector<HTMLElement>('[aria-checked="true"]')
       ;(selected ?? menu?.querySelector<HTMLElement>('[role="menuitemradio"]'))?.focus()
@@ -120,7 +128,7 @@ export function AdsCheckProductShell({ activeNavigation, children }: AdsCheckPro
       if (event.key === 'Tab') {
         event.preventDefault()
         utilityShouldRestoreFocusRef.current = false
-        const controls = Array.from(document.querySelectorAll<HTMLElement>('.ads-rail-secondary > .ads-rail-button'))
+        const controls = Array.from(document.querySelectorAll<HTMLElement>('.ads-top-actions > a, .ads-top-actions > button'))
         const currentIndex = trigger ? controls.indexOf(trigger) : -1
         const nextIndex = event.shiftKey ? currentIndex - 1 : currentIndex + 1
         const nextControl = controls[nextIndex]
@@ -148,6 +156,7 @@ export function AdsCheckProductShell({ activeNavigation, children }: AdsCheckPro
     document.addEventListener('keydown', handleKeys)
     document.addEventListener('mousedown', closeOutside)
     return () => {
+      window.removeEventListener('resize', positionMenu)
       window.cancelAnimationFrame(focusTimer)
       document.removeEventListener('keydown', handleKeys)
       document.removeEventListener('mousedown', closeOutside)
@@ -197,18 +206,18 @@ export function AdsCheckProductShell({ activeNavigation, children }: AdsCheckPro
       <div className="ads-top-actions">
         <Link className="ads-buy-button" aria-label={t("ui.b90857eb2c")} to="/app/billing/payment"><ShoppingCart size={15} /><span>{t("ui.b90857eb2c")}</span></Link>
         <Link className="ads-profile ads-shell-profile" aria-label={t("ui.da3dbde4f0")} to="/app/account"><span>{t("ui.82fa5f31dc")}</span></Link>
+        <button className={`ads-header-utility${utilityPanel === 'language' ? ' is-selected' : ''}`} type="button" aria-label={tx(m("ui.bc23ab2eaa", { 0: languageLabel }))} aria-haspopup="menu" aria-expanded={utilityPanel === 'language'} aria-controls="ads-shell-language-menu" data-ads-shell-menu-trigger="language" onClick={() => chooseUtility('language')}><Languages size={16} /></button>
+        <a className="ads-header-utility" aria-label={t("ui.ed2a55ae3b")} href="https://www.facebook.com/adscheck.official/" target="_blank" rel="noreferrer" title={t("ui.ed2a55ae3b")}><Headphones size={16} /></a>
+        <Link className={`ads-header-utility ads-header-utility--notification${activeNavigation === 'notification' ? ' is-active' : ''}`} aria-label={t("ui.5d6af377c2")} aria-current={activeNavigation === 'notification' ? 'page' : undefined} to="/app/notification" title={t("ui.5d6af377c2")}><Bell size={16} /></Link>
       </div>
     </header>
 
     <section className="ads-workspace ads-product-workspace">
-      <AdsCheckShellCurve />
+      <AdsCheckShellCurve enableLeftCornerAccents={activeNavigation !== 'billing' && activeNavigation !== 'adscheck-pro'} enableBottomLeftAccent={activeNavigation === 'billing' || activeNavigation === 'adscheck-pro'} />
       <nav className="ads-rail" aria-label={t("ui.f03700cd5e")}>
-        <div className="ads-rail-primary">{primaryNavigation.map((item) => <RailLink key={item.key} item={item} active={activeNavigation === item.key} />)}</div>
+        <div className="ads-rail-primary"><AdsCheckModuleIsland />{primaryNavigation.map((item) => <RailLink key={item.key} item={item} active={activeNavigation === item.key} />)}</div>
         <div className="ads-rail-secondary">
           <button className="ads-rail-button" type="button" aria-label={t("ui.b3755a35d8")} title={t("ui.b3755a35d8")} onClick={openControlHub}><AdsCheckNavIcon /></button>
-          <button className={`ads-rail-button${utilityPanel === 'language' ? ' is-selected' : ''}`} type="button" aria-label={tx(m("ui.bc23ab2eaa", { 0: languageLabel }))} aria-haspopup="menu" aria-expanded={utilityPanel === 'language'} aria-controls="ads-shell-language-menu" data-ads-shell-menu-trigger="language" onClick={() => chooseUtility('language')}><Languages size={16} /></button>
-          <a className="ads-rail-button" aria-label={t("ui.ed2a55ae3b")} href="https://www.facebook.com/adscheck.official/" target="_blank" rel="noreferrer" title={t("ui.ed2a55ae3b")}><Headphones size={16} /></a>
-          <Link className={`ads-rail-button${activeNavigation === 'notification' ? ' is-active' : ''}`} aria-label={t("ui.5d6af377c2")} aria-current={activeNavigation === 'notification' ? 'page' : undefined} to="/app/notification" title={t("ui.5d6af377c2")}><Bell size={16} /></Link>
         </div>
       </nav>
 

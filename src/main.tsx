@@ -49,6 +49,7 @@ import './styles/ads-check-device-and-detail-dialogs.css'
 import './styles/ads-check-adaccounts-via-audit.css'
 import './styles/ads-check-adaccounts-responsive.css'
 import './styles/ads-check-v8-loading.css'
+import './styles/ads-check-pro-floating-panels.css'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode><BrowserRouter><App /></BrowserRouter></StrictMode>,

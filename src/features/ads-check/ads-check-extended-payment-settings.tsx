@@ -4,6 +4,10 @@ import {
   Bold,
   CaseSensitive,
   Check,
+  CheckCheck,
+  RotateCcw,
+  Search,
+  LayoutGrid,
   Italic,
   Link2,
   Palette,
@@ -27,6 +31,9 @@ import { ExtendedPaymentDropdown } from './ads-check-extended-payment-dropdown'
 import { ExtendedPaymentRateModal } from './ads-check-extended-payment-rate-modal'
 
 type ExtendedPaymentSettingsPanelProps = {
+  onRestoreDefaults: () => void
+  onSelectAllFields: () => void
+  onResetFields: () => void
   bubbleEnabled: boolean
   surface: ExtendedPaymentSurface
   language: string
@@ -99,6 +106,9 @@ const SIGNATURE_COLORS: { label: string; value: string }[] = [
 ]
 
 export const ExtendedPaymentSettingsPanel: FC<ExtendedPaymentSettingsPanelProps> = ({
+  onRestoreDefaults,
+  onSelectAllFields,
+  onResetFields,
   bubbleEnabled,
   surface,
   language,
@@ -126,6 +136,8 @@ export const ExtendedPaymentSettingsPanel: FC<ExtendedPaymentSettingsPanelProps>
   const [linkOpen, setLinkOpen] = useState(false)
   const [linkValue, setLinkValue] = useState('')
   const [rateModalOpen, setRateModalOpen] = useState(false)
+  const [fieldSearch, setFieldSearch] = useState('')
+  const visibleFields = extendedPaymentFields.filter(field => tx(field.label).toLocaleLowerCase().includes(fieldSearch.trim().toLocaleLowerCase()))
 
   // Uncontrolled contentEditable: the DOM is the source of truth while
   // typing (React re-rendering `innerHTML` on every keystroke would fight
@@ -218,6 +230,7 @@ export const ExtendedPaymentSettingsPanel: FC<ExtendedPaymentSettingsPanelProps>
     <header className="ads-extended-page-heading">
       <span className="ads-extended-heading-icon"><Sparkles size={17} /></span>
       <h1 id="extended-payment-title">{t("ui.4d95467c53")}</h1>
+      <button className="ads-extended-restore" type="button" onClick={onRestoreDefaults}><RotateCcw size={15} />{t('extended.restoreDefaults')}</button>
     </header>
 
     <div className="ads-extended-settings-scroll">
@@ -265,9 +278,16 @@ export const ExtendedPaymentSettingsPanel: FC<ExtendedPaymentSettingsPanelProps>
       </section>
 
       <section className="ads-extended-card ads-extended-fields" aria-labelledby="extended-fields-title">
-        <h2 id="extended-fields-title"><span className="ads-extended-mini-mark" aria-hidden="true" />{t("ui.637800698d")}</h2>
+        <div className="ads-extended-board-heading">
+          <h2 id="extended-fields-title"><LayoutGrid size={18} aria-hidden="true" />{t("ui.637800698d")}</h2>
+          <div className="ads-extended-board-actions">
+            <label className="ads-extended-field-search"><Search size={15} aria-hidden="true" /><input type="search" value={fieldSearch} onChange={event => setFieldSearch(event.target.value)} aria-label={t('extended.searchFields')} placeholder={t('extended.searchFields')} /></label>
+            <button type="button" onClick={onSelectAllFields}><CheckCheck size={15} />{t('extended.selectAll')}</button>
+            <button type="button" className="is-neutral" onClick={onResetFields}><RotateCcw size={15} />{t('extended.resetFields')}</button>
+          </div>
+        </div>
         <div className="ads-extended-fields-grid" role="group" aria-label={t("ui.8f69965be0")}>
-          {extendedPaymentFields.map((field) => {
+          {visibleFields.map((field) => {
             const Icon = field.icon
             const selected = selectedFields.includes(field.id)
             return (
@@ -279,9 +299,9 @@ export const ExtendedPaymentSettingsPanel: FC<ExtendedPaymentSettingsPanelProps>
                 aria-pressed={selected}
                 onClick={() => onToggleField(field.id)}
               >
-                <span><Icon size={17} /></span>
+                <span className="ads-extended-field-icon"><Icon size={17} /></span>
                 <b>{tx(field.label)}</b>
-                {selected && <Check className="ads-extended-field-check" size={13} aria-hidden="true" />}
+                <span className="ads-extended-selection-badge" aria-hidden="true"><Check size={13} strokeWidth={2.3} /></span>
               </button>
             )
           })}
@@ -289,7 +309,11 @@ export const ExtendedPaymentSettingsPanel: FC<ExtendedPaymentSettingsPanelProps>
       </section>
 
       <section className="ads-extended-card ads-extended-signature" aria-labelledby="extended-signature-title">
-        <h2 id="extended-signature-title"><UserRound size={17} />{t("ui.2b42a67457")}</h2>
+        <div className="ads-extended-section-heading">
+          <h2 id="extended-signature-title"><UserRound size={17} />{t("ui.2b42a67457")}</h2>
+          <button className="ads-extended-save-button" type="button" aria-label={t("ui.8029c9eb86")} onClick={onSave}><Save size={14} />{t("ui.a306970e8b")}</button>
+        </div>
+        {visibleFields.length === 0 && <p className="ads-extended-board-empty">{t('extended.noFields')}</p>}
         <div className="ads-extended-editor">
           <div className="ads-extended-editor-toolbar" role="group" aria-label={t("ui.3a13c2fa77")}>
             <button type="button" aria-label={t("ui.c192d78ef8")} onMouseDown={preventBlur} onClick={() => runCommand('underline')}><Underline size={16} /></button>
@@ -317,7 +341,6 @@ export const ExtendedPaymentSettingsPanel: FC<ExtendedPaymentSettingsPanelProps>
               </div>}
             </span>
             <span className="ads-extended-save-status" role="status" aria-live="polite">{tx(savedMessage)}</span>
-            <button className="ads-extended-save-button" type="button" aria-label={t("ui.8029c9eb86")} onClick={onSave}><Save size={14} />{t("ui.a306970e8b")}</button>
           </div>
           <div
             ref={editorRef}

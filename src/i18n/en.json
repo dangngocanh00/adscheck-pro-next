@@ -2763,5 +2763,11 @@
   "ui.0c1d2e3f04": "Editor",
   "ui.5a6b7c8d05": "Analyst",
   "ui.a9b8c7d606": "Action bar",
-  "ui.b101c2d303": "Unpublished", "ui.b404c5d606": "Likes", "ui.b707c8d909": "Followers", "ui.ba10cb11dc": "Posts", "ui.bd13ce14ef": "Page Verified", "ui.c016df1720": "Ads Eligibility", "ui.c319e02123": "Ads Ban Reason", "ui.c622e32426": "Page Live", "ui.c925e62729": "Monetization", "ui.d328f93032": "Ads policy violation", "ui.e429fa4133": "Monetized", "ui.f52a0b5234": "Not monetized", "ui.a430b14135": "Die", "ui.7f5c4d3e2b": "Not published", "ui.2d9f8c7b61": "Employee", "ui.ed1c2b3a4f": "Published", "ui.ed2c3b4a5f": "Unpublished", "ui.ed3c4b5a6f": "Business"
+  "ui.b101c2d303": "Unpublished", "ui.b404c5d606": "Likes", "ui.b707c8d909": "Followers", "ui.ba10cb11dc": "Posts", "ui.bd13ce14ef": "Page Verified", "ui.c016df1720": "Ads Eligibility", "ui.c319e02123": "Ads Ban Reason", "ui.c622e32426": "Page Live", "ui.c925e62729": "Monetization", "ui.d328f93032": "Ads policy violation", "ui.e429fa4133": "Monetized", "ui.f52a0b5234": "Not monetized", "ui.a430b14135": "Die", "ui.7f5c4d3e2b": "Not published", "ui.2d9f8c7b61": "Employee", "ui.ed1c2b3a4f": "Published", "ui.ed2c3b4a5f": "Unpublished", "ui.ed3c4b5a6f": "Business",
+  "extended.restoreDefaults": "Restore default",
+  "extended.searchFields": "Search data",
+  "extended.selectAll": "Select all",
+  "extended.resetFields": "Reset",
+  "extended.noFields": "No matching fields",
+  "extended.selectedCount": "{0}/{1} items selected"
 }

@@ -1,7 +1,10 @@
 import { useAppLanguage, m } from '@/i18n'
+import '@/styles/ads-check-extended-payment-pa5.css'
 import { useCallback, useEffect, useMemo, useRef, useState, type FC } from 'react'
 import {
   extendedPaymentStorageKey,
+  defaultExtendedPaymentSettings,
+  extendedPaymentFields,
   readExtendedPaymentSettings,
   type ExtendedPaymentCurrencyMode,
   type ExtendedPaymentSurface,
@@ -22,6 +25,20 @@ export const AdsCheckExtendedPaymentPage: FC = () => {
   const [selectedFields, setSelectedFields] = useState<string[]>(initialSettings.selectedFields)
   const [signature, setSignature] = useState(initialSettings.signature)
   const [savedMessage, setSavedMessage] = useState('')
+  const [restoreVersion, setRestoreVersion] = useState(0)
+  const restoreDefaults = () => {
+    const defaults = defaultExtendedPaymentSettings
+    setBubbleEnabled(defaults.bubbleEnabled)
+    setSurface(defaults.surface)
+    setLanguage(defaults.language)
+    setCurrencyMode(defaults.currencyMode)
+    setDisplayCurrency(defaults.displayCurrency)
+    setCustomRates({ ...defaults.customRates })
+    setSelectedFields([...defaults.selectedFields])
+    setSignature(defaults.signature)
+    // Reseed the uncontrolled editor only on an explicit restore, never while typing.
+    setRestoreVersion(version => version + 1)
+  }
 
   const currentSnapshot = useMemo(() => JSON.stringify({
     schemaVersion: 2,
@@ -64,6 +81,10 @@ export const AdsCheckExtendedPaymentPage: FC = () => {
       <div className="ads-payment-page ads-extended-payment-page" id="ads-payment-main">
         <div className="ads-extended-layout">
           <ExtendedPaymentSettingsPanel
+            key={restoreVersion}
+            onRestoreDefaults={restoreDefaults}
+            onSelectAllFields={() => setSelectedFields(extendedPaymentFields.map(field => field.id))}
+            onResetFields={() => setSelectedFields([...defaultExtendedPaymentSettings.selectedFields])}
             bubbleEnabled={bubbleEnabled}
             surface={surface}
             language={language}

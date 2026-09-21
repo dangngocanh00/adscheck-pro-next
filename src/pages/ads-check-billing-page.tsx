@@ -1,5 +1,6 @@
+import { AdsCheckCurveNeon } from '@/features/ads-check/ads-check-curve-neon'
 import { m, useAppLanguage, t, tx } from '@/i18n'
-import { forwardRef, useLayoutEffect, useMemo, useRef, useState, type FC, type ReactNode } from 'react'
+import { forwardRef, useId, useLayoutEffect, useMemo, useRef, useState, type FC, type ReactNode } from 'react'
 import {
   ArrowLeft,
   CalendarDays,
@@ -303,6 +304,7 @@ const PlanManagementPanel: FC<PlanManagementPanelProps> = ({ visibleFeatures, pl
 }
 
 export const AdsCheckBillingPage: FC = () => {
+  const surfaceId = useId()
   useAppLanguage();
   const [activeTab, setActiveTab] = useState<BillingTab>('purchase')
   const [checkoutOpen, setCheckoutOpen] = useState(false)
@@ -394,6 +396,18 @@ export const AdsCheckBillingPage: FC = () => {
       const leftPanel = frame.querySelector<HTMLElement>('.ads-billing-workspace-content:not([hidden]) .ads-purchase-builder')
       const leftPanelRect = leftPanel?.getBoundingClientRect()
       const frameWidth = leftPanelRect && leftPanelRect.width > 0 ? leftPanelRect.width : frameRect.width
+      // Share actual panel width with the action row; percentage estimates drift
+      // when the summary column hits its minimum width.
+      frame.style.setProperty('--billing-action-width', `${frameWidth}px`)
+      const available = frameWidth - (lastButtonRect.right - frameRect.left) - 76
+      const progress = frame.querySelector<HTMLElement>('.ads-billing-workspace-content:not([hidden]) .ads-purchase-progress')
+      frame.toggleAttribute('data-progress-below', !!progress && progress.scrollWidth > available)
+      const toolbar = nav.querySelector<HTMLElement>('.ads-billing-plan-toolbar')
+      const toolbarMinimum = toolbar ? Array.from(toolbar.children).reduce((total, child) => {
+        const control = child as HTMLElement
+        return total + (control.matches('.ads-billing-plan-search') ? 100 : control.getBoundingClientRect().width) + 6
+      }, 0) : 0
+      frame.toggleAttribute('data-toolbar-below', toolbarMinimum > available)
       const tabPosition: BillingWorkspaceTabPosition = activeIndex === 0 ? 'first' : activeIndex === buttons.length - 1 ? 'last' : 'middle'
       const path = buildBillingWorkspacePath({
         frameWidth,
@@ -409,6 +423,8 @@ export const AdsCheckBillingPage: FC = () => {
     const observer = new ResizeObserver(recompute)
     observer.observe(frame)
     observer.observe(nav)
+    nav.querySelectorAll('[role="tab"], .ads-billing-plan-toolbar, .ads-billing-plan-toolbar > *').forEach((element) => observer.observe(element))
+    frame.querySelectorAll('.ads-purchase-builder, .ads-purchase-progress').forEach((element) => observer.observe(element))
     window.addEventListener('resize', recompute)
     return () => {
       observer.disconnect()
@@ -463,14 +479,14 @@ export const AdsCheckBillingPage: FC = () => {
                 {/* Same wash gradient/stops (and same --cv-workspace-wash-*
                     tokens) already used by Curve B, so V1–V5 behave
                     identically here without a separate theme system. */}
-                <linearGradient id="ads-billing-workspace-wash" x1="0" y1="0" x2="0" y2="1">
+                <linearGradient id={surfaceId + "-wash"} x1="0" y1="0" x2="0" y2="1">
                   <stop offset="0" stopColor="var(--cv-workspace-wash-strong, rgba(77, 255, 127, 0.06))" />
                   <stop offset="0.519231" stopColor="var(--cv-workspace-wash-soft, rgba(77, 255, 127, 0.02))" />
                   <stop offset="1" stopColor="var(--cv-workspace-wash-strong, rgba(77, 255, 127, 0.06))" />
                 </linearGradient>
               </defs>
               <path d={workspaceSurface.path} fill="rgba(255, 255, 255, 0.95)" />
-              <path d={workspaceSurface.path} fill="url(#ads-billing-workspace-wash)" />
+              <path d={workspaceSurface.path} fill={`url(#${surfaceId}-wash)`} />
               {/* Third layer, matching production's 3-path structure. No
                   texture asset/pattern exists anywhere in this project yet
                   (checked before implementing) — kept transparent as a
@@ -478,6 +494,11 @@ export const AdsCheckBillingPage: FC = () => {
               <path d={workspaceSurface.path} fill="transparent" />
             </svg>
           ))}
+          {SHOW_CURVE_D && <svg className="ads-billing-curve-neon" aria-hidden="true" focusable="false"
+            viewBox={'0 0 ' + workspaceSurface.width + ' ' + workspaceSurface.height}
+            preserveAspectRatio="none" style={{ width: workspaceSurface.width, height: workspaceSurface.height }}>
+            <AdsCheckCurveNeon path={workspaceSurface.path.replace(/^M0 [^ ]+ V([^ ]+) /, 'M0 $1 ').split(' V')[0]} curve="d" />
+          </svg>}
           <BillingTabs active={activeTab} onChange={moveToTab} trailing={activeTab === 'plans' ? planToolbar : activeTab === 'history' ? historyToolbar : undefined} />
           <div id="billing-purchase-panel" className="ads-billing-workspace-content" role="tabpanel" aria-labelledby="billing-purchase-tab" hidden={activeTab !== 'purchase'}>
             <AdsCheckBillingPurchasePanel hidden={checkoutOpen} onCheckout={openCheckout} />

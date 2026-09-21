@@ -2767,5 +2767,11 @@
   "ui.ed1c2b3a4f": "เผยแพร่แล้ว",
   "ui.ed2c3b4a5f": "ยกเลิกเผยแพร่แล้ว",
   "ui.ed3c4b5a6f": "ธุรกิจ",
-  "billing.extraSessions": "เซสชันเพิ่มเติม (ครั้งเดียว)"
+  "billing.extraSessions": "เซสชันเพิ่มเติม (ครั้งเดียว)",
+  "extended.restoreDefaults": "คืนค่าเริ่มต้น",
+  "extended.searchFields": "ค้นหาข้อมูล",
+  "extended.selectAll": "เลือกทั้งหมด",
+  "extended.resetFields": "รีเซ็ต",
+  "extended.noFields": "ไม่พบข้อมูล",
+  "extended.selectedCount": "เลือกแล้ว {0}/{1} รายการ"
 }

@@ -2767,5 +2767,11 @@
   "ui.ed1c2b3a4f": "已发布",
   "ui.ed2c3b4a5f": "已取消发布",
   "ui.ed3c4b5a6f": "企业",
-  "billing.extraSessions": "额外会话（一次性）"
+  "billing.extraSessions": "额外会话（一次性）",
+  "extended.restoreDefaults": "恢复默认",
+  "extended.searchFields": "搜索数据",
+  "extended.selectAll": "全选",
+  "extended.resetFields": "重置",
+  "extended.noFields": "未找到匹配字段",
+  "extended.selectedCount": "已选择 {0}/{1} 项"
 }

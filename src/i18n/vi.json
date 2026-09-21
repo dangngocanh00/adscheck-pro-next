@@ -2747,5 +2747,11 @@
   "ui.ba88e93d9f": "Không ảnh hưởng lịch campaign.",
   "ui.a154a1e8e0": "Quên check-out cuối ngày.",
   "ui.185581b81f": "Đính kèm xác nhận của Leader.",
-  "billing.extraSessions": "Phiên bổ sung (một lần)"
+  "billing.extraSessions": "Phiên bổ sung (một lần)",
+  "extended.restoreDefaults": "Khôi phục mặc định",
+  "extended.searchFields": "Tìm dữ liệu",
+  "extended.selectAll": "Chọn tất cả",
+  "extended.resetFields": "Đặt lại",
+  "extended.noFields": "Không tìm thấy dữ liệu",
+  "extended.selectedCount": "Đã chọn {0}/{1} mục"
 }

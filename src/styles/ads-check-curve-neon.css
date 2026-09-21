@@ -1,0 +1,37 @@
+.ads-pro-curve-b-neon,
+.ads-billing-curve-neon {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 21;
+  overflow: visible;
+  pointer-events: none;
+}
+.ads-curve-neon path { vector-effect: non-scaling-stroke; stroke-linecap: round; stroke-linejoin: round; }
+.ads-curve-neon-glow { stroke-width: 5px; opacity: .4; filter: blur(2px); }
+.ads-curve-neon-base { stroke-width: var(--neon-core-width); opacity: .7; }
+.ads-curve-neon:is(.is-top-right, .is-bottom-right, .is-top-left, .is-bottom-left) { opacity: .65; }
+.ads-curve-neon:is(.is-top-right, .is-bottom-right, .is-top-left, .is-bottom-left) .ads-curve-neon-glow { stroke-width: 3px; opacity: .2; filter: blur(1px); }
+.ads-curve-neon-pulse { filter: drop-shadow(0 0 3px #22d3ee); }
+.ads-curve-neon-runner {
+  stroke-width: var(--neon-runner-width);
+  opacity: .22;
+  animation: ads-curve-neon-travel var(--neon-duration) linear infinite;
+  animation-delay: calc(var(--neon-delay) + var(--runner-inner-delay, 0s));
+}
+.ads-content-corner-accents { position: absolute; z-index: 2; pointer-events: none; overflow: hidden; }
+.ads-curve-neon.is-inner .ads-curve-neon-base { opacity: .22; }
+.ads-curve-neon.is-inner .ads-curve-neon-glow { stroke-width: 2px; opacity: .18; filter: blur(.6px); }
+.ads-curve-neon.is-inner .ads-curve-neon-pulse { filter: drop-shadow(0 0 1px rgba(14, 165, 233, .22)); }
+.ads-curve-neon.is-inner .ads-curve-neon-runner { animation-fill-mode: backwards; }
+/* The canonical shell traverses A bottom-to-top; reverse only the light. */
+.ads-curve-neon.is-reversed .ads-curve-neon-runner { animation-direction: reverse; }
+@keyframes ads-curve-neon-travel {
+  from { stroke-dashoffset: var(--runner-start); }
+  to { stroke-dashoffset: var(--runner-end); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ads-curve-neon-runner { animation: none; }
+  .ads-curve-neon-pulse { display: none; }
+}

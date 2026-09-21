@@ -3,7 +3,7 @@
  *
  * These values were extracted from the approved 1891 x 1215 shell, but are
  * deliberately no longer rendered in that scaled coordinate system. Curve A
- * and Curve C use these fixed bend values at every desktop size; only the
+ * uses these fixed bend values at every desktop size; only the
  * straight runs between them are allowed to change length.
  */
 
@@ -25,16 +25,6 @@ export const CURVE_A_BOTTOM_SPINE_END_INSET = 234
 export const CURVE_A_BOTTOM_SHOULDER_INSET = 196
 export const CURVE_A_BOTTOM_OUTER_INSET = 174
 export const CURVE_A_BOTTOM_EDGE_INSET = 154
-
-// Curve C: fixed 52px indentation at the right edge. The compact variant
-// retains the same fixed bend depth and only shortens its straight segment.
-export const CURVE_C_DEPTH = 52
-export const CURVE_C_UPPER_START_Y = 87
-export const CURVE_C_DEEP_START_Y = 145
-export const CURVE_C_DEEP_END_Y = 247
-export const CURVE_C_RECOVERY_END_Y = 305
-export const CURVE_C_COMPACT_DEEP_END_Y = 175
-export const CURVE_C_COMPACT_RECOVERY_END_Y = 233
 
 // The reopen controls are real UI, so their size/placement is likewise
 // pixel-local rather than derived from the shell's width.
@@ -58,23 +48,3 @@ export function resolveRailAnchor(shellRect: HostShellRect): { top: number; left
   }
 }
 
-export type CurveCGeometry = {
-  outerX: number
-  innerX: number
-  upperStartY: number
-  deepStartY: number
-  deepEndY: number
-  recoveryEndY: number
-}
-
-/** Runtime/debug coordinates for the exact, unscaled Curve C. */
-export function resolveCurveCGeometry(shellRect: HostShellRect): CurveCGeometry {
-  return {
-    outerX: shellRect.right - SHELL_EDGE,
-    innerX: shellRect.right - SHELL_EDGE - CURVE_C_DEPTH,
-    upperStartY: shellRect.top + CURVE_C_UPPER_START_Y,
-    deepStartY: shellRect.top + CURVE_C_DEEP_START_Y,
-    deepEndY: shellRect.top + CURVE_C_DEEP_END_Y,
-    recoveryEndY: shellRect.top + CURVE_C_RECOVERY_END_Y,
-  }
-}

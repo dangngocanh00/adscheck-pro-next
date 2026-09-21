@@ -2,6 +2,41 @@
 .ads-save-app *{box-sizing:border-box}.ads-save-app button{font:inherit}.ads-skip-link{position:fixed;z-index:90;left:70px;top:8px;transform:translateY(-150%);padding:8px 12px;border-radius:8px;background:#fff;color:#071b0c}.ads-skip-link:focus{transform:none}.ads-main-panel:focus{outline:0}.ads-topbar{height:46px;display:flex;align-items:center;padding:0 12px;position:relative;z-index:30}.ads-brand{display:flex;align-items:center;gap:7px;color:#fff}.ads-brand-header-logo{width:30px;height:30px}.ads-brand span:last-child{display:grid;line-height:1}.ads-brand strong{font-size:13px;font-weight:500}.ads-brand small{margin-top:2px;font-size:8px;color:rgba(255,255,255,.7)}.ads-top-actions{margin-left:auto;display:flex;align-items:center;gap:9px}.ads-top-actions button{border:0;color:#fff;cursor:pointer}.ads-buy-button{height:28px;display:flex;align-items:center;gap:7px;padding:0 15px;border-radius:999px;background:linear-gradient(90deg,var(--cv-buy-button-start, #3a9d30),var(--cv-buy-button-end, #86dc48))}.ads-profile{height:28px;padding:0 9px 0 14px;border-radius:999px;background:rgba(255,255,255,.08);font-size:12px}.ads-mobile-menu{display:none}
 .ads-workspace{height:calc(100dvh - 50px);min-height:620px;margin:0 4px 4px;position:relative;border-radius:20px;overflow:hidden;background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,.018));box-shadow:0 24px 80px rgba(0,0,0,.28)}.ads-rail{position:absolute;inset:0 auto 0 0;width:58px;display:flex;flex-direction:column;align-items:center;padding:8px 0 10px}.ads-rail-primary,.ads-rail-secondary{display:flex;flex-direction:column;gap:8px}.ads-rail-secondary{margin-top:auto;gap:4px}.ads-rail-button{width:44px;height:36px;display:grid;place-items:center;border:0;background:transparent;color:rgba(255,255,255,.72);cursor:pointer;position:relative}.ads-rail-button::before{content:"";position:absolute;inset:0 4px;border-radius:999px;background:rgba(255,255,255,.12);box-shadow:0 4px 12px rgba(0,0,0,.22);transition:transform .18s ease,background .18s ease}.ads-rail-secondary .ads-rail-button::before{background:transparent;box-shadow:none}.ads-rail-button>*{position:relative;z-index:1}.ads-rail-button:hover::before{background:var(--cv-sidebar-hover, rgba(255,255,255,.2));transform:scale(1.05)}.ads-rail-button.is-active{color:var(--cv-sidebar-active-icon, #021807)}.ads-rail-button.is-active::before{background:linear-gradient(135deg,var(--cv-sidebar-active-start, #42e861),var(--cv-sidebar-active-end, #65ff80))}.ads-version{font-size:13px;font-weight:600;font-style:italic}
 
+/* Desktop module buttons only: preserve existing hit areas and the 8px gap. */
+.ads-rail-primary .ads-rail-button {
+  color: #C4D2E8;
+  transition: color .24s ease;
+}
+.ads-rail-primary .ads-rail-button::before {
+  border: 1px solid rgba(255, 255, 255, .08);
+  border-radius: 13px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, .07), rgba(255, 255, 255, .03)), #243348;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .04), 0 2px 5px rgba(0, 0, 0, .12);
+  transition: transform .24s ease, border-color .24s ease, box-shadow .24s ease, filter .24s ease;
+}
+.ads-rail-primary .ads-rail-button > svg { display: block; fill: none; }
+.ads-rail-primary .ads-rail-button:not(.is-active):hover { color: #E1EBFF; }
+.ads-rail-primary .ads-rail-button:not(.is-active):hover::before {
+  border-color: rgba(125, 190, 255, .32);
+  filter: brightness(1.12);
+  transform: translateY(-1px);
+}
+.ads-rail-primary .ads-rail-button.is-active { color: #F5FAFF; }
+.ads-rail-primary .ads-rail-button.is-active::before {
+  border-color: rgba(125, 190, 255, .75);
+  background: radial-gradient(ellipse at 50% 0%, rgba(205, 241, 255, .22), transparent 65%), linear-gradient(145deg, #3E8BFF, #2F6BFF);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .22), inset 0 0 9px rgba(125, 211, 255, .14), 0 0 10px rgba(70, 140, 255, .28);
+  transform: none;
+}
+.ads-rail-primary .ads-rail-button.is-active:hover::before { filter: brightness(1.035); }
+.ads-rail-primary .ads-rail-button:focus-visible { outline: none; }
+.ads-rail-primary .ads-rail-button:focus-visible::before { outline: 2px solid #BDE7FF; outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) {
+  .ads-rail-primary .ads-rail-button,
+  .ads-rail-primary .ads-rail-button::before { transition: none; }
+  .ads-rail-primary .ads-rail-button:not(.is-active):hover::before { transform: none; }
+}
+
 /* Shared "Khám phá Control Hub" rail button — now occupies the slot that
    used to show "v8"/Đổi phiên bản (see AdsCheckNavIcon, reused verbatim by
    every module's own sidebar: ads-save-page.tsx's rail for Ads Check

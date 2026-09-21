@@ -1,7 +1,7 @@
 import { m, useAppLanguage, t, tx } from '@/i18n'
-import { useEffect, useLayoutEffect, useMemo, useRef, useState, type KeyboardEvent as ReactKeyboardEvent } from 'react'
-import { ChevronsLeft } from 'lucide-react'
-import { FunctionStoreRailIcon, WorkflowRailIcon } from './ads-check-pro-rail-icons'
+import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState, type KeyboardEvent as ReactKeyboardEvent } from 'react'
+import { Layers3, Workflow } from 'lucide-react'
+import { AdsCheckCurveNeon } from './ads-check-curve-neon'
 import { AdsCheckV8LoadingScreen } from './ads-check-v8-loading-screen'
 import { AdsProDownloadPanel } from './ads-check-pro-download-panel'
 import type { ExportColumn } from './ads-check-pro-export'
@@ -14,7 +14,6 @@ import { AdsCheckProFunctionLibrary } from './ads-check-pro-function-library'
 import { AdsCheckProLocalDialog } from './ads-check-pro-local-dialogs'
 import { isAdsProDrawerViewport, useAdsProDrawerViewport } from './ads-check-pro-responsive-drawer'
 import { AdsCheckProFolderPanel, AdsCheckProToolbar } from './ads-check-pro-shared-controls'
-import { resolveCurveCGeometry, resolveRailAnchor } from './ads-check-shell-curve-geometry'
 import { buildWorkspaceSurfacePath, type WorkspaceSurfaceAnchor } from './ads-check-pro-workspace-surface'
 import { AdsCheckProWorkflowModeDialog } from './ads-check-pro-workflow-mode-dialog'
 import { AdsCheckProWorkflowPanel, type WorkflowStep } from './ads-check-pro-workflow-panel'
@@ -82,23 +81,9 @@ function tkqcRoleDown(role: TkqcAdminRole): TkqcAdminRole { return TKQC_ROLE_BY_
 const pageRowFixtures = generateGenericRows('page', assetColumns.page, 45)
 const pixelRowFixtures = generateGenericRows('pixel', assetColumns.pixel, 30)
 
-// onCurveShellStateChange notifies the shell one level up (AdsSavePage
-// renders AdsCheckShellCurve, which needs both signals) — activeAsset/
-// functionOpen/workflowOpen all stay owned here, this is a plain upward
-// notification of 2 derived, INDEPENDENT booleans, not a hoisted state:
-//  - showCurveC: the indented-socket path variant — states 00/10/01.
-//  - reserveRailSpace: the 58px right margin the rail sits in — kept for as
-//    long as the rail itself is needed (00/10/01), not just when Curve C's
-//    own indentation is visible. Without this split, states 10/01 would
-//    reclaim the 58px (Curve C hidden) AND lose the rail's only safe
-//    housing at the same time, pushing it to overlap panel content or off
-//    the viewport at narrower widths — this way the indentation disappears
-//    in 10/01 but the rail keeps its exact approved position; only state 11
-//    (no rail at all) actually reclaims the space.
-export type CurveShellState = { showCurveC: boolean; compactCurveC: boolean; reserveRailSpace: boolean }
+// Keep shell geometry independent of floating panel visibility.
 type WorkspaceProps = {
   onAnnounce: (message: string, tone?: 'success' | 'info') => void
-  onCurveShellStateChange?: (state: CurveShellState) => void
 }
 type LocalDialogState = { mode: 'note' | 'delete'; row: ViaConnection } | null
 
@@ -129,7 +114,8 @@ const defaultStepConfigValues: Record<AdsAssetKey, Record<string, Record<string,
 // template just because the user keeps editing the current workflow.
 const defaultLoadedTemplateIds: Record<AdsAssetKey, string | null> = { via: null, 'ad-account': null, business: null, page: null, pixel: null }
 
-export function AdsCheckAdAccountsWorkspace({ onAnnounce, onCurveShellStateChange }: WorkspaceProps) {
+export function AdsCheckAdAccountsWorkspace({ onAnnounce }: WorkspaceProps) {
+  const surfaceId = useId()
   useAppLanguage();
   const isDrawer = useAdsProDrawerViewport()
   const [activeAsset, setActiveAsset] = useState<AdsAssetKey>('via')
@@ -190,18 +176,7 @@ export function AdsCheckAdAccountsWorkspace({ onAnnounce, onCurveShellStateChang
     else next.add(groupId)
     return next
   })
-  // Curve C and its 58px rail reservation share the production state rule:
-  // visible/allocated in 00/10/01, absent only in 11 and on VIA. Rail content
-  // itself is filtered below, so a single-open state shows only the control
-  // for the still-closed panel.
-  useEffect(() => {
-    const nonVia = activeAsset !== 'via'
-    onCurveShellStateChange?.({
-      showCurveC: nonVia && !(functionOpen && workflowOpen),
-      compactCurveC: nonVia && functionOpen !== workflowOpen,
-      reserveRailSpace: nonVia && !(functionOpen && workflowOpen),
-    })
-  }, [activeAsset, functionOpen, workflowOpen, onCurveShellStateChange])
+  const [functionQueries, setFunctionQueries] = useState<Record<AdsAssetKey, string>>({ via: '', 'ad-account': '', business: '', page: '', pixel: '' })
   const [foldersOpen, setFoldersOpen] = useState(() => !isAdsProDrawerViewport())
   // VIA Audit Batch 1 Part D — replaces the old dense/largeType booleans:
   // one shared settings object for every asset tab (Part D2/D12, traced:
@@ -404,6 +379,9 @@ export function AdsCheckAdAccountsWorkspace({ onAnnounce, onCurveShellStateChang
   // post-setup settings) — avoids ever stacking the (dismissible,
   // non-critical) help modal on top of a blocking security flow.
   const controlHubDialogActive = controlHubSetupStep !== null || controlHubSettingsOpen
+  const helpButtonRef = useRef<HTMLButtonElement>(null)
+  const floatingPanelsRef = useRef<HTMLDivElement>(null)
+  const functionLauncherRef = useRef<HTMLButtonElement>(null)
   const workflowRailButtonRef = useRef<HTMLButtonElement>(null)
   const workflowOpenedFromRail = useRef(false)
   const workspaceFrameRef = useRef<HTMLElement>(null)
@@ -414,18 +392,31 @@ export function AdsCheckAdAccountsWorkspace({ onAnnounce, onCurveShellStateChang
     viewBox: '0 0 1837 1205',
     path: 'M0 1205 V28 C0 0 10 0 41 0 H70.546875 C89.546875 2 88.546875 18 88.546875 28 C88.546875 38 96.546875 44 104.546875 44 H418.109375 C442.109375 44 434.909375 0 466.109375 0 H1837 V1205 Z',
   }))
-  // Reopen-button rail position — socketed into Curve C's own indentation.
-  // Derived purely from the host shell's rect (.ads-workspace, the element
-  // AdsCheckShellCurve/Curve C paints into) + Curve C's fixed viewBox
-  // anchors (see resolveRailAnchor) — never from the viewport, never from
-  // table/tab/Curve B rects.
-  const [railAnchor, setRailAnchor] = useState<{ top: number; left: number } | null>(null)
   // VIA has no right-panel system at all (Kho chức năng/Quy trình/rail/right
   // shell) — production has no function catalog for it. This gates RENDERING
   // only; functionOpen/workflowOpen themselves are left untouched so the
   // prior state (10/01/11/00) restores exactly when switching back to a
   // supported asset.
   const supportsPanels = activeAsset !== 'via'
+  // Closed launchers follow the existing Help control's responsive position.
+  useLayoutEffect(() => {
+    const help = helpButtonRef.current
+    const floating = floatingPanelsRef.current
+    if (!help || !floating) return
+    const updateAnchor = () => {
+      const rect = help.getBoundingClientRect()
+      floating.style.setProperty('--help-center-x', String(rect.x + rect.width / 2) + 'px')
+      floating.style.setProperty('--help-top', String(rect.y) + 'px')
+    }
+    updateAnchor()
+    const observer = new ResizeObserver(updateAnchor)
+    observer.observe(help)
+    window.addEventListener('resize', updateAnchor)
+    return () => {
+      observer.disconnect()
+      window.removeEventListener('resize', updateAnchor)
+    }
+  }, [controlHubDialogActive])
   const liveAssetTabs = assetTabs.map((tab) => tab.key === 'via' ? { ...tab, count: viaRows.length } : tab)
   const activeTab = liveAssetTabs.find((tab) => tab.key === activeAsset) ?? liveAssetTabs[0]
   const query = queries[activeAsset]
@@ -511,15 +502,7 @@ export function AdsCheckAdAccountsWorkspace({ onAnnounce, onCurveShellStateChang
       // header strip (including above Function/Workflow/Curve C) exactly as
       // before; only the light path shape itself is now width-constrained.
       setWorkspaceSurface({ viewBox: `0 0 ${frameRect.width} ${frameRect.height}`, path })
-      // Rail anchor: socketed into Curve C's own indentation, derived from
-      // the host shell's rect + Curve C's fixed viewBox anchors (see
-      // resolveRailAnchor) — never from viewport size or table/tab rects.
-      const shellEl = frame.closest('.ads-workspace')
-      if (shellEl) {
-        const shellRect = shellEl.getBoundingClientRect()
-        setRailAnchor(resolveRailAnchor(shellRect))
-        if (import.meta.env.DEV) (window as unknown as { __curveCDebug?: unknown }).__curveCDebug = resolveCurveCGeometry(shellRect)
-      }
+
     }
     recompute()
     const observer = new ResizeObserver(recompute)
@@ -1049,26 +1032,25 @@ export function AdsCheckAdAccountsWorkspace({ onAnnounce, onCurveShellStateChang
     if (isDrawer) { setFunctionOpen(false); setWorkflowOpen(false) }
     setFoldersOpen(true)
   }
+  const closeFunctions = () => {
+    setFunctionOpen(false)
+    window.requestAnimationFrame(() => functionLauncherRef.current?.focus())
+  }
   const openFunctions = () => {
     // Opening Function only ever opens Function — no prerequisite the other
     // way, and no side effect on workflowOpen (state 01 stays valid; this
     // can legally take 01 -> 11).
     if (isDrawer) setFoldersOpen(false)
     setFunctionOpen(true)
+    window.requestAnimationFrame(() => document.querySelector<HTMLInputElement>('#ads-pro-function-library input')?.focus())
   }
   const openWorkflow = () => {
-    // Workflow has a prerequisite ON OPEN ONLY: opening it also opens
-    // Function (00 -> 11, 10 -> 11). This is not a standing invariant —
-    // closing either panel afterwards never re-applies it (see
-    // closeWorkflow / the Function panel's own onClose, both single-field).
     workflowOpenedFromRail.current = false
     if (isDrawer) setFoldersOpen(false)
-    setFunctionOpen(true)
     setWorkflowOpen(true)
   }
   const openWorkflowFromRail = () => {
     workflowOpenedFromRail.current = true
-    setFunctionOpen(true)
     setWorkflowOpen(true)
   }
   const closeWorkflow = () => {
@@ -1107,7 +1089,6 @@ export function AdsCheckAdAccountsWorkspace({ onAnnounce, onCurveShellStateChang
   const tkqcSpendLimitRow = tkqcSpendLimitRowId ? tkqcRows.find((row) => row.id === tkqcSpendLimitRowId) ?? null : null
   const tkqcAdminPanelRow = tkqcAdminPanelRowId ? tkqcRows.find((row) => row.id === tkqcAdminPanelRowId) ?? null : null
 
-  const hasPanelRail = supportsPanels && !(functionOpen && workflowOpen)
   const showFunctionPanel = supportsPanels && functionOpen
   const showWorkflowPanel = supportsPanels && workflowOpen
   // BM Round 1 Shared Rules #9/#18, extended to Page and Pixel — the
@@ -1147,24 +1128,28 @@ export function AdsCheckAdAccountsWorkspace({ onAnnounce, onCurveShellStateChang
             green under V2. `stop-color` is a real CSS property on SVG
             presentation attributes, so it resolves `var()` the same as
             any other color declaration; fallback = exact current literal. */}
-        <linearGradient id="ads-pro-workspace-wash" x1="0" y1="0" x2="0" y2="1">
+        <linearGradient id={surfaceId + "-wash"} x1="0" y1="0" x2="0" y2="1">
           <stop offset="0" stopColor="var(--cv-workspace-wash-strong, rgba(77, 255, 127, 0.06))" />
           <stop offset="0.519231" stopColor="var(--cv-workspace-wash-soft, rgba(77, 255, 127, 0.02))" />
           <stop offset="1" stopColor="var(--cv-workspace-wash-strong, rgba(77, 255, 127, 0.06))" />
         </linearGradient>
-        <linearGradient id="ads-pro-workspace-notch-fill" x1="0" y1="0" x2="1" y2="1">
+        <linearGradient id={surfaceId + "-notch-fill"} x1="0" y1="0" x2="1" y2="1">
           <stop offset="0" stopColor="var(--cv-app-bg-dark, #001707)" />
           <stop offset="1" stopColor="var(--cv-app-bg-dark-2, #00250c)" />
         </linearGradient>
-        <radialGradient id="ads-pro-workspace-notch-highlight" cx="50%" cy="-20%" r="42%">
+        <radialGradient id={surfaceId + "-notch-highlight"} cx="50%" cy="-20%" r="42%">
           <stop offset="0" stopColor="var(--cv-app-ambient, rgba(57, 178, 82, 0.24))" />
           <stop offset="1" stopColor="var(--cv-app-ambient-transparent, rgba(59, 130, 246, 0))" />
         </radialGradient>
       </defs>
-      <rect x="0" y="0" width="100%" height="100%" fill="url(#ads-pro-workspace-notch-fill)" />
-      <rect x="0" y="0" width="100%" height="100%" fill="url(#ads-pro-workspace-notch-highlight)" />
+      <rect x="0" y="0" width="100%" height="100%" fill={`url(#${surfaceId}-notch-fill)`} />
+      <rect x="0" y="0" width="100%" height="100%" fill={`url(#${surfaceId}-notch-highlight)`} />
       <path d={workspaceSurface.path} fill="rgba(255, 255, 255, 0.95)" />
-      <path d={workspaceSurface.path} fill="url(#ads-pro-workspace-wash)" />
+      <path d={workspaceSurface.path} fill={`url(#${surfaceId}-wash)`} />
+    </svg>
+    {/* Reuse the runtime surface contour, excluding its closing side/bottom edges. */}
+    <svg className="ads-pro-curve-b-neon" aria-hidden="true" focusable="false" viewBox={workspaceSurface.viewBox}>
+      <AdsCheckCurveNeon path={workspaceSurface.path.replace(/^M0 [^ ]+ V([^ ]+) /, 'M0 $1 ').split(' V')[0]} curve="b" />
     </svg>
     <h1 className="sr-only" id="ads-pro-workspace-title">{t("ui.6949c5370b")}</h1>
     <div className="ads-pro-header-row">
@@ -1208,11 +1193,17 @@ export function AdsCheckAdAccountsWorkspace({ onAnnounce, onCurveShellStateChang
         />}
       </div>
     </div>
-    {tx(hasPanelRail && <aside className="ads-pro-panel-rail" aria-label={t("ui.f67492a781")} style={railAnchor ? { top: `${railAnchor.top}px`, left: `${railAnchor.left}px` } : undefined}>
-        {tx(!functionOpen && <button type="button" aria-label={tx(m("ui.653eaf83e1", { 0: assetLabels[activeAsset] }))} aria-controls="ads-pro-function-library" aria-expanded="false" onClick={openFunctions}><FunctionStoreRailIcon size={18} /><ChevronsLeft size={15} /></button>)}
-        {tx(!workflowOpen && <button ref={workflowRailButtonRef} type="button" aria-label={tx(m("ui.c8e42616d4", { 0: assetLabels[activeAsset] }))} aria-controls="ads-pro-workflow" aria-expanded="false" onClick={openWorkflowFromRail}><WorkflowRailIcon size={18} /><ChevronsLeft size={15} /></button>)}
-      </aside>)}
-    {tx(supportsPanels && <AdsCheckProFunctionLibrary key={`${activeAsset}-functions`} asset={activeAsset as Exclude<AdsAssetKey, 'via'>} assetLabel={assetLabels[activeAsset]} groups={groups} selectedStepIds={workflow.map((step) => step.itemId)} open={functionOpen} workflowMode={workflowMode} collapsedGroups={collapsedGroups} onToggleGroup={toggleGroupCollapsed} onClose={() => setFunctionOpen(false)} onAdd={addFunction} onRemove={removeFunction} onOpenWorkflowMode={() => setWorkflowModeDialogOpen(true)} onAnnounce={onAnnounce} />)}
+    <div ref={floatingPanelsRef} className={`ads-pro-floating-panels${showFunctionPanel || showWorkflowPanel ? ' has-open-panel' : ''}`} onKeyDown={(event) => {
+      if (event.key !== 'Escape' || !(event.target instanceof HTMLElement)) return
+      if (event.target.closest('[aria-modal="true"]')) return
+      if (event.target.closest('#ads-pro-function-library')) { event.stopPropagation(); closeFunctions() }
+      if (event.target.closest('#ads-pro-workflow')) { event.stopPropagation(); closeWorkflow() }
+    }}>
+    {supportsPanels && <aside className="ads-pro-panel-launchers" aria-label={t("ui.f67492a781")}>
+      <button ref={functionLauncherRef} type="button" className="ads-pro-panel-launcher is-library" title={t("ui.495881f617")} aria-label={tx(m("ui.653eaf83e1", { 0: assetLabels[activeAsset] }))} aria-controls="ads-pro-function-library" aria-expanded={functionOpen} onClick={() => functionOpen ? closeFunctions() : openFunctions()}><Layers3 size={22} aria-hidden="true" /></button>
+      <button ref={workflowRailButtonRef} type="button" className="ads-pro-panel-launcher is-process" title={tx(m("ui.c8e42616d4", { 0: assetLabels[activeAsset] }))} aria-label={tx(m("ui.c8e42616d4", { 0: assetLabels[activeAsset] }))} aria-controls="ads-pro-workflow" aria-expanded={workflowOpen} onClick={() => workflowOpen ? closeWorkflow() : openWorkflowFromRail()}><Workflow size={22} aria-hidden="true" /></button>
+    </aside>}
+    {tx(supportsPanels && <AdsCheckProFunctionLibrary key={`${activeAsset}-functions`} asset={activeAsset as Exclude<AdsAssetKey, 'via'>} assetLabel={assetLabels[activeAsset]} query={functionQueries[activeAsset]} onQueryChange={(value) => setFunctionQueries((current) => ({ ...current, [activeAsset]: value }))} groups={groups} selectedStepIds={workflow.map((step) => step.itemId)} open={functionOpen} workflowMode={workflowMode} collapsedGroups={collapsedGroups} onToggleGroup={toggleGroupCollapsed} onClose={closeFunctions} onAdd={addFunction} onRemove={removeFunction} onOpenWorkflowMode={() => setWorkflowModeDialogOpen(true)} onAnnounce={onAnnounce} />)}
     {tx(supportsPanels && <AdsCheckProWorkflowPanel
       key={`${activeAsset}-workflow`}
       assetLabel={assetLabels[activeAsset]}
@@ -1239,6 +1230,7 @@ export function AdsCheckAdAccountsWorkspace({ onAnnounce, onCurveShellStateChang
       onDeleteTemplate={deleteTemplate}
       onStart={startWorkflowExecution}
     />)}
+    </div>
     <AdsCheckProLocalDialog mode={dialog?.mode ?? null} row={dialog?.row ?? null} onClose={() => setDialog(null)} onSaveNote={(rowId, note) => { setViaRows((current) => current.map((row) => row.id === rowId ? { ...row, note } : row)); onAnnounce(m("ui.d758801225"), 'success') }} onDelete={(rowId) => { setViaRows((current) => current.filter((row) => row.id !== rowId)); updateSelection((current) => current.filter((id) => id !== rowId)); window.requestAnimationFrame(() => assetPanelRef.current?.focus()); onAnnounce(m("ui.5df2fdbac2"), 'success') }} />
     <AdsCheckProLocalDialog mode={tkqcNoteRow ? 'note' : null} row={tkqcNoteRow} onClose={() => setTkqcNoteRow(null)} onSaveNote={(rowId, note) => saveTkqcNote(rowId, note)} onDelete={() => {}} />
     <AdsCheckProLocalDialog mode={bmNoteRow ? 'note' : null} row={bmNoteRow} onClose={() => setBmNoteRow(null)} onSaveNote={(rowId, note) => saveBmNote(rowId, note)} onDelete={() => {}} />
@@ -1465,7 +1457,7 @@ export function AdsCheckAdAccountsWorkspace({ onAnnounce, onCurveShellStateChang
         BM/Page/Pixel never duplicates it. Hidden while any other Control
         Hub dialog is active (see controlHubDialogActive above) so it never
         stacks on top of a blocking security flow. */}
-    {tx(!controlHubDialogActive && <button type="button" className="ads-control-hub-help-fab" aria-label={t("ui.b6a25c9e0f")} onClick={() => setControlHubHelpOpen(true)}>?</button>)}
+    {tx(!controlHubDialogActive && <button ref={helpButtonRef} type="button" className="ads-control-hub-help-fab" aria-label={t("ui.b6a25c9e0f")} onClick={() => setControlHubHelpOpen(true)}>?</button>)}
     {controlHubHelpOpen && <AdsCheckProControlHubHelpModal onClose={() => setControlHubHelpOpen(false)} />}
     {/* CORRECTION x2 — reuses the EXACT existing splash (AdsCheckV8LoadingScreen),
         not a new component, but scoped to the WHOLE Ads Check Pro workspace

@@ -3,7 +3,7 @@ import { closestCenter, DndContext, KeyboardSensor, PointerSensor, useSensor, us
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react'
-import { Check, ChevronUp, ChevronsRight, Circle, GripVertical, HelpCircle, Pin, Plus, Search, Settings, X } from 'lucide-react'
+import { Check, ChevronUp, Circle, GripVertical, HelpCircle, Pin, Plus, Search, Settings, X } from 'lucide-react'
 import { useOverlayFocus } from '@/components/ui/use-overlay-focus'
 import { functionIcons, groupIcons } from './ads-check-pro-function-icons'
 import { useAdsProDrawerFocus, useAdsProDrawerViewport } from './ads-check-pro-responsive-drawer'
@@ -29,6 +29,8 @@ function loadPinnedIds(storageKey: string): Set<string> {
 type FunctionLibraryProps = {
   asset: Exclude<AdsAssetKey, 'via'>
   assetLabel: string
+  query: string
+  onQueryChange: (value: string) => void
   groups: FunctionGroup[]
   selectedStepIds: string[]
   open: boolean
@@ -162,12 +164,11 @@ function PlainFunctionRow({ fn, ...rest }: RowBehaviorProps) {
   return <FunctionRowView fn={fn} {...rest} />
 }
 
-export function AdsCheckProFunctionLibrary({ asset, assetLabel, groups, selectedStepIds, open, workflowMode, collapsedGroups, onToggleGroup, onClose, onAdd, onRemove, onOpenWorkflowMode, onAnnounce }: FunctionLibraryProps) {
+export function AdsCheckProFunctionLibrary({ asset, assetLabel, query, onQueryChange: setQuery, groups, selectedStepIds, open, workflowMode, collapsedGroups, onToggleGroup, onClose, onAdd, onRemove, onOpenWorkflowMode, onAnnounce }: FunctionLibraryProps) {
   useAppLanguage();
   const panelRef = useRef<HTMLElement>(null)
   const isDrawer = useAdsProDrawerViewport()
   useAdsProDrawerFocus(open && isDrawer, panelRef, onClose)
-  const [query, setQuery] = useState('')
   const [guideFn, setGuideFn] = useState<AdsFunctionDefinition | null>(null)
   const guideDialogRef = useRef<HTMLElement>(null)
   useOverlayFocus(guideFn !== null, guideDialogRef, () => setGuideFn(null))
@@ -292,7 +293,7 @@ export function AdsCheckProFunctionLibrary({ asset, assetLabel, groups, selected
     <header className="ads-panel-heading">
       <span className="sr-only" id="ads-function-library-title">{t("ui.495881f617")}{" "}{tx(assetLabel)}</span>
       <button type="button" className="ads-function-workflow-mode-trigger" aria-label={tx(workflowModeLabel)} onClick={onOpenWorkflowMode}>{tx(workflowModeLabel)}<Settings size={14} /></button>
-      <button type="button" aria-label={t("ui.c32fd13f6c")} data-autofocus={isDrawer ? true : undefined} onClick={onClose}><ChevronsRight size={18} /></button>
+      <button type="button" aria-label={t("ui.c32fd13f6c")} data-autofocus={isDrawer ? true : undefined} onClick={onClose}><X size={18} /></button>
     </header>
     <div className="ads-function-search-row">
       <label className="ads-function-search">

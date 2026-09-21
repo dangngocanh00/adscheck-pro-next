@@ -2767,5 +2767,11 @@
   "ui.ed1c2b3a4f": "Опубликовано",
   "ui.ed2c3b4a5f": "Снято с публикации",
   "ui.ed3c4b5a6f": "Бизнес",
-  "billing.extraSessions": "Дополнительные сеансы (разово)"
+  "billing.extraSessions": "Дополнительные сеансы (разово)",
+  "extended.restoreDefaults": "Восстановить по умолчанию",
+  "extended.searchFields": "Поиск данных",
+  "extended.selectAll": "Выбрать всё",
+  "extended.resetFields": "Сбросить",
+  "extended.noFields": "Поля не найдены",
+  "extended.selectedCount": "Выбрано: {0}/{1}"
 }

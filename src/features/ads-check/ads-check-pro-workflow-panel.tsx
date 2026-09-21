@@ -3,7 +3,7 @@ import { closestCenter, DndContext, KeyboardSensor, PointerSensor, useSensor, us
 import { SortableContext, sortableKeyboardCoordinates, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { useLayoutEffect, useRef, useState, type CSSProperties } from 'react'
-import { ChevronDown, ChevronsRight, FolderOpen, GripVertical, Play, Save, Settings, X } from 'lucide-react'
+import { ChevronDown, FolderOpen, GripVertical, Play, Save, Settings, X } from 'lucide-react'
 import { useAdsProDrawerFocus, useAdsProDrawerViewport } from './ads-check-pro-responsive-drawer'
 import { functionIcons } from './ads-check-pro-function-icons'
 import { AdsCheckProTemplatePanel } from './ads-check-pro-template-panel'
@@ -237,7 +237,7 @@ export function AdsCheckProWorkflowPanel({
     <header className="ads-panel-heading ads-workflow-heading">
       <h2 id="ads-workflow-title">{t("ui.4e8bce41f2")}{" "}<span>– {steps.length} {" "}{t("ui.381cb564b6")}</span></h2>
       <button className="ads-workflow-template" type="button" aria-label="Template" aria-expanded={templatePanelOpen} onClick={() => setTemplatePanelOpen((value) => !value)}><FolderOpen size={15} />{t("ui.3ec1ae061c")}</button>
-      <button className="ads-workflow-close" type="button" aria-label={t("ui.33165c0f9f")} data-autofocus={isDrawer ? true : undefined} onClick={onClose}><ChevronsRight size={18} /></button>
+      <button className="ads-workflow-close" type="button" aria-label={t("ui.33165c0f9f")} data-autofocus={isDrawer ? true : undefined} onClick={onClose}><X size={18} /></button>
     </header>
     {templatePanelOpen && <AdsCheckProTemplatePanel
       templates={templates}

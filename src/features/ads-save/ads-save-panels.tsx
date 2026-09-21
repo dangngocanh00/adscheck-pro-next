@@ -72,6 +72,13 @@ export function RailMenus(props: RailMenusProps) {
     if (!props.active) return
     const panel = panelRef.current
     const trigger = document.querySelector<HTMLElement>(`[aria-controls="ads-${props.active}-menu"]`)
+    const positionMenu = () => {
+      if (!panel || !trigger?.classList.contains('ads-header-utility')) return
+      const rect = trigger.getBoundingClientRect()
+      Object.assign(panel.style, { position: 'fixed', top: (rect.bottom + 8) + 'px', bottom: 'auto', left: 'auto', right: Math.max(12, window.innerWidth - rect.right) + 'px' })
+    }
+    positionMenu()
+    window.addEventListener('resize', positionMenu)
     const focusTimer = window.requestAnimationFrame(() => {
       const selected = panel?.querySelector<HTMLElement>('[aria-checked="true"]')
       const focusTarget = selected ?? panel?.querySelector<HTMLElement>('button')
@@ -81,7 +88,7 @@ export function RailMenus(props: RailMenusProps) {
       if (event.key === 'Tab') {
         event.preventDefault()
         shouldRestoreFocusRef.current = false
-        const controls = Array.from(document.querySelectorAll<HTMLElement>('.ads-rail-secondary > .ads-rail-button'))
+        const controls = Array.from(document.querySelectorAll<HTMLElement>('.ads-top-actions > a, .ads-top-actions > button'))
         const currentIndex = trigger ? controls.indexOf(trigger) : -1
         const nextIndex = event.shiftKey ? currentIndex - 1 : currentIndex + 1
         const nextControl = controls[nextIndex]
@@ -115,6 +122,7 @@ export function RailMenus(props: RailMenusProps) {
     document.addEventListener('keydown', handleKeys)
     document.addEventListener('mousedown', closeOutside)
     return () => {
+      window.removeEventListener('resize', positionMenu)
       window.cancelAnimationFrame(focusTimer)
       document.removeEventListener('keydown', handleKeys)
       document.removeEventListener('mousedown', closeOutside)

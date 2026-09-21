@@ -1,10 +1,12 @@
+import { AdsCheckModuleIsland } from '@/features/ads-check/ads-check-module-island'
 import { appLanguageOptions, m, useAppLanguage, tx, t } from '@/i18n'
-import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 import {
   Bell, Bookmark, CreditCard, Headphones, Home,
   Languages, Menu, Package, RefreshCw, ShoppingCart,
 } from 'lucide-react'
 import { AdsCheckProAppIcon } from '@/features/ads-check/ads-check-pro-app-icon'
+import { AdsCheckModuleIcon } from '@/features/ads-check/ads-check-module-icon'
 import { AdsCheckNavIcon } from '@/features/ads-check/ads-check-nav-icon'
 import { AdsCheckBrandMark } from '@/features/ads-check/ads-check-brand-mark'
 import { Link, useNavigate } from 'react-router-dom'
@@ -12,7 +14,7 @@ import { AccountPanel, RailMenus, type AdsLanguage, type AdsRailMenu } from '@/f
 import { ControlHubModal, VersionWelcomeModal } from '@/features/ads-save/ads-save-modals'
 import { ExploreV8Modal } from '@/features/ads-save/ads-save-explore-modal'
 import { AdsSaveMobileDrawer } from '@/features/ads-save/ads-save-mobile-drawer'
-import { AdsCheckAdAccountsWorkspace, type CurveShellState } from '@/features/ads-check/ads-check-adaccounts-workspace'
+import { AdsCheckAdAccountsWorkspace } from '@/features/ads-check/ads-check-adaccounts-workspace'
 import { AdsSaveWorkspace } from '@/features/ads-save/ads-save-workspace'
 import { AdsSaveConfiguredWorkspace } from '@/features/ads-save/ads-save-configured-workspace'
 import { AdsSaveCreateConfigModal } from '@/features/ads-save/ads-save-create-config-modal'
@@ -94,13 +96,6 @@ export default function AdsSavePage({ variant = 'ads-save' }: { variant?: AdsWor
   // for that specific configuration. Cleared whenever the modal closes so
   // a later "+ Thêm cấu hình mới" never accidentally reopens in edit mode.
   const [editingConfigId, setEditingConfigId] = useState<string | null>(null)
-  // Curve C's 2 independent signals (see CurveShellState) — derived and
-  // owned inside AdsCheckAdAccountsWorkspace (activeAsset/functionOpen/
-  // workflowOpen all live there), this just mirrors the resulting booleans
-  // up so the shell curve above it knows what to render/reserve. Defaults
-  // match the workspace's own initial state (VIA, no rail needed).
-  const [curveShellState, setCurveShellState] = useState<CurveShellState>({ showCurveC: false, compactCurveC: false, reserveRailSpace: false })
-  const handleCurveShellStateChange = useCallback((state: CurveShellState) => setCurveShellState(state), [])
   const mainRef = useRef<HTMLElement>(null)
   const retryTimer = useRef<number | null>(null)
 
@@ -217,29 +212,23 @@ export default function AdsSavePage({ variant = 'ads-save' }: { variant?: AdsWor
       <div className="ads-top-actions">
         <button className="ads-buy-button" type="button" aria-label={t("ui.b90857eb2c")} onClick={() => navigate('/app/billing/payment')}><ShoppingCart size={15} /><span>{t("ui.b90857eb2c")}</span></button>
         <button className="ads-profile" type="button" aria-haspopup="dialog" aria-expanded={accountOpen} onClick={() => { setActiveMenu(null); setDialog(null); setAccountOpen((value) => !value) }}>{tx(isAdsCheckPro ? m("ui.4f4d141887") : m("ui.0f366f2fcc"))}</button>
+        <button className={`ads-header-utility${activeMenu === 'language' ? ' is-selected' : ''}`} type="button" aria-label={t("ui.65074a8565")} aria-haspopup="menu" aria-expanded={activeMenu === 'language'} aria-controls="ads-language-menu" data-ads-menu-trigger="language" onClick={() => toggleMenu('language')}><Languages size={16} /></button>
+        <a className="ads-header-utility" aria-label={t("ui.ed2a55ae3b")} title={t("ui.ed2a55ae3b")} href="https://www.facebook.com/adscheck.official/" target="_blank" rel="noreferrer"><Headphones size={16} /></a>
+        <Link className="ads-header-utility ads-header-utility--notification" aria-label={t("ui.5d6af377c2")} title={t("ui.5d6af377c2")} to="/app/notification"><Bell size={16} /></Link>
       </div>
     </header>
 
     <section className="ads-workspace">
-      {isAdsCheckPro
-        ? <AdsCheckShellCurve showRightCurve={curveShellState.showCurveC} compactRightCurve={curveShellState.compactCurveC} reserveRailSpace={curveShellState.reserveRailSpace} />
-        // Ads Save gets the SAME approved Curve A shell — but never Curve C
-        // (no right Function/Workflow rail exists for this module), the
-        // exact geometry already used by Ads Check Pro's own VIA state
-        // (showRightCurve=false → PATH_WITHOUT_CURVE_C).
-        : <AdsCheckShellCurve showRightCurve={false} />}
+      <AdsCheckShellCurve enableLeftCornerAccents={!isAdsCheckPro} enableBottomLeftAccent={isAdsCheckPro} />
       <nav className="ads-rail" aria-label={t("ui.f03700cd5e")}>
-        <div className="ads-rail-primary">{tx(navigation.map(({ label, icon: Icon, active, to }) => <RailButton key={label} label={tx(label)} active={active} href={to}><Icon size={17} fill={active ? 'currentColor' : 'none'} /></RailButton>))}</div>
+        <div className="ads-rail-primary"><AdsCheckModuleIsland />{tx(navigation.map(({ label, active, to }) => <RailButton key={label} label={tx(label)} active={active} href={to}><AdsCheckModuleIcon route={to} /></RailButton>))}</div>
         <div className="ads-rail-secondary">
           <RailButton label={t("ui.b3755a35d8")} onClick={() => openDialog('control')}><AdsCheckNavIcon /></RailButton>
-          <RailButton label={t("ui.65074a8565")} selected={activeMenu === 'language'} expanded={activeMenu === 'language'} controls="ads-language-menu" onClick={() => toggleMenu('language')}><Languages size={16} /></RailButton>
-          <RailButton label={t("ui.ed2a55ae3b")} href="https://www.facebook.com/adscheck.official/" external><Headphones size={16} /></RailButton>
-          <RailButton label={t("ui.5d6af377c2")} href="/app/notification"><Bell size={16} /></RailButton>
         </div>
       </nav>
 
       <main ref={mainRef} id="ads-save-main" className="ads-main-panel" tabIndex={-1}>
-        {tx(isAdsCheckPro ? (extensionReady && loginSession !== null ? <AdsCheckAdAccountsWorkspace onAnnounce={announce} onCurveShellStateChange={handleCurveShellStateChange} /> : <div className="ads-install-content">
+        {tx(isAdsCheckPro ? (extensionReady && loginSession !== null ? <AdsCheckAdAccountsWorkspace onAnnounce={announce} /> : <div className="ads-install-content">
           <header className="ads-install-heading"><h1>{t("ui.607ce9f4e7")}</h1><p>{t("ui.8853a78d4b")}</p></header>
           <div className="ads-install-cards">
             <article className="ads-install-card"><div className="ads-card-main"><AdsCheckBrandMark className="ads-install-hero-logo" /><h2>{t("ui.82403fe59c")}</h2><p>{t("ui.1e087a46f2")}</p></div><a className="ads-download-link" href="https://adscheck.app/connect" target="_blank" rel="noreferrer">{t("ui.1a4df19079")}</a></article>

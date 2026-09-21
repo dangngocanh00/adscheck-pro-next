@@ -45,17 +45,7 @@
   z-index: 1;
 }
 
-/* This reserved 58px right margin houses BOTH Curve C's indentation AND the
-   reopen rail — mirrors .ads-rail's 58px on the left. Production:
-   pl-[58px] pr-[58px] on the same host-shell content wrapper. Scoped to the
-   ads-check-pro shell only (via :has(.ads-pro-workspace-shape)) so plain Ads
-   Save keeps its unreserved 8px right inset.
-   Keyed off the explicit reservation signal used together with Curve C in
-   states 00/10/01 (see reserveRailSpace/CurveShellState). Only state 11
-   and VIA (no right-panel system) actually reclaim the space. */
-.ads-workspace:has(.ads-pro-workspace-shape.has-rail-reservation) .ads-main-panel {
-  right: 58px;
-}
+
 
 .ads-pro-workspace-shape {
   width: 100%;
@@ -245,4 +235,205 @@
   .ads-save-app.is-ads-check-pro .ads-install-heading p {
     margin: 5px 0 0;
   }
+}
+
+/* Fixed-size module island centered in the full rail; utilities stay separate. */
+@media (min-width: 768px) {
+  .ads-workspace:has(.ads-pro-workspace-shape) .ads-rail {
+    display: grid;
+    grid-template-rows: minmax(0, 1fr) auto minmax(0, 1fr);
+    justify-items: center;
+    align-items: center;
+    padding: 0;
+  }
+  .ads-rail-primary {
+    grid-row: 2;
+    width: var(--dynamic-island-width, 56px);
+    position: relative;
+    --island-item-gap: 12px;
+    --island-end-padding: 29px;
+    padding: var(--island-end-padding) 6px;
+    gap: var(--island-item-gap);
+    border: 1px solid transparent;
+  }
+  .ads-workspace:has(.ads-pro-workspace-shape) .ads-rail-primary .ads-rail-button {
+    width: 42px;
+    height: 42px;
+  }
+  .ads-rail-primary .ads-rail-button::before { inset: 0; border-radius: 13px; }
+
+  .ads-rail-secondary {
+    grid-row: 3;
+    align-self: end;
+    margin: 0 0 16px;
+    gap: 4px;
+  }
+  .ads-workspace:has(.ads-pro-workspace-shape) .ads-rail-secondary .ads-rail-button { width: var(--utility-size, 36px); height: var(--utility-size, 36px); }
+}
+
+.ads-module-island-surface {
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  width: 56px;
+  height: 318px;
+  overflow: visible;
+  pointer-events: none;
+}
+.ads-module-island-trace {
+  --island-runner-inset: 0;
+  animation: ads-module-island-orbit 6s linear infinite;
+}
+.ads-module-island-trace.is-glow { opacity: .2; filter: blur(1.5px); }
+@keyframes ads-module-island-orbit {
+  from { stroke-dashoffset: calc(100px - var(--island-runner-inset) * 1px); }
+  to { stroke-dashoffset: calc(0px - var(--island-runner-inset) * 1px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ads-module-island-runner { display: none; }
+  .ads-module-island-trace { animation: none; }
+}
+
+/* Compact rail: fixed navigation dimensions, reclaimed width goes to content. */
+@media (min-width: 768px) {
+  .ads-workspace {
+    --dynamic-island-width: 56px;
+    --utility-size: 36px;
+    --left-shell-width: 62px;
+    --island-content-gap: 22px;
+    --dynamic-island-content-gap: 12px;
+  }
+  .ads-workspace:has(.ads-pro-workspace-shape) .ads-rail { width: var(--left-shell-width); }
+  .ads-workspace:has(.ads-pro-workspace-shape) .ads-rail-primary,
+  .ads-workspace:has(.ads-pro-workspace-shape) .ads-rail-secondary {
+    /* Share the island's horizontal axis within the reserved navigation zone. */
+    position: relative;
+    left: calc(var(--island-content-gap) - var(--dynamic-island-content-gap));
+  }
+  .ads-workspace:has(.ads-pro-workspace-shape) > .ads-main-panel,
+  .ads-workspace:has(.ads-pro-workspace-shape) > .ads-product-main {
+    /* Independent air gap to the fitted frame, then its inner overhang. */
+    left: calc((var(--left-shell-width) + var(--dynamic-island-width)) / 2 + var(--island-content-gap) + var(--content-backplate-overhang));
+    min-width: 0;
+  }
+}
+.ads-module-island-surface { filter: drop-shadow(0 5px 4px rgba(0, 5, 18, .45)); }
+.ads-module-island-halo { opacity: .3; filter: blur(3px); }
+.ads-module-island-band { opacity: .72; animation: ads-module-island-luminance 5.5s ease-in-out infinite; }
+@keyframes ads-module-island-luminance { 0%, 100% { opacity: .55; } 50% { opacity: .85; } }
+@media (prefers-reduced-motion: reduce) {
+  .ads-module-island-band { animation: none; opacity: .72; }
+}
+
+/* The SVG is the fitted content backplate; the rail has no full-height slab. */
+.ads-workspace:has(.ads-pro-workspace-shape) {
+  --content-backplate-overhang: 10px;
+  background: transparent;
+}
+.ads-pro-workspace-shape { filter: drop-shadow(0 3px 6px rgba(0, 0, 0, .18)); }
+
+/* B3 Floating Card: the tile itself communicates selection. */
+.ads-rail-primary .ads-rail-button {
+  color: rgba(225, 238, 255, .78);
+  transition: color 220ms cubic-bezier(.2,.8,.2,1), transform 220ms cubic-bezier(.2,.8,.2,1);
+}
+.ads-rail-primary .ads-rail-button::before {
+  border-radius: 14px;
+  background: linear-gradient(145deg, rgba(35, 53, 75, .96), rgba(26, 40, 60, .98));
+  border-color: rgba(126, 164, 205, .20);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, .18), inset 0 1px 0 rgba(255, 255, 255, .05);
+  transition: background 220ms cubic-bezier(.2,.8,.2,1), border-color 220ms cubic-bezier(.2,.8,.2,1), box-shadow 220ms cubic-bezier(.2,.8,.2,1), filter 220ms cubic-bezier(.2,.8,.2,1);
+}
+.ads-rail-primary .ads-rail-button::after { content: none; }
+.ads-rail-primary .ads-rail-button:not(.is-active):is(:hover, :focus-visible) {
+  color: rgba(225, 238, 255, .95);
+  transform: translateY(-1px);
+}
+.ads-rail-primary .ads-rail-button:not(.is-active):is(:hover, :focus-visible)::before {
+  background: linear-gradient(145deg, rgba(43, 72, 111, .98), rgba(30, 55, 89, .98));
+  border-color: rgba(74, 163, 255, .42);
+  box-shadow: 0 5px 12px rgba(3, 15, 32, .28), inset 0 1px 0 rgba(255, 255, 255, .08);
+  filter: none;
+  transform: none;
+}
+.ads-rail-primary .ads-rail-button.is-active {
+  color: #F8FCFF;
+  transform: translateY(-2px);
+}
+.ads-rail-primary .ads-rail-button.is-active::before {
+  background: radial-gradient(circle at 50% 20%, rgba(125, 211, 252, .20), transparent 55%), linear-gradient(145deg, #3B82F6, #2563EB 52%, #1D4ED8);
+  border-color: rgba(125, 211, 252, .55);
+  box-shadow: 0 8px 18px rgba(7, 48, 140, .35), 0 2px 6px rgba(0, 0, 0, .28), 0 0 12px rgba(56, 189, 248, .20), inset 0 1px 0 rgba(255, 255, 255, .18);
+}
+.ads-rail-primary .ads-rail-button.is-active:hover::before { filter: brightness(1.03); }
+.ads-rail-primary .ads-rail-button:focus-visible::before { outline: 2px solid rgba(56, 189, 248, .68); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) {
+  .ads-rail-primary .ads-rail-button,
+  .ads-rail-primary .ads-rail-button::before { transition: none; }
+  .ads-rail-primary .ads-rail-button.is-active,
+  .ads-rail-primary .ads-rail-button:not(.is-active):is(:hover, :focus-visible) { transform: none; }
+}
+
+/* Header utility actions and the independent bottom phone CTA. */
+.ads-topbar .ads-top-actions { gap: 8px; align-items: center; }
+.ads-topbar .ads-top-actions > .ads-header-utility {
+  position: relative; width: 30px; height: 26px; padding: 0; flex: none;
+  display: inline-flex; align-items: center; justify-content: center;
+  border: 1px solid transparent; border-radius: 999px;
+  background: transparent; color: rgba(220, 235, 250, .78); box-shadow: none;
+  cursor: pointer; transition: background .2s ease, border-color .2s ease, color .2s ease, box-shadow .2s ease;
+}
+.ads-topbar .ads-header-utility svg { flex: none; }
+.ads-topbar .ads-top-actions > .ads-header-utility:is(:hover, :focus-visible) {
+  border-color: rgba(164, 201, 235, .22); background: rgba(210, 231, 255, .08); color: #EDF6FF;
+  box-shadow: 0 0 6px rgba(56, 189, 248, .07);
+}
+.ads-topbar .ads-top-actions > .ads-header-utility:is(.is-active, .is-selected, [aria-expanded="true"]) {
+  border-color: rgba(130, 192, 239, .32); background: rgba(51, 101, 155, .28); color: #EDF6FF;
+  box-shadow: inset 0 1px 0 rgba(202, 232, 255, .06);
+}
+.ads-topbar .ads-top-actions > .ads-header-utility--notification:is(.is-active, .is-selected, [aria-current="page"], [aria-expanded="true"]) {
+  border-color: rgba(112, 190, 255, .55);
+  background: linear-gradient(145deg, rgba(37, 99, 180, .72), rgba(65, 62, 143, .64));
+  color: #C8F3FF;
+  box-shadow: inset 0 1px 0 rgba(203, 238, 255, .12), 0 0 8px rgba(66, 151, 255, .18);
+}
+.ads-topbar .ads-header-utility:focus-visible { outline: 2px solid #7DD3FC; outline-offset: 2px; }
+.ads-header-utility-badge { position: absolute; top: -3px; right: -3px; min-width: 12px; height: 12px; padding: 0 3px; border-radius: 999px; background: #EF4444; color: white; font-size: 8px; line-height: 12px; }
+.ads-shell-utility-menu.is-language, .ads-rail-popover.is-language { z-index: 80; max-width: calc(100vw - 24px); }
+.ads-workspace:has(.ads-pro-workspace-shape) .ads-rail-secondary .ads-rail-button {
+  width: 48px; height: 48px; transition: transform .18s ease;
+}
+.ads-rail-secondary .ads-rail-button::before {
+  content: none;
+}
+.ads-rail-secondary .ads-rail-button { background: transparent; border: 0; box-shadow: none; }
+.ads-rail-secondary .ads-rail-nav-icon {
+  width: 38px; height: 38px; animation: ads-phone-ready .9s ease-in-out infinite;
+  filter: drop-shadow(0 0 3px rgba(40, 206, 235, .2));
+  transition: filter .18s ease;
+}
+.ads-rail-secondary .ads-rail-button:hover { transform: scale(1.04); }
+.ads-rail-secondary .ads-rail-button:hover .ads-rail-nav-icon {
+  animation-duration: .75s;
+  filter: brightness(1.08) drop-shadow(0 0 4px rgba(40, 206, 235, .3));
+}
+.ads-rail-secondary .ads-rail-button:active { transform: scale(.97); }
+.ads-rail-secondary .ads-rail-button:focus-visible { outline: 2px solid #7DD3FC; outline-offset: 3px; border-radius: 50%; }
+@keyframes ads-phone-ready {
+  0%, 100% { transform: rotate(-7deg); }
+  25% { transform: rotate(6deg) translateY(-1px); }
+  50% { transform: rotate(-6deg); }
+  75% { transform: rotate(7deg) translateY(-1px); }
+}
+@media (max-width: 1100px) { .ads-topbar .ads-top-actions { gap: 6px; } }
+@media (max-width: 767px) {
+  .ads-shell-utility-menu.is-language { display: block; }
+  .ads-topbar .ads-top-actions { gap: 4px; }
+  .ads-topbar .ads-top-actions > .ads-header-utility { width: 26px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ads-rail-secondary .ads-rail-nav-icon { animation: none; transition: none; }
+  .ads-rail-secondary .ads-rail-button { transition: none; }
+  .ads-rail-secondary .ads-rail-button:is(:hover, :active) { transform: none; }
 }

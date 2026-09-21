@@ -1,5 +1,11 @@
 // Canonical messages retain literal types for existing enum/selection logic.
 const vi = {
+  "extended.restoreDefaults": "Khôi phục mặc định",
+  "extended.searchFields": "Tìm dữ liệu",
+  "extended.selectAll": "Chọn tất cả",
+  "extended.resetFields": "Đặt lại",
+  "extended.noFields": "Không tìm thấy dữ liệu",
+  "extended.selectedCount": "Đã chọn {0}/{1} mục",
   "ui.f774f2161e": "Đang tải",
   "ui.67ca89ee82": "Bỏ qua điều hướng",
   "ui.286a38e3d5": "Tổng quan",

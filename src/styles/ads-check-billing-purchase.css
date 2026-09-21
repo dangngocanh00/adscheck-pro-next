@@ -238,12 +238,44 @@
    identity instead of leaking Pro's brand into it. */
 .ads-purchase-tier-grid > button:not(.ads-purchase-tier-swap) { min-width: 0; min-height: 244px; padding: 25px 30px; position: relative; overflow: hidden; border: 1px solid #1D4ED8; border-radius: 18px; background: radial-gradient(circle at 80% 25%, rgba(59, 130, 246, .22), transparent 38%), linear-gradient(120deg, #0B1F3A, #071426); color: #fff; text-align: left; cursor: pointer; }
 .ads-purchase-tier-grid > button.is-priority { border-color: #866a1f; background: radial-gradient(circle at 80% 25%, rgba(255, 211, 66, .2), transparent 38%), linear-gradient(120deg, #4b3506, #1b1302); color: #fff1ae; }
-.ads-purchase-tier-grid > button.is-selected { border: 5px solid var(--cv-purchase-tier-selected-border, #3B82F6); padding: 21px 26px; }
-.ads-purchase-tier-grid > button.is-priority.is-selected { border-color: #f4d46c; }
+/* PA4 luminous fill: static light and depth, with stable border geometry. */
+.ads-purchase-tier-grid > button:not(.ads-purchase-tier-swap) {
+  --tier-selected-border: #40BFFF;
+  --tier-selected-glow: rgba(37, 160, 255, .35);
+  --tier-selected-inner: rgba(39, 194, 255, .14);
+  --tier-selected-fill: radial-gradient(circle at 70% 40%, rgba(39, 194, 255, .30), rgba(29, 124, 255, .22) 35%, rgba(7, 26, 58, .96) 75%), linear-gradient(120deg, #071A3A, #0B2B66 55%, #0E5BFF);
+  transition: border-color .24s ease, box-shadow .24s ease, filter .24s ease, transform .24s ease;
+}
+.ads-purchase-tier-grid > button.is-priority {
+  --tier-selected-border: #F5C933;
+  --tier-selected-glow: rgba(242, 185, 11, .32);
+  --tier-selected-inner: rgba(255, 211, 77, .13);
+  --tier-selected-fill: radial-gradient(circle at 70% 40%, rgba(255, 211, 77, .28), rgba(242, 185, 11, .20) 35%, rgba(59, 37, 0, .96) 75%), linear-gradient(120deg, #3B2500, #5A3900 55%, #D99A00);
+}
+.ads-purchase-tier-grid > button.is-selected {
+  border-color: var(--tier-selected-border);
+  background: var(--tier-selected-fill);
+  box-shadow:
+    0 0 0 1px var(--tier-selected-border),
+    0 0 18px var(--tier-selected-glow),
+    0 5px 12px rgba(0, 0, 0, .16),
+    inset 0 1px 0 rgba(255, 255, 255, .10),
+    inset 0 0 24px var(--tier-selected-inner);
+}
+.ads-purchase-tier-grid > button:not(.ads-purchase-tier-swap):not(.is-selected):hover {
+  border-color: var(--tier-selected-border);
+  filter: brightness(1.05);
+  transform: translateY(-1px);
+}
+.ads-purchase-tier-grid > button.is-selected:hover { filter: brightness(1.025); }
+@media (prefers-reduced-motion: reduce) {
+  .ads-purchase-tier-grid > button:not(.ads-purchase-tier-swap) { transition: none; }
+  .ads-purchase-tier-grid > button:not(.ads-purchase-tier-swap):not(.is-selected):hover { transform: none; }
+}
 .ads-purchase-tier-label { min-height: 32px; padding: 0 13px; position: absolute; left: 27px; top: 24px; display: inline-flex; align-items: center; border: 1px solid currentColor; border-radius: 999px; color: #60A5FA; font-size: 12px; font-weight: 700; }
 .is-priority .ads-purchase-tier-label { color: #f4d46c; }
-.ads-purchase-selected-label { min-height: 34px; padding: 0 15px; position: absolute; z-index: 2; right: 13px; top: -2px; display: inline-flex; align-items: center; border-radius: 0 0 17px 17px; background: #3B82F6; color: #fff; font-size: 11px; font-weight: 700; }
-.is-priority .ads-purchase-selected-label { background: #f4d46c; color: #3f2d00; }
+.ads-purchase-selected-label { min-height: 34px; padding: 0 15px; position: absolute; z-index: 2; right: 13px; top: -2px; display: inline-flex; align-items: center; border-radius: 0 0 17px 17px; background: linear-gradient(115deg, #0F2F6B, #1D4ED8); color: #fff; font-size: 11px; font-weight: 700; }
+.is-priority .ads-purchase-selected-label { background: linear-gradient(115deg, #EAB308, #FCD34D); color: #3f2d00; }
 .ads-purchase-tier-art { width: 255px; height: 290px; position: absolute; right: 15px; top: -28px; opacity: .9; filter: drop-shadow(0 0 18px rgba(59, 130, 246, .34)); transform: rotate(7deg); }
 .ads-purchase-tier-art i { position: absolute; display: block; border-radius: 8px; background: linear-gradient(145deg, #1D4ED8, #60A5FA 50%, #2563EB); box-shadow: inset 8px 6px 10px rgba(255, 255, 255, .28), inset -9px -8px 15px rgba(11, 31, 58, .32); transform: skew(-24deg); }
 .ads-purchase-tier-art i:first-child { width: 82px; height: 285px; left: 102px; top: -8px; }
@@ -928,4 +960,44 @@
 @media (max-width: 767px) {
   .ads-billing-daterange-body { flex-direction: column; }
   .ads-billing-daterange-presets { width: 100%; flex-direction: row; flex-wrap: wrap; border-right: 0; border-bottom: 1px solid #eef3ef; }
+}
+
+/* Content-aware navigation: preserve labels and let adjacent tools yield space. */
+.ads-billing-tabs {
+  gap: clamp(6px, .5vw, 10px);
+}
+.ads-billing-tabs > button {
+  width: max-content;
+  min-width: max-content;
+  flex: 0 0 auto;
+  margin: 0;
+  padding-inline: clamp(12px, .8vw, 18px);
+  white-space: nowrap;
+  line-height: 1.5;
+  letter-spacing: normal;
+}
+.ads-billing-tabs > button + button { margin-left: 0; }
+.ads-billing-tabs > button svg,
+.ads-purchase-progress button svg,
+.ads-buy-button svg { flex-shrink: 0; }
+.ads-purchase-progress { width: max-content; }
+.ads-purchase-progress button { flex: 0 0 auto; white-space: nowrap; }
+.ads-top-actions { min-width: 0; }
+.ads-buy-button { flex: 0 0 auto; white-space: nowrap; }
+.ads-billing-tabs-trailing { min-width: 0; flex: 0 1 auto; }
+.ads-billing-plan-toolbar { min-width: 0; }
+.ads-billing-plan-search { width: auto; min-width: 100px; flex: 0 1 190px; }
+.ads-billing-plan-search input { width: 100%; }
+.ads-billing-daterange-trigger { flex: 0 0 auto; }
+@media (min-width: 1051px) {
+  .ads-billing-tabs { width: var(--billing-action-width, calc(69.5% - 1px)); overflow: visible; pointer-events: none; }
+  .ads-billing-tabs > button,
+  .ads-billing-tabs-trailing { pointer-events: auto; }
+  .ads-billing-tabs-trailing { margin-left: auto; padding-left: 60px; }
+  .ads-billing-workspace-frame[data-progress-below] .ads-purchase-progress { top: 43px; height: 36px; }
+  .ads-billing-workspace-frame[data-toolbar-below] .ads-billing-tabs-trailing {
+    position: absolute; top: 52px; right: 18px; left: 18px;
+    margin: 0; padding: 0; justify-content: flex-end;
+  }
+  .ads-billing-workspace-frame[data-toolbar-below] .ads-purchase-builder { padding-top: 100px; }
 }
