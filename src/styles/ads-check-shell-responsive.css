@@ -1,0 +1,148 @@
+/* Phase 1: shell only. Module-specific layouts keep their own scroll contracts. */
+.ads-save-app {
+  --shell-page-gap: 4px;
+  --shell-content-gap: 12px;
+  --shell-padding-x: 12px;
+  --shell-padding-y: 8px;
+  --left-nav-width: 62px;
+  --mobile-page-padding: 4px;
+  --tablet-page-padding: 8px;
+  --topbar-height: 46px;
+  --bottom-nav-height: 0px;
+  --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+  --content-radius: 20px;
+  --section-gap: clamp(12px, 1.2vw, 20px);
+}
+.ads-save-app > .ads-topbar { height: var(--topbar-height); padding-inline: var(--shell-padding-x); container: ads-header / inline-size; }
+.ads-save-app > .ads-workspace { margin: 0 var(--shell-page-gap) var(--shell-page-gap); height: calc(100dvh - var(--topbar-height) - var(--shell-page-gap)); }
+.ads-save-app .ads-workspace { --left-shell-width: var(--left-nav-width); --dynamic-island-content-gap: var(--shell-content-gap); container: ads-content / inline-size; }
+.ads-save-app .ads-rail { container: ads-navigation / inline-size; }
+.ads-save-app :is(.ads-product-main, .ads-main-panel) { border-radius: var(--content-radius); }
+.ads-shell-bottom-nav { display: none; }
+/* A constrained header can trim labels independently of the viewport. */
+@container ads-header (max-width: 700px) {
+  .ads-top-actions { gap: 4px; }
+  .ads-top-actions .ads-profile { max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .ads-brand small { display: none; }
+}
+
+@media (min-width: 768px) and (max-width: 1279px) {
+  .ads-save-app {
+    --left-nav-width: 56px; --shell-content-gap: 10px;
+    --shell-page-gap: 4px; --shell-padding-x: 10px;
+    --content-radius: 16px; --section-gap: 14px;
+  }
+  .ads-save-app .ads-workspace { min-height: 0; --content-backplate-overhang: 6px; }
+  .ads-save-app .ads-workspace:has(.ads-pro-workspace-shape) > :is(.ads-product-main, .ads-main-panel) {
+    left: calc(var(--left-nav-width) + var(--shell-content-gap) + 6px);
+    right: var(--tablet-page-padding); top: var(--shell-padding-y); bottom: var(--shell-padding-y);
+  }
+  .ads-save-app .ads-workspace:has(.ads-pro-workspace-shape) .ads-rail-primary,
+  .ads-save-app .ads-workspace:has(.ads-pro-workspace-shape) .ads-rail-secondary { left: 0; }
+  .ads-save-app .ads-rail-primary { --island-item-gap: 9px; padding: 29px 5px; }
+  .ads-save-app .ads-workspace:has(.ads-pro-workspace-shape) .ads-rail-primary .ads-rail-button { width: 44px; height: 44px; }
+  .ads-save-app .ads-module-island-surface { height: 316px; }
+  .ads-save-app .ads-topbar .ads-top-actions { gap: 6px; }
+  .ads-save-app .ads-topbar .ads-top-actions > .ads-header-utility { width: 44px; height: 44px; }
+  .ads-save-app .ads-topbar :is(.ads-buy-button, .ads-profile) { min-height: 44px; }
+  .ads-save-app .ads-curve-neon { opacity: .48; }
+  .ads-save-app .ads-curve-neon-glow { opacity: .12; }
+}
+
+/* Portrait tablet trades the permanent rail for the existing navigation drawer. */
+@media (min-width: 768px) and (max-width: 1279px) and (orientation: portrait) {
+  .ads-save-app { --left-nav-width: 0px; --topbar-height: 54px; }
+  .ads-save-app .ads-rail { display: none !important; }
+  .ads-save-app .ads-workspace:has(.ads-pro-workspace-shape) > :is(.ads-product-main, .ads-main-panel) { left: var(--tablet-page-padding); }
+  .ads-save-app .ads-mobile-menu { display: grid; }
+}
+
+/* Shared drawer presentation also applies to portrait tablet. */
+@media (max-width: 1279px) {
+  .ads-save-app.is-ads-check-pro > .ads-topbar { height: var(--topbar-height); }
+  .ads-save-app .ads-mobile-menu { width: 44px; height: 44px; flex: none; place-items: center; margin-right: 8px; border: 1px solid #A6ECCD33; border-radius: 13px; background: #FFFFFF0D; color: #E9FAF2; }
+  .ads-save-app .ads-drawer-layer { position: fixed; z-index: 90; inset: 0; display: block; background: #061C12A6; backdrop-filter: blur(5px); }
+  .ads-save-app .ads-mobile-drawer {
+    width: min(340px, calc(100vw - 32px)); height: 100dvh;
+    padding: calc(12px + env(safe-area-inset-top, 0px)) 12px calc(16px + var(--safe-area-bottom));
+    overflow-y: auto; overscroll-behavior: contain;
+    background: #F7FDFA; color: #163A2A; box-shadow: 16px 0 48px #00000040;
+  }
+  .ads-save-app .ads-drawer-heading { min-height: 48px; display: flex; align-items: center; justify-content: space-between; padding: 0 4px 0 12px; }
+  .ads-save-app .ads-drawer-heading button { width: 44px; height: 44px; flex: none; display: grid; place-items: center; border: 0; border-radius: 12px; background: #E9F9EF; color: #155739; }
+  .ads-save-app .ads-mobile-drawer :is(nav, .ads-drawer-tools) { display: grid; gap: 4px; }
+  .ads-save-app .ads-mobile-drawer :is(nav, .ads-drawer-tools) > :is(a, button) {
+    width: 100%; min-width: 0; min-height: 44px; padding: 10px 14px;
+    display: flex; align-items: center; gap: 12px; border: 0; border-radius: 12px;
+    background: transparent; color: #1E293B; text-align: left; text-decoration: none;
+    font: inherit; font-size: 14px; line-height: 1.4; overflow-wrap: anywhere;
+  }
+  .ads-save-app .ads-mobile-drawer svg { flex: none; }
+  .ads-save-app .ads-mobile-drawer :is(nav, .ads-drawer-tools) > .is-active { background: #E9F9EF; color: #1C5A3E; }
+  .ads-save-app .ads-drawer-divider { height: 1px; margin: 12px; background: #DCF3E9; }
+  .ads-save-app .ads-drawer-tools b { margin-left: auto; font-size: 10px; }
+  .ads-save-app .ads-mobile-languages { margin: 0 8px 8px; padding: 6px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; border-radius: 12px; background: #EAFBF3; }
+  .ads-save-app .ads-mobile-languages button { min-height: 44px; border: 1px solid transparent; border-radius: 10px; background: #FFF; color: #195D3E; font-size: 13px; }
+  .ads-save-app .ads-mobile-languages button[aria-pressed='true'] { border-color: #287151; background: #E9F9EF; }
+  .ads-save-app :is(.ads-mobile-menu, .ads-mobile-drawer button, .ads-mobile-drawer a):focus-visible { outline: 2px solid #B9FF39; outline-offset: 2px; }
+}
+
+@media (max-width: 767px) {
+  .ads-save-app {
+    --topbar-height: calc(56px + env(safe-area-inset-top, 0px));
+    --bottom-nav-height: 68px; --left-nav-width: 0px;
+    --shell-page-gap: var(--mobile-page-padding); --shell-content-gap: 4px;
+    --shell-padding-x: 12px; --shell-padding-y: 4px; --content-radius: 14px; --section-gap: 12px;
+    height: 100dvh; min-height: 0; display: flex; flex-direction: column; overflow: hidden;
+  }
+  .ads-save-app > .ads-topbar { flex: none; padding-top: env(safe-area-inset-top, 0px); padding-bottom: 0; gap: 8px; }
+  .ads-save-app .ads-brand { min-width: 0; margin-right: auto; }
+  .ads-save-app .ads-brand-header-logo { width: 30px; height: 30px; }
+  .ads-save-app .ads-mobile-menu { order: 3; display: grid; margin: 0; }
+  .ads-save-app .ads-topbar .ads-top-actions { display: none; }
+  .ads-save-app > .ads-workspace {
+    flex: 1 1 0; height: auto; min-height: 0;
+    margin: 0 var(--shell-page-gap) var(--shell-page-gap);
+    --content-backplate-overhang: 2px;
+  }
+  .ads-save-app .ads-rail { display: none !important; }
+  .ads-save-app .ads-workspace:has(.ads-pro-workspace-shape) > :is(.ads-product-main, .ads-main-panel) {
+    inset: var(--shell-padding-y) var(--mobile-page-padding);
+    min-width: 0; max-width: 100%; min-height: 0;
+    overflow: auto; overscroll-behavior-y: contain; scrollbar-width: thin;
+  }
+  .ads-save-app .ads-main-panel::-webkit-scrollbar { display: block; width: 4px; height: 4px; }
+  .ads-shell-bottom-nav {
+    flex: none; height: calc(var(--bottom-nav-height) + var(--safe-area-bottom));
+    padding: 6px max(4px, env(safe-area-inset-left, 0px)) calc(6px + var(--safe-area-bottom)) max(4px, env(safe-area-inset-right, 0px));
+    display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 3px;
+    background: #0A311F; border-top: 1px solid #97E9C426;
+    container: ads-bottom-navigation / inline-size;
+  }
+  .ads-shell-bottom-nav > :is(a, button) {
+    min-width: 0; min-height: 44px; padding: 4px 2px; display: flex; flex-direction: column;
+    justify-content: center; align-items: center; gap: 4px; border: 1px solid transparent; border-radius: 12px;
+    color: #BCEDD7; background: transparent; text-decoration: none; font: inherit; cursor: pointer;
+  }
+  .ads-shell-bottom-nav svg { flex: none; }
+  .ads-shell-bottom-nav span { max-width: 100%; font-size: 10px; line-height: 1.25; text-align: center; }
+  .ads-shell-bottom-nav > :is([aria-current='page'], .is-current, [aria-expanded='true']) { background: linear-gradient(135deg, #2CD086, #1C8556); border-color: #B9FF3970; color: #FFF; box-shadow: inset 0 1px 0 #FFFFFF20; }
+  .ads-shell-bottom-nav > :is(a, button):focus-visible { outline: 2px solid #B9FF39; outline-offset: -2px; }
+  .ads-save-app .ads-pro-workspace-shape { filter: none; }
+  .ads-save-app .ads-curve-neon { opacity: .35; }
+  .ads-save-app .ads-curve-neon-glow { display: none; }
+  .ads-save-app .ads-curve-neon-pulse { filter: none; }
+  .ads-save-app .ads-curve-neon:is(.is-top-left, .is-bottom-right) { display: none; }
+  .ads-save-app .ads-toast { bottom: calc(var(--bottom-nav-height) + var(--safe-area-bottom) + 12px); }
+  .ads-save-app .ads-control-hub-help-fab { bottom: calc(var(--bottom-nav-height) + var(--safe-area-bottom) + 12px); }
+}
+@container ads-bottom-navigation (max-width: 380px) {
+  .ads-shell-bottom-nav span { font-size: 10px; overflow-wrap: anywhere; }
+}
+@container ads-navigation (max-width: 56px) {
+  .ads-rail-primary { --island-item-gap: 9px; }
+}
+/* Scope containment to the content frame, without modifying module internals. */
+@container ads-content (max-width: 767px) {
+  .ads-shell-utility-menu { max-width: calc(100cqw - 16px); }
+}

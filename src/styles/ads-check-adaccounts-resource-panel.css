@@ -80,7 +80,7 @@
   white-space: nowrap;
 }
 .ads-resource-badge.is-role-admin { background: var(--cv-brand-icon-badge-bg, #e3f3e7); color: var(--cv-brand-primary, #0d9f39); }
-.ads-resource-badge.is-you { background: #dbeafe; color: #1d4ed8; }
+.ads-resource-badge.is-you { background: #E9F9EF; color: #1C5A3E; }
 /* Semantic "Live" status badge — intentionally NOT themed by V2 Blue. */
 .ads-resource-badge.is-live { background: #e3f3e7; color: #0d9f39; }
 .ads-resource-badge.is-die { background: #fdeceb; color: #d63b34; }
@@ -139,7 +139,7 @@
   text-align: left;
   cursor: pointer;
 }
-.ads-resource-row-menu-popover button:hover:not(:disabled) { background: var(--cv-brand-soft, #EFF6FF); }
+.ads-resource-row-menu-popover button:hover:not(:disabled) { background: var(--cv-brand-soft, #F1FFDC); }
 .ads-resource-row-menu-popover button:disabled { color: #b7c4b9; cursor: not-allowed; }
 .ads-resource-row-menu-popover button.is-destructive { color: #d63b34; }
 .ads-resource-row-menu-popover button.is-destructive:hover { background: #fdeceb; }

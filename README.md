@@ -1,39 +1,42 @@
-# Fun Agency HRM
+# AdsCheck Pro
 
-Frontend-only HRM prototype for Fun Agency. It includes role-aware dashboards, the agency's real position catalog, employee operations, approvals, attendance, payroll, organization editing, dark mode, responsive layouts, and realistic local mock data.
+Frontend workspace for AdsCheck Pro and its companion modules. Built with React 19, TypeScript, Vite, React Router, Tailwind CSS, dnd-kit, Lucide and SheetJS.
 
 ## Run locally
 
-Requires Node.js 20+.
+Requires a Node.js version supported by Vite 8 (20.19+ or 22.12+).
 
-```bash
-npm install
-npm run dev
+```powershell
+npm.cmd install
+npm.cmd run dev -- --host 127.0.0.1 --port 5174 --strictPort
 ```
 
-Quality checks:
+Open http://127.0.0.1:5174/. The root URL opens AdsCheck Pro. Keep the terminal running while using the preview.
 
-```bash
-npm run build
-npm run lint
-npm run test:e2e
+## Routes
+
+- `/app/adscheck-pro/adaccounts`: VIA, TKQC, BM, Page and Pixel tables, folders, tags, column settings, exports and workflows.
+- `/app/home`: product introduction, interactive dashboard illustration and feature cards.
+- `/app/ads-save` (alias `/ads-save`): download configuration editor and local export history.
+- `/app/extended-payment`: payment presentation settings and preview.
+- `/app/billing/payment`: package selection and demo checkout.
+- `/app/notification`: notification center.
+- `/app/account`: account and session settings.
+
+Unknown URLs redirect to AdsCheck Pro.
+
+## Data and persistence
+
+This is a frontend prototype with anonymous fixtures. There is no backend, real Meta integration, browser-extension connection or payment processing. Workflow execution and device sessions are local simulations. CSV/XLSX/text downloads generate real local files.
+
+React state holds workspace rows, selections, active workflows, execution logs and Ads Save configurations. Browser storage retains selected presentation preferences, column settings, workflow templates and tags. Language options are Vietnamese, English, Russian, Thai and Chinese.
+
+## Checks
+
+```powershell
+npm.cmd run build
+npm.cmd run lint
+npm.cmd run test:e2e
 ```
 
-Chrome/CDP UI capture instructions: [`docs/chrome-playwright-capture.md`](docs/chrome-playwright-capture.md).
-
-## Main routes
-
-- `/login`: demo sign-in.
-- `/`: role-aware dashboard and charts.
-- `/hr-center`: connected HR operations center for employee lifecycle, schedules, contracts, assets, reports, and employee experience.
-- `/work-inbox`: shared HR work queue with SLA, priority, ownership, filters, completion, and local task creation.
-- `/documents`: electronic people-document library with signing progress, expiry alerts, reminders, drafts, and downloads.
-- `/org-chart`: draggable organization editor with draft confirmation, review, undo/redo, keyboard moves, and mobile hierarchy browser.
-- `/employees`: searchable/filterable table and card views scoped to the viewer's company, managed regions, direct department, or own record.
-- `/employees/:id`: employee profile with route-level access guards and permission-locked salary and mutation controls.
-- `/employees/new`: five-step employee form with scoped region/role choices, session draft state, and document upload selection.
-- `/approvals`: assigned-approver cockpit with three approval levels plus employee request creation, tracking, rejection feedback, and safe cancellation.
-- `/departments`, `/attendance`, `/payroll`, `/settings`: interactive operations modules with local decisions, detail drawers/modals, exports, and editable settings.
-- `/styleguide`: reusable components, tokens, and UI states.
-
-Use the role switcher in the header to demo CEO, senior manager, leader, HR, accounting, and employee scopes. The global header search finds people and modules. All changes remain in local state; no API or external HR data is used.
+Playwright covers desktop Chrome and mobile Chrome. See [system architecture](docs/system-architecture.md), [design guidelines](docs/design-guidelines.md) and [Chrome capture instructions](docs/chrome-playwright-capture.md).

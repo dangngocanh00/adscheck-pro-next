@@ -18,7 +18,7 @@ type AdsSaveWorkspaceProps = {
 // empty-state image/SVG asset exists anywhere in this project (checked
 // `public/`, `src/features/ads-save/*`, and every "*illustration*"/
 // "*empty*" hit in the codebase — the only existing "EmptyState" is a
-// generic Tailwind/shadcn component from the unrelated HRM side, which
+// generic Tailwind/shadcn component, which
 // does not match Ads Save's own hand-rolled CSS visual language at all).
 // Built here from the SAME lightweight technique already used elsewhere
 // in this app (a lucide icon + small CSS-drawn accent dots/badge, e.g.

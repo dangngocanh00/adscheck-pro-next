@@ -1,14 +1,16 @@
+import { adsCheckShellNavigation as primaryNavigation } from './ads-check-shell-navigation'
+import { AdsCheckShellBottomNav } from './ads-check-shell-bottom-nav'
+import { useShellDrawerMode } from './use-shell-drawer-mode'
 import { AdsCheckModuleIsland } from '@/features/ads-check/ads-check-module-island'
 import { appLanguageOptions, getAppLanguageLabel, m, useAppLanguage, tx, t } from '@/i18n'
-import { useEffect, useRef, useState, type ComponentType, type ReactNode } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 import {
-  Bell, Bookmark, CreditCard, Grid2X2, Headphones, Home,
-  Languages, Menu, Package, ShoppingCart, UserRound, X,
+  Bell, Grid2X2, Headphones,
+  Languages, Menu, ShoppingCart, UserRound, X,
 } from 'lucide-react'
-import { AdsCheckProAppIcon } from '@/features/ads-check/ads-check-pro-app-icon'
 import { AdsCheckModuleIcon } from '@/features/ads-check/ads-check-module-icon'
 import { AdsCheckNavIcon } from '@/features/ads-check/ads-check-nav-icon'
-import { AdsCheckBrandMark } from '@/features/ads-check/ads-check-brand-mark'
+import { ToolmetaWordmark } from '@/features/ads-check/ads-check-brand-mark'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useOverlayFocus } from '@/components/ui/use-overlay-focus'
 import { ControlHubModal } from '@/features/ads-save/ads-save-modals'
@@ -25,25 +27,12 @@ import {
   type AdsCheckVersion,
 } from '@/features/ads-check/ads-check-session-state'
 
-type NavigationItem = {
-  key: string
-  label: string
-  icon: ComponentType<{ size?: number; strokeWidth?: number }>
-  to: string
-}
+type NavigationItem = (typeof primaryNavigation)[number]
 
 type AdsCheckProductShellProps = {
   activeNavigation: string
   children: ReactNode
 }
-
-const primaryNavigation: NavigationItem[] = [
-  { key: 'dashboard', label: 'Dashboard', icon: Home, to: '/app/home' },
-  { key: 'ads-check-pro', label: 'Ads Check Pro', icon: AdsCheckProAppIcon, to: '/app/adscheck-pro/adaccounts' },
-  { key: 'extended-payment', label: 'Extended Payment', icon: CreditCard, to: '/app/extended-payment' },
-  { key: 'ads-save', label: 'Ads Save', icon: Bookmark, to: '/app/ads-save' },
-  { key: 'billing', label: m("ui.b90857eb2c"), icon: Package, to: '/app/billing/payment' },
-]
 
 const languageOptions = appLanguageOptions
 
@@ -82,6 +71,7 @@ export function AdsCheckProductShell({ activeNavigation, children }: AdsCheckPro
   const [notice, setNotice] = useState<string | null>(null)
 
   useOverlayFocus(mobileOpen, drawerRef, () => setMobileOpen(false))
+  useShellDrawerMode(setMobileOpen)
 
   useEffect(() => subscribeAdsCheckSessionState(() => {
     setLanguage(readAdsCheckLanguage())
@@ -96,7 +86,11 @@ export function AdsCheckProductShell({ activeNavigation, children }: AdsCheckPro
       ? t("ui.ade9e0760e")
       : tx(routeTitles[location.pathname] ?? 'Ads Check')
     document.title = `${routeTitle} · Ads Check`
-    const frame = window.requestAnimationFrame(() => mainRef.current?.focus({ preventScroll: true }))
+    const frame = window.requestAnimationFrame(() => {
+      // Locale changes must not move keyboard focus behind an open drawer.
+      const target = drawerRef.current?.querySelector<HTMLButtonElement>('[aria-controls="ads-product-mobile-languages"]') ?? mainRef.current
+      target?.focus({ preventScroll: true })
+    })
     return () => {
       window.cancelAnimationFrame(frame)
       document.title = previousTitle
@@ -202,7 +196,7 @@ export function AdsCheckProductShell({ activeNavigation, children }: AdsCheckPro
     <a className="ads-skip-link" href="#ads-product-main">{t("ui.9af88ffc6d")}</a>
     <header className="ads-topbar">
       <button className="ads-mobile-menu" type="button" aria-label={t("ui.23e29182f4")} aria-expanded={mobileOpen} aria-controls="ads-product-mobile-drawer" onClick={() => setMobileOpen(true)}><Menu size={18} /></button>
-      <Link className="ads-brand" to="/app/home" aria-label="Ads Check home"><AdsCheckBrandMark className="ads-brand-header-logo" /><span><strong>{t("ui.0a099528df")}</strong><small>{t("ui.44a1737be5")}</small></span></Link>
+      <Link className="ads-brand" to="/app/home" aria-label="Ads Check home"><ToolmetaWordmark /></Link>
       <div className="ads-top-actions">
         <Link className="ads-buy-button" aria-label={t("ui.b90857eb2c")} to="/app/billing/payment"><ShoppingCart size={15} /><span>{t("ui.b90857eb2c")}</span></Link>
         <Link className="ads-profile ads-shell-profile" aria-label={t("ui.da3dbde4f0")} to="/app/account"><span>{t("ui.82fa5f31dc")}</span></Link>
@@ -232,6 +226,7 @@ export function AdsCheckProductShell({ activeNavigation, children }: AdsCheckPro
       </div>)}
     </section>
 
+    <AdsCheckShellBottomNav open={mobileOpen} drawerId="ads-product-mobile-drawer" onMore={() => setMobileOpen(true)} />
     {tx(mobileOpen && <div className="ads-drawer-layer" onMouseDown={(event) => { if (event.target === event.currentTarget) setMobileOpen(false) }}>
       <section ref={drawerRef} id="ads-product-mobile-drawer" className="ads-mobile-drawer ads-product-mobile-drawer" role="dialog" aria-modal="true" aria-label={t("ui.69f43dc60e")}>
         <header className="ads-drawer-heading"><span>{t("ui.57f5f5efbc")}</span><button type="button" data-autofocus aria-label={t("ui.a2b1f3c584")} onClick={() => setMobileOpen(false)}><X size={18} /></button></header>

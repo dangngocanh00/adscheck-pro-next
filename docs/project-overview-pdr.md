@@ -1,20 +1,9 @@
-# Fun Agency HRM product overview
+# AdsCheck Pro product overview
 
-Fun Agency HRM is an internal operations interface for CEO, Quản lý, Leader and employees across the agency's functional positions.
+AdsCheck Pro is a frontend prototype for managing advertising assets and composing repeatable workflows.
 
-Position catalog: Tài nguyên 1, Tài nguyên 2, MKT, TK, Vận hành, KT, VĐ, Design, BA, Tester, TK 2, and Support MKT.
+Core surfaces include VIA connections, advertising accounts (TKQC), Business Manager, Pages and Pixels. Users can filter/select rows, organize local folders and tags, configure columns, export files, compose workflow steps, save templates and inspect simulated execution logs.
 
-Core jobs:
+Companion modules provide a dashboard shell, Ads Save configurations, Extended Payment presentation settings, package selection and demo checkout, notifications and account/session controls.
 
-- understand workforce health by role and region;
-- maintain organization assignments with effective dates and draft review;
-- find and manage employee records;
-- process approvals, attendance, contracts, and payroll under explicit permissions.
-- operate onboarding, probation, offboarding, schedules, assets, employee communication, and workforce reporting from one connected HR center;
-- search people and modules globally and surface time-sensitive notifications.
-- triage cross-module HR work by priority, SLA, owner, and source record;
-- issue, track, renew, and download employee documents through a visible signing workflow.
-
-This repository is a frontend prototype. All people, requests, attendance, payroll, and organization changes are deterministic mock data held in local state.
-
-The UX reference scope is comparable to a modern Vietnamese HRM suite: centralized records, lifecycle tasks, flexible scheduling and attendance methods, approval-linked timesheets, configurable payroll periods, payslips, internal communication, reports, and audit history. The interface is original to Fun Agency and does not reuse third-party branding or assets.
+The interface supports Vietnamese, English, Russian, Thai and Chinese, with desktop panels and mobile drawers. Anonymous fixtures support local interaction without connecting external accounts. Remote execution, extension readiness and purchase activity remain demonstrations; CSV/XLSX exports produce actual local files.

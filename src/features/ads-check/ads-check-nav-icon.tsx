@@ -1,5 +1,5 @@
 import { useAppLanguage } from '@/i18n'
-import railNavIcon from '../../../assets/nav-icon.png'
+import railNavIcon from '../../../assets/Media Toolmeta/toolmeta-logo-icon-gradient.png.png'
 
 // ONE shared nav-icon element — reused verbatim by every module's own
 // sidebar rail (Ads Check Pro/Ads Save via ads-save-page.tsx, and every
@@ -8,5 +8,8 @@ import railNavIcon from '../../../assets/nav-icon.png'
 // can never drift between modules.
 export function AdsCheckNavIcon() {
   useAppLanguage();
-  return <img src={railNavIcon} alt="" className="ads-rail-nav-icon" />
+  // Frame the supplied symbol tightly without editing the original PNG.
+  return <svg className="ads-rail-nav-icon" viewBox="150 260 1010 810" aria-hidden="true" focusable="false">
+    <image href={railNavIcon} width="1280" height="1280" />
+  </svg>
 }

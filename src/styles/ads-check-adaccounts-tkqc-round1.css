@@ -24,7 +24,7 @@
   box-shadow: 0 1px 2px rgba(15, 60, 25, .08);
   cursor: pointer;
 }
-.ads-pro-currency-trigger.is-active { background: var(--cv-brand-soft, #EFF6FF); color: var(--cv-brand-primary-hover, #1D4ED8); }
+.ads-pro-currency-trigger.is-active { background: var(--cv-brand-soft, #F1FFDC); color: var(--cv-brand-primary-hover, #1C5A3E); }
 .ads-pro-currency-panel {
   width: 200px;
   max-height: 320px;
@@ -55,7 +55,7 @@
   font-size: 12.5px;
   cursor: pointer;
 }
-.ads-pro-currency-option:hover { background: #EFF6FF; }
+.ads-pro-currency-option:hover { background: #F1FFDC; }
 .ads-pro-currency-option.is-selected { background: var(--cv-brand-icon-badge-bg, #e3f3e7); color: var(--cv-brand-primary, #0d9f39); font-weight: 600; }
 .ads-pro-currency-empty { padding: 12px; color: #8ba393; font-size: 12px; text-align: center; }
 
@@ -74,17 +74,17 @@
 .ads-pro-daterange-body { display: flex; }
 .ads-pro-daterange-presets { width: 150px; flex: none; padding: 10px; display: flex; flex-direction: column; gap: 2px; border-right: 1px solid #eef3ef; }
 .ads-pro-daterange-preset { height: 32px; padding: 0 10px; border: 0; border-radius: 8px; background: transparent; color: #445048; font-size: 12px; text-align: left; cursor: pointer; }
-.ads-pro-daterange-preset:hover { background: #EFF6FF; }
+.ads-pro-daterange-preset:hover { background: #F1FFDC; }
 .ads-pro-daterange-preset.is-selected { background: var(--cv-brand-icon-badge-bg, #e3f3e7); color: var(--cv-brand-primary, #0d9f39); font-weight: 600; }
 .ads-pro-daterange-calendar { min-width: 0; flex: 1; padding: 12px; }
 .ads-pro-daterange-calendar header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
-.ads-pro-daterange-calendar header button { width: 26px; height: 26px; display: grid; place-items: center; border: 0; border-radius: 999px; background: #EFF6FF; color: #445048; cursor: pointer; }
+.ads-pro-daterange-calendar header button { width: 26px; height: 26px; display: grid; place-items: center; border: 0; border-radius: 999px; background: #F1FFDC; color: #445048; cursor: pointer; }
 .ads-pro-daterange-calendar header strong { font-size: 12.5px; color: #17281b; }
 .ads-pro-daterange-weekdays,
 .ads-pro-daterange-grid { display: grid; grid-template-columns: repeat(7, 1fr); }
 .ads-pro-daterange-weekdays span { padding: 4px 0; color: #8ba393; font-size: 11px; text-align: center; }
 .ads-pro-daterange-cell { height: 30px; border: 0; border-radius: 8px; background: transparent; color: #17281b; font-size: 12px; cursor: pointer; }
-.ads-pro-daterange-cell:hover { background: #EFF6FF; }
+.ads-pro-daterange-cell:hover { background: #F1FFDC; }
 .ads-pro-daterange-cell.is-in-range { background: var(--cv-brand-hover-soft, #eafbee); }
 .ads-pro-daterange-cell.is-edge { background: var(--cv-brand-primary, #0d9f39); color: #fff; font-weight: 600; }
 .ads-pro-daterange-cell.is-empty { cursor: default; }

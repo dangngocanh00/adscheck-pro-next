@@ -100,7 +100,7 @@
   .ads-pro-mobile-cards dt { color: #7a847c; }
   .ads-pro-mobile-cards dd { margin: 0; color: #27332a; text-align: right; }
   .ads-pro-mobile-cards footer { margin-top: 11px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  .ads-pro-mobile-cards footer button { min-height: 44px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; border: 1px solid #DBEAFE; border-radius: 10px; background: #F0F7FF; color: #1D4ED8; }
+  .ads-pro-mobile-cards footer button { min-height: 44px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; border: 1px solid #E9F9EF; border-radius: 10px; background: #F8FAF7; color: #1C5A3E; }
   .ads-pro-mobile-cards footer button:last-child { color: #b3434e; }
   .ads-pro-mobile-cards li.is-restricted { border-color: #f0cfd4; background: #fffafa; }
   .ads-pro-mobile-cards li.is-restricted header { grid-template-columns: minmax(0, 1fr); }

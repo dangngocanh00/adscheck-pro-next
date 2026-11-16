@@ -11,6 +11,6 @@
 
 ## Risks
 
-- Global HRM styles may leak into the new route; mitigate with a root-scoped reset.
+- Global styles may leak into the route; mitigate with a root-scoped reset.
 - Exact proprietary font may not be available; use a close local humanist sans fallback.
 - Reference floating promotion overlaps content on mobile; preserve the gesture while keeping close control reachable.

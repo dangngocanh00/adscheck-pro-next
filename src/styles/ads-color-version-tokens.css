@@ -1,198 +1,192 @@
-/* Ads Check global brand palette — AdsMeta-inspired royal/electric blue
-   SaaS direction (replaces the removed V1-V5 "color version preview"
-   system; this is now the ONE fixed theme, not a switchable preview).
-   Every real color consumption site reads these via
-   `var(--cv-x, <fallback>)` — the fallback literals still baked into each
-   call site are inert now that this file always defines every token; they
-   were the old "if this file were ever missing" safety net and are kept
-   only because rewriting every call site's fallback has zero visual
-   effect (the var always resolves here first). Geometry/spacing/
-   typography are NEVER defined here — only color. */
+/* Toolmeta palette, sampled from https://public.toolmeta.io/.
+   Change blue brand colors only; semantic colors and neutral grays stay intact. */
 
 :root {
   /* Application shell */
-  --cv-app-bg-dark: #071426;
-  --cv-app-bg-dark-2: #0B1F3A;
-  --cv-app-ambient: rgba(59, 130, 246, .20);
-  --cv-app-ambient-mobile: rgba(59, 130, 246, .28);
+  --cv-app-bg-dark: #071F18;
+  --cv-app-bg-dark-2: #092E22;
+  --cv-app-ambient: rgba(40, 113, 81, .20);
+  --cv-app-ambient-mobile: rgba(40, 113, 81, .28);
   /* Same hue as --cv-app-ambient at alpha 0 — used as a radial-gradient's
      fade-out stop so the fade never passes through a mismatched hue (was
      hardcoded to the old green's RGB channel before this migration). */
-  --cv-app-ambient-transparent: rgba(59, 130, 246, 0);
+  --cv-app-ambient-transparent: rgba(40, 113, 81, 0);
 
   /* Workspace */
   --cv-workspace-bg-1: #ffffff;
-  --cv-workspace-bg-2: #F0F7FF;
-  --cv-workspace-bg-3: #DBEAFE;
+  --cv-workspace-bg-2: #F8FAF7;
+  --cv-workspace-bg-3: #E9F9EF;
   --cv-workspace-surface: #fff;
-  --cv-workspace-soft-surface: #F0F7FF;
-  --cv-product-workspace-surface: #F0F7FF;
-  --cv-product-workspace-ambient: rgba(59, 130, 246, .16);
+  --cv-workspace-soft-surface: #F8FAF7;
+  --cv-product-workspace-surface: #F8FAF7;
+  --cv-product-workspace-ambient: rgba(40, 113, 81, .16);
 
-  /* Brand — royal/electric blue, AdsMeta-inspired. --cv-brand-soft is the
-     lighter of two soft tiers (subtle hover washes); --cv-brand-soft-strong
-     is the stronger tier (selected/pressed states) — kept deliberately
-     distinct, mirroring the same 2-tier relationship the old green palette
-     had. */
-  --cv-brand-primary: #2563EB;
-  --cv-brand-primary-hover: #1D4ED8;
-  --cv-brand-primary-active: #1E40AF;
-  --cv-brand-soft: #EFF6FF;
-  --cv-brand-soft-strong: #DBEAFE;
-  --cv-brand-subtle: #F0F7FF;
-  --cv-brand-border: #BFDBFE;
-  --cv-brand-border-strong: #60A5FA;
-  --cv-brand-icon: #3B82F6;
-  --cv-brand-mark: #3B82F6;
-  --cv-brand-icon-badge-bg: #DBEAFE;
-  --cv-illustration-core-1: #F0F7FF;
-  --cv-illustration-core-2: #DBEAFE;
-  --cv-illustration-dot: #3B82F6;
-  --cv-primary-cta-start: #3B82F6;
-  --cv-primary-cta-end: #2563EB;
-  --cv-brand-hover-soft: #DBEAFE;
-  --cv-brand-focus-soft: #DBEAFE;
-  --cv-panel-soft-bg: #F0F7FF;
-  --cv-fw-pin-active-start: #60A5FA;
-  --cv-fw-pin-active-end: #2563EB;
-  --cv-asset-tab-active-2-start: #60A5FA;
-  --cv-asset-tab-active-2-end: #1D4ED8;
-  --cv-asset-tab-active-solid: #2563EB;
-  --cv-asset-tab-active-glow: rgba(37, 99, 235, .26);
-  --cv-checkbox-accent-2: #3B82F6;
-  --cv-checkbox-accent-3: #3B82F6;
-  --cv-checkbox-accent-4: #3B82F6;
-  --cv-brand-tint-06: rgba(37, 99, 235, .06);
-  --cv-brand-tint-08: rgba(37, 99, 235, .08);
-  --cv-brand-tint-10: rgba(37, 99, 235, .1);
-  --cv-brand-tint-12: rgba(37, 99, 235, .12);
-  --cv-brand-solid-2: #2563EB;
-  --cv-billing-tab-active-start: #1D4ED8;
-  --cv-billing-tab-active-end: #2563EB;
-  --cv-purchase-checkbox-border: #2563EB;
-  --cv-purchase-checkbox-bg: #3B82F6;
-  --cv-purchase-duration-border: #3B82F6;
-  --cv-purchase-duration-bg: #F0F7FF;
-  --cv-purchase-tier-selected-border: #3B82F6;
-  --cv-purchase-section-icon: #2563EB;
-  --cv-purchase-accent: #2563EB;
-  --cv-purchase-accent-icon-bg: #EFF6FF;
-  --cv-purchase-card-border: #3B82F6;
-  --cv-purchase-card-bg: #F0F7FF;
-  --cv-utility-menu-hover: #EFF6FF;
-  --cv-utility-menu-checked: #2563EB;
-  --cv-utility-menu-checked-ring: #93C5FD;
-  --cv-toast-bg: #0B1F3A;
-  --cv-toast-success-bg: #1E40AF;
-  --cv-workspace-wash-strong: rgba(59, 130, 246, .06);
-  --cv-workspace-wash-soft: rgba(59, 130, 246, .02);
-  --cv-rail-icon-gradient-start: #60A5FA;
-  --cv-rail-icon-gradient-end: #2563EB;
-  --cv-story-kicker-text: #2563EB;
-  --cv-story-progress-border: #BFDBFE;
-  --cv-story-progress-text: #1E40AF;
-  --cv-story-cta-start: #2563EB;
-  --cv-story-cta-end: #60A5FA;
-  --cv-story-cta-glow: rgba(37, 99, 235, .2);
-  --cv-story-benefit-icon: #3B82F6;
-  --cv-story-video-frame: #BFDBFE;
-  --cv-story-video-bg: #071426;
-  --cv-story-video-shadow: rgba(11, 31, 58, .3);
-  --cv-video-glow-1: rgba(59, 130, 246, .7);
-  --cv-video-glow-2: #3B82F6;
-  --cv-video-bg-start: #071426;
-  --cv-video-bg-mid: #1D4ED8;
-  --cv-video-bg-end: #60A5FA;
-  --cv-video-logo-bg: rgba(7, 20, 38, .62);
-  --cv-story-back-border: #BFDBFE;
-  --cv-story-back-text: #1E40AF;
-  --cv-folder-active-1: rgba(37, 99, 235, .1);
-  --cv-folder-active-2: rgba(59, 130, 246, .06);
-  --cv-folder-add-hover: #2563EB;
+  /* Toolmeta forest-green actions, mint surfaces and lime highlights. */
+  --cv-brand-primary: #287151;
+  --cv-brand-primary-hover: #1C5A3E;
+  --cv-brand-primary-active: #163B2C;
+  --cv-brand-soft: #F1FFDC;
+  --cv-brand-soft-strong: #E9F9EF;
+  --cv-brand-subtle: #F8FAF7;
+  --cv-brand-border: #CCE5CE;
+  --cv-brand-border-strong: #67C780;
+  --cv-brand-icon: #287151;
+  --cv-brand-mark: #287151;
+  --cv-brand-icon-badge-bg: #E9F9EF;
+  --cv-illustration-core-1: #F8FAF7;
+  --cv-illustration-core-2: #E9F9EF;
+  --cv-illustration-dot: #287151;
+  --cv-primary-cta-start: #287151;
+  --cv-primary-cta-end: #163B2C;
+  --cv-brand-hover-soft: #E9F9EF;
+  --cv-brand-focus-soft: #E9F9EF;
+  --cv-panel-soft-bg: #F8FAF7;
+  --cv-fw-pin-active-start: #67C780;
+  --cv-fw-pin-active-end: #287151;
+  --cv-asset-tab-active-2-start: #287151;
+  --cv-asset-tab-active-2-end: #163B2C;
+  --cv-asset-tab-active-solid: #287151;
+  --cv-asset-tab-active-glow: rgba(40, 113, 81, .26);
+  --cv-checkbox-accent-2: #287151;
+  --cv-checkbox-accent-3: #287151;
+  --cv-checkbox-accent-4: #287151;
+  --cv-brand-tint-06: rgba(40, 113, 81, .06);
+  --cv-brand-tint-08: rgba(40, 113, 81, .08);
+  --cv-brand-tint-10: rgba(40, 113, 81, .1);
+  --cv-brand-tint-12: rgba(40, 113, 81, .12);
+  --cv-brand-solid-2: #287151;
+  --cv-billing-tab-active-start: #1C5A3E;
+  --cv-billing-tab-active-end: #287151;
+  --cv-purchase-checkbox-border: #287151;
+  --cv-purchase-checkbox-bg: #287151;
+  --cv-purchase-duration-border: #287151;
+  --cv-purchase-duration-bg: #F8FAF7;
+  --cv-purchase-tier-selected-border: #287151;
+  --cv-purchase-section-icon: #287151;
+  --cv-purchase-accent: #287151;
+  --cv-purchase-accent-icon-bg: #F1FFDC;
+  --cv-purchase-card-border: #287151;
+  --cv-purchase-card-bg: #F8FAF7;
+  --cv-utility-menu-hover: #F1FFDC;
+  --cv-utility-menu-checked: #287151;
+  --cv-utility-menu-checked-ring: #A5E4B6;
+  --cv-toast-bg: #092E22;
+  --cv-toast-success-bg: #163B2C;
+  --cv-workspace-wash-strong: rgba(40, 113, 81, .06);
+  --cv-workspace-wash-soft: rgba(40, 113, 81, .02);
+  --cv-rail-icon-gradient-start: #67C780;
+  --cv-rail-icon-gradient-end: #287151;
+  --cv-story-kicker-text: #287151;
+  --cv-story-progress-border: #CCE5CE;
+  --cv-story-progress-text: #163B2C;
+  --cv-story-cta-start: #287151;
+  --cv-story-cta-end: #67C780;
+  --cv-story-cta-glow: rgba(40, 113, 81, .2);
+  --cv-story-benefit-icon: #287151;
+  --cv-story-video-frame: #CCE5CE;
+  --cv-story-video-bg: #071F18;
+  --cv-story-video-shadow: rgba(9, 46, 34, .3);
+  --cv-video-glow-1: rgba(40, 113, 81, .7);
+  --cv-video-glow-2: #287151;
+  --cv-video-bg-start: #071F18;
+  --cv-video-bg-mid: #1C5A3E;
+  --cv-video-bg-end: #67C780;
+  --cv-video-logo-bg: rgba(7, 31, 24, .62);
+  --cv-story-back-border: #CCE5CE;
+  --cv-story-back-text: #163B2C;
+  --cv-folder-active-1: rgba(40, 113, 81, .1);
+  --cv-folder-active-2: rgba(40, 113, 81, .06);
+  --cv-folder-add-hover: #287151;
 
   /* Extended Payment */
-  --cv-ext-brand-text: #1D4ED8;
-  --cv-ext-brand-border: #3B82F6;
-  --cv-ext-toggle-on: #2563EB;
-  --cv-ext-icon-1: #3B82F6;
-  --cv-ext-icon-2: #3B82F6;
-  --cv-ext-icon-3: #3B82F6;
-  --cv-ext-icon-4: #3B82F6;
-  --cv-ext-icon-5: #60A5FA;
-  --cv-ext-icon-badge-bg: #EFF6FF;
-  --cv-ext-check: #2563EB;
-  --cv-ext-field-border: #60A5FA;
-  --cv-ext-toolbar-active-bg: #DBEAFE;
-  --cv-ext-save-text: #1D4ED8;
-  --cv-ext-brand-glow: rgba(59, 130, 246, .38);
-  --cv-ext-shell-1: #1D4ED8;
-  --cv-ext-shell-2: #1E3A8A;
-  --cv-ext-shell-3: #0B1F3A;
-  --cv-ext-shell-ring: rgba(29, 78, 216, .7);
-  --cv-ext-dark-control-bg: rgba(11, 31, 58, .38);
-  --cv-ext-agency-icon: #60A5FA;
-  --cv-ext-agency-icon-bg: #0B1F3A;
-  --cv-ext-disabled-overlay-bg: rgba(240, 247, 255, .92);
-  --cv-ext-disabled-text: #1E3A5F;
-  --cv-ext-blockquote-border: #60A5FA;
-  --cv-ext-page-bg: #DCEAFB;
-  --cv-ext-panel-border: #BFDBFE;
-  --cv-ext-panel-bg: rgba(240, 247, 255, .97);
-  --cv-ext-scrollbar: #BFD7FE;
-  --cv-ext-scrollbar-2: #A8C8FE;
-  --cv-ext-modal-shadow: rgba(11, 31, 58, .28);
-  --cv-ext-mini-mark-1: #3B82F6;
-  --cv-ext-mini-mark-2: #93C5FD;
-  --cv-ext-logo-1: #2563EB;
-  --cv-ext-logo-2: #60A5FA;
-  --cv-ext-rate-active-bg: #EFF6FF;
-
-  /* Dashboard intro/onboarding — ads-check-dashboard-source-fidelity.css
-     (loads AFTER ads-check-shell-dashboard.css, same specificity, so it
-     is the file that actually renders on screen — see that file's own
-     header comment). */
-  --cv-dash-ambient-1: rgba(37, 99, 235, .28);
-  --cv-dash-ambient-2: rgba(29, 78, 216, .24);
-  --cv-dash-ambient-3: rgba(59, 130, 246, .1);
-  --cv-dash-bg-1: #020509;
-  --cv-dash-bg-2: #071426;
-  --cv-dash-bg-3: #0B1F3A;
-  --cv-dash-dot-1: rgba(147, 197, 253, .72);
-  --cv-dash-dot-2: rgba(147, 197, 253, .45);
-  --cv-dash-accent: #60A5FA;
-  --cv-dash-progress-active: #3B82F6;
-  --cv-dash-progress-inactive: #1D4ED8;
-  --cv-dash-headline: #3B82F6;
-  --cv-dash-card-tint: rgba(59, 130, 246, .025);
-  --cv-dash-card-icon: #60A5FA;
-  --cv-dash-video-border: rgba(59, 130, 246, .65);
-  --cv-dash-video-bg: #020509;
-  --cv-dash-rays: rgba(59, 130, 246, .26);
-  --cv-dash-canvas-glow: rgba(37, 99, 235, .34);
-  --cv-dash-canvas-bg-1: #0B1F3A;
-  --cv-dash-canvas-bg-2: #010509;
-  --cv-dash-play: #3B82F6;
-  --cv-dash-play-glow: rgba(37, 99, 235, .3);
-  --cv-dash-back-border: rgba(59, 130, 246, .22);
-  --cv-dash-list-active: rgba(37, 99, 235, .08);
-  --cv-dash-list-number: #60A5FA;
+  --cv-ext-brand-text: #1C5A3E;
+  --cv-ext-brand-border: #287151;
+  --cv-ext-toggle-on: #287151;
+  --cv-ext-icon-1: #287151;
+  --cv-ext-icon-2: #287151;
+  --cv-ext-icon-3: #287151;
+  --cv-ext-icon-4: #287151;
+  --cv-ext-icon-5: #67C780;
+  --cv-ext-icon-badge-bg: #F1FFDC;
+  --cv-ext-check: #287151;
+  --cv-ext-field-border: #67C780;
+  --cv-ext-toolbar-active-bg: #E9F9EF;
+  --cv-ext-save-text: #1C5A3E;
+  --cv-ext-brand-glow: rgba(40, 113, 81, .38);
+  --cv-ext-shell-1: #1C5A3E;
+  --cv-ext-shell-2: #123528;
+  --cv-ext-shell-3: #092E22;
+  --cv-ext-shell-ring: rgba(28, 90, 62, .7);
+  --cv-ext-dark-control-bg: rgba(9, 46, 34, .38);
+  --cv-ext-agency-icon: #67C780;
+  --cv-ext-agency-icon-bg: #092E22;
+  --cv-ext-disabled-overlay-bg: rgba(248, 250, 247, .92);
+  --cv-ext-disabled-text: #355647;
+  --cv-ext-blockquote-border: #67C780;
+  --cv-ext-page-bg: #DFF8ED;
+  --cv-ext-panel-border: #CCE5CE;
+  --cv-ext-panel-bg: rgba(248, 250, 247, .97);
+  --cv-ext-scrollbar: #C9F4E1;
+  --cv-ext-scrollbar-2: #B6F0D6;
+  --cv-ext-modal-shadow: rgba(9, 46, 34, .28);
+  --cv-ext-mini-mark-1: #287151;
+  --cv-ext-mini-mark-2: #A5E4B6;
+  --cv-ext-logo-1: #287151;
+  --cv-ext-logo-2: #67C780;
+  --cv-ext-rate-active-bg: #F1FFDC;
 
   /* Sidebar (rail) */
-  --cv-sidebar-hover: rgba(59, 130, 246, .12);
-  --cv-sidebar-active-start: #3B82F6;
-  --cv-sidebar-active-end: #2563EB;
-  --cv-sidebar-active-icon: #071426;
+  --cv-sidebar-hover: rgba(40, 113, 81, .12);
+  --cv-sidebar-active-start: #CAFF4D;
+  --cv-sidebar-active-end: #B0FB30;
+  --cv-sidebar-active-icon: #071F18;
 
   /* Shell CTA buttons (2 distinct existing gradients, kept distinct) */
-  --cv-buy-button-start: #3B82F6;
-  --cv-buy-button-end: #2563EB;
-  --cv-cta-button-start: #3B82F6;
-  --cv-cta-button-end: #2563EB;
-  --cv-outline-border: #BFDBFE;
-  --cv-outline-text: #2563EB;
+  --cv-buy-button-start: #CAFF4D;
+  --cv-buy-button-end: #B0FB30;
+  --cv-cta-button-start: #287151;
+  --cv-cta-button-end: #163B2C;
+  --cv-outline-border: #CCE5CE;
+  --cv-outline-text: #287151;
 
   /* Modal / tinted surfaces */
-  --cv-modal-mint-1: #F0F7FF;
-  --cv-modal-mint-2: #DBEAFE;
-  --cv-modal-border: #BFDBFE;
+  --cv-modal-mint-1: #F8FAF7;
+  --cv-modal-mint-2: #E9F9EF;
+  --cv-modal-border: #CCE5CE;
+}
+
+:root {
+  --color-blue-50: #f8faf7;
+  --color-blue-100: #f1ffdc;
+  --color-blue-200: #e9f9ef;
+  --color-blue-300: #a5e4b6;
+  --color-blue-400: #67c780;
+  --color-blue-500: #39865c;
+  --color-blue-600: #287151;
+  --color-blue-700: #1c5a3e;
+  --color-blue-800: #163b2c;
+  --color-blue-900: #092e22;
+  --color-blue-950: #071f18;
+  --color-sky-50: #f8faf7;
+  --color-sky-100: #f1ffdc;
+  --color-sky-200: #e9f9ef;
+  --color-sky-300: #a5e4b6;
+  --color-sky-400: #67c780;
+  --color-sky-500: #39865c;
+  --color-sky-600: #287151;
+  --color-sky-700: #1c5a3e;
+  --color-sky-800: #163b2c;
+  --color-sky-900: #092e22;
+  --color-sky-950: #071f18;
+  --color-cyan-50: #f8faf7;
+  --color-cyan-100: #f1ffdc;
+  --color-cyan-200: #e9f9ef;
+  --color-cyan-300: #a5e4b6;
+  --color-cyan-400: #67c780;
+  --color-cyan-500: #39865c;
+  --color-cyan-600: #287151;
+  --color-cyan-700: #1c5a3e;
+  --color-cyan-800: #163b2c;
+  --color-cyan-900: #092e22;
+  --color-cyan-950: #071f18;
 }

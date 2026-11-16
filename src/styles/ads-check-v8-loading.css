@@ -4,7 +4,7 @@
   display: flex;
   position: relative;
   overflow: hidden;
-  background: radial-gradient(circle at 50% -20%, var(--cv-app-ambient, rgba(59, 130, 246, .24)), transparent 42%), linear-gradient(135deg, var(--cv-app-bg-dark, #071426), var(--cv-app-bg-dark-2, #0B1F3A));
+  background: radial-gradient(circle at 50% -20%, var(--cv-app-ambient, rgba(40, 113, 81, .24)), transparent 42%), linear-gradient(135deg, var(--cv-app-bg-dark, #071F18), var(--cv-app-bg-dark-2, #092E22));
   font-family: "Google Sans Flex", "Be Vietnam Pro", system-ui, sans-serif;
 }
 
@@ -49,7 +49,7 @@
   position: relative;
   overflow: hidden;
   border-radius: 22px;
-  background-image: var(--ads-v8-loading-bg);
+  background-image: radial-gradient(ellipse at 55% 30%, rgba(185,255,57,.18), transparent 60%), linear-gradient(145deg,#184c37,#071f18);
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -73,7 +73,7 @@
   height: 6px;
   display: block;
   border-radius: 999px;
-  background: rgba(11, 31, 58, .38);
+  background: rgba(9, 46, 34, .38);
   overflow: hidden;
 }
 
@@ -82,7 +82,7 @@
   height: 100%;
   display: block;
   border-radius: 999px;
-  background: linear-gradient(90deg, #1D4ED8, #3B82F6);
+  background: linear-gradient(90deg, #1C5A3E, #287151);
   animation: ads-v8-loading-slide 1.3s ease-in-out infinite;
 }
 

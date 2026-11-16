@@ -4,69 +4,51 @@
 
 /* Desktop module buttons only: preserve existing hit areas and the 8px gap. */
 .ads-rail-primary .ads-rail-button {
-  color: #C4D2E8;
+  color: #C4E8D8;
   transition: color .24s ease;
 }
 .ads-rail-primary .ads-rail-button::before {
   border: 1px solid rgba(255, 255, 255, .08);
   border-radius: 13px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, .07), rgba(255, 255, 255, .03)), #243348;
+  background: linear-gradient(180deg, rgba(255, 255, 255, .07), rgba(255, 255, 255, .03)), #244838;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, .04), 0 2px 5px rgba(0, 0, 0, .12);
   transition: transform .24s ease, border-color .24s ease, box-shadow .24s ease, filter .24s ease;
 }
 .ads-rail-primary .ads-rail-button > svg { display: block; fill: none; }
-.ads-rail-primary .ads-rail-button:not(.is-active):hover { color: #E1EBFF; }
+.ads-rail-primary .ads-rail-button:not(.is-active):hover { color: #E6FAF1; }
 .ads-rail-primary .ads-rail-button:not(.is-active):hover::before {
-  border-color: rgba(125, 190, 255, .32);
+  border-color: rgba(148, 232, 194, .32);
   filter: brightness(1.12);
   transform: translateY(-1px);
 }
-.ads-rail-primary .ads-rail-button.is-active { color: #F5FAFF; }
+.ads-rail-primary .ads-rail-button.is-active { color: #F7FDFA; }
 .ads-rail-primary .ads-rail-button.is-active::before {
-  border-color: rgba(125, 190, 255, .75);
-  background: radial-gradient(ellipse at 50% 0%, rgba(205, 241, 255, .22), transparent 65%), linear-gradient(145deg, #3E8BFF, #2F6BFF);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .22), inset 0 0 9px rgba(125, 211, 255, .14), 0 0 10px rgba(70, 140, 255, .28);
+  border-color: rgba(148, 232, 194, .75);
+  background: radial-gradient(ellipse at 50% 0%, rgba(214, 246, 232, .22), transparent 65%), linear-gradient(145deg, #60DDA5, #53DB9E);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .22), inset 0 0 9px rgba(148, 232, 194, .14), 0 0 10px rgba(102, 223, 169, .28);
   transform: none;
 }
 .ads-rail-primary .ads-rail-button.is-active:hover::before { filter: brightness(1.035); }
 .ads-rail-primary .ads-rail-button:focus-visible { outline: none; }
-.ads-rail-primary .ads-rail-button:focus-visible::before { outline: 2px solid #BDE7FF; outline-offset: 2px; }
+.ads-rail-primary .ads-rail-button:focus-visible::before { outline: 2px solid #C9F3E0; outline-offset: 2px; }
 @media (prefers-reduced-motion: reduce) {
   .ads-rail-primary .ads-rail-button,
   .ads-rail-primary .ads-rail-button::before { transition: none; }
   .ads-rail-primary .ads-rail-button:not(.is-active):hover::before { transform: none; }
 }
 
-/* Shared "Khám phá Control Hub" rail button — now occupies the slot that
-   used to show "v8"/Đổi phiên bản (see AdsCheckNavIcon, reused verbatim by
-   every module's own sidebar: ads-save-page.tsx's rail for Ads Check
-   Pro/Ads Save, and every AdsCheckProductShell-wrapped module — Dashboard/
-   Extended Payment/Billing/Notification/Account). nav-icon.png keeps its
-   own intrinsic color in both inactive/active state (no currentColor
-   recolor); the existing .ads-rail-button::before pill still handles
-   hover/active background as before. Sized larger than "typical" for this
-   44×36 footprint — deliberately more prominent than the plain icons below
-   it, now that it owns the slot — but object-fit:contain + the button's
-   own flex/place-items centering means it never clips or shifts the
-   button's own geometry. Animation lives ONLY on this <img>, never on
-   .ads-rail-button, so the rail/button never moves — continuous smooth
-   wiggle (no rest beat), same speed on hover (button's own ::before
-   hover/active pill still works as before, untouched). */
+/* Shared transparent Toolmeta symbol with a continuous, gentle sway. */
 .ads-rail-nav-icon {
-  height: 30px;
-  width: 30px;
+  display: block;
+  height: 32px;
+  width: 36px;
   flex-shrink: 0;
-  object-fit: contain;
-  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, .15));
   transform-origin: 50% 55%;
-  animation: ads-sidebar-nav-icon-wiggle 1.35s ease-in-out infinite;
+  animation: toolmeta-logo-sway 1.6s ease-in-out infinite;
 }
-@keyframes ads-sidebar-nav-icon-wiggle {
-  0% { transform: rotate(-5deg) translateY(0); }
-  25% { transform: rotate(4deg) translateY(-1px); }
-  50% { transform: rotate(-4deg) translateY(0); }
-  75% { transform: rotate(5deg) translateY(-1px); }
-  100% { transform: rotate(-5deg) translateY(0); }
+@keyframes toolmeta-logo-sway {
+  0%, 100% { transform: rotate(-7deg); }
+  50% { transform: rotate(7deg); }
 }
 @media (prefers-reduced-motion: reduce) {
   .ads-rail-nav-icon { animation: none; }
@@ -74,9 +56,9 @@
 .ads-main-panel{position:absolute;inset:8px 8px 8px 62px;border-radius:20px;background:radial-gradient(circle at 50% 55%,var(--cv-workspace-bg-1, #fff) 0,var(--cv-workspace-bg-2, #f7fff8) 35%,var(--cv-workspace-bg-3, #effaf1) 78%);color:#090b0a;overflow:auto}.ads-install-content{width:min(840px,calc(100% - 40px));min-height:100%;margin:0 auto;padding-top:25px;display:flex;flex-direction:column}.ads-install-heading{text-align:center}.ads-install-heading h1{margin:0;font-size:24px;line-height:28px;font-weight:500;letter-spacing:-.02em}.ads-install-heading p{margin:7px 0 0;color:rgba(0,0,0,.45);font-size:13px}.ads-install-cards{display:flex;justify-content:center;margin-top:62px}.ads-install-card{width:min(420px,100%);padding:40px;display:flex;flex-direction:column;border-radius:24px;background:#fff;box-shadow:0 16px 32px rgba(0,177,115,.06)}.ads-card-main{flex:1;display:flex;flex-direction:column;align-items:center;text-align:center}.ads-brand-logo-mark{display:inline-block;object-fit:contain;flex-shrink:0}.ads-install-hero-logo{width:52px;height:52px}.ads-install-card h2{margin:28px 0 0;font-size:18px;line-height:26px;font-weight:500}.ads-install-card p{max-width:320px;margin:7px 0 0;color:rgba(0,0,0,.47);font-size:14px;line-height:20px}.ads-install-card>button{width:100%;height:41px;flex:none;border:0;border-radius:999px;color:#fff;background:linear-gradient(90deg,var(--cv-cta-button-start, #2c872b),var(--cv-cta-button-end, #8add48));font-size:14px;font-weight:500;cursor:pointer;transition:transform .18s cubic-bezier(.2,.8,.2,1),filter .18s}.ads-install-card>button:hover{filter:saturate(1.08) brightness(1.03);transform:translateY(-1px)}.ads-install-card>button:active{transform:scale(.98)}.ads-install-card>button:disabled{background:rgba(0,0,0,.06);color:rgba(0,0,0,.4);cursor:not-allowed}.ads-retry-row{margin-top:auto;min-height:90px;display:flex;align-items:center;justify-content:center;gap:8px;color:rgba(0,0,0,.44);font-size:14px}.ads-retry-row button{height:33px;display:flex;align-items:center;gap:6px;padding:0 13px;border:1px solid var(--cv-outline-border, #75bb51);border-radius:999px;background:transparent;color:var(--cv-outline-text, #397d2a);cursor:pointer}.ads-retry-row button:disabled{opacity:.7}.is-spinning{animation:ads-spin .8s linear infinite}@keyframes ads-spin{to{transform:rotate(360deg)}}
 .ads-drawer-layer{display:none}.ads-toast{position:fixed;z-index:100;left:50%;bottom:22px;transform:translateX(-50%);max-width:min(420px,calc(100vw - 28px));padding:11px 16px;pointer-events:none;border:1px solid rgba(255,255,255,.16);border-radius:12px;background:var(--cv-toast-bg, #153421);color:#fff;box-shadow:0 14px 40px rgba(0,0,0,.3);font-size:13px}.ads-toast.is-success{background:var(--cv-toast-success-bg, #246c30)}
 @media(max-width:900px){.ads-install-content{width:min(760px,calc(100% - 30px))}.ads-install-card{padding:32px 24px}.ads-profile{display:none}}
-@media(max-width:767px){.ads-save-app{height:100dvh;min-height:844px;overflow:hidden;background:radial-gradient(circle at 75% 0,var(--cv-app-ambient-mobile, rgba(77,235,104,.32)),transparent 46%),var(--ads-dark)}.ads-topbar{height:42px;padding:8px 14px 0 12px}.ads-mobile-menu{width:34px;height:34px;display:grid;place-items:center;margin-right:10px;border:0;border-radius:50%;background:rgba(255,255,255,.14);color:#fff}.ads-brand strong{font-size:12px}.ads-brand small{font-size:8px}.ads-top-actions{margin-left:auto}.ads-profile{display:none}.ads-buy-button{width:34px;height:34px;padding:0;display:grid;place-items:center;background:#2563EB;color:#fff}.ads-buy-button span{display:none}.ads-workspace{height:calc(100dvh - 74px);min-height:770px;margin:8px 2px 24px;border-radius:18px;background:transparent;overflow:hidden}.ads-rail{display:none}.ads-main-panel{inset:0;border-radius:18px;background:radial-gradient(circle at 50% 55%,var(--cv-workspace-bg-1, #fff),var(--cv-workspace-bg-3, #effaf1) 76%);overflow:hidden}.ads-install-content{width:calc(100% - 30px);min-height:853px;margin-left:12px;margin-right:18px;padding-top:0}.ads-install-heading{height:84px}.ads-install-heading h1{height:48px;overflow:hidden;transform:translateY(-50px);font-size:16px}.ads-install-heading p{margin:-42px 0 0;font-size:13px}.ads-install-cards{display:flex;justify-content:center;margin-top:0}.ads-install-card{width:100%;padding:16px;border-radius:24px}.ads-install-hero-logo{width:44px;height:44px;margin-top:0}.ads-install-card h2{margin-top:26px;font-size:16px}.ads-install-card p{margin-top:5px;font-size:13px;line-height:19px}.ads-install-card>button{width:100%;height:41px}.ads-retry-row{min-height:72px;display:flex;flex-wrap:wrap}.ads-drawer-layer{position:fixed;z-index:70;inset:0;display:block;background:rgba(0,13,4,.58);backdrop-filter:blur(5px)}.ads-mobile-drawer{width:min(300px,84vw);height:100%;padding:16px;background:#F5F8FF;color:#16213A;box-shadow:20px 0 60px rgba(0,0,0,.26);animation:ads-drawer-in .22s ease-out}.ads-drawer-heading{height:48px;display:flex;align-items:center;justify-content:space-between;padding:0 4px 0 12px;font-weight:600}.ads-drawer-heading button{width:44px;height:44px;display:grid;place-items:center;border:0;border-radius:50%;background:#DBEAFE}.ads-mobile-drawer>button{width:100%;min-height:48px;display:flex;align-items:center;gap:12px;padding:0 14px;border:0;border-radius:12px;background:transparent;color:#1E293B;text-align:left}.ads-mobile-drawer>button.is-active{background:#DBEAFE;color:#1E40AF;font-weight:600}.ads-toast{bottom:14px}@keyframes ads-drawer-in{from{transform:translateX(-100%)}}}
+@media(max-width:767px){.ads-save-app{height:100dvh;min-height:844px;overflow:hidden;background:radial-gradient(circle at 75% 0,var(--cv-app-ambient-mobile, rgba(77,235,104,.32)),transparent 46%),var(--ads-dark)}.ads-topbar{height:42px;padding:8px 14px 0 12px}.ads-mobile-menu{width:34px;height:34px;display:grid;place-items:center;margin-right:10px;border:0;border-radius:50%;background:rgba(255,255,255,.14);color:#fff}.ads-brand strong{font-size:12px}.ads-brand small{font-size:8px}.ads-top-actions{margin-left:auto}.ads-profile{display:none}.ads-buy-button{width:34px;height:34px;padding:0;display:grid;place-items:center;background:#287151;color:#fff}.ads-buy-button span{display:none}.ads-workspace{height:calc(100dvh - 74px);min-height:770px;margin:8px 2px 24px;border-radius:18px;background:transparent;overflow:hidden}.ads-rail{display:none}.ads-main-panel{inset:0;border-radius:18px;background:radial-gradient(circle at 50% 55%,var(--cv-workspace-bg-1, #fff),var(--cv-workspace-bg-3, #effaf1) 76%);overflow:hidden}.ads-install-content{width:calc(100% - 30px);min-height:853px;margin-left:12px;margin-right:18px;padding-top:0}.ads-install-heading{height:84px}.ads-install-heading h1{height:48px;overflow:hidden;transform:translateY(-50px);font-size:16px}.ads-install-heading p{margin:-42px 0 0;font-size:13px}.ads-install-cards{display:flex;justify-content:center;margin-top:0}.ads-install-card{width:100%;padding:16px;border-radius:24px}.ads-install-hero-logo{width:44px;height:44px;margin-top:0}.ads-install-card h2{margin-top:26px;font-size:16px}.ads-install-card p{margin-top:5px;font-size:13px;line-height:19px}.ads-install-card>button{width:100%;height:41px}.ads-retry-row{min-height:72px;display:flex;flex-wrap:wrap}.ads-drawer-layer{position:fixed;z-index:70;inset:0;display:block;background:rgba(0,13,4,.58);backdrop-filter:blur(5px)}.ads-mobile-drawer{width:min(300px,84vw);height:100%;padding:16px;background:#F7FDFA;color:#163A2A;box-shadow:20px 0 60px rgba(0,0,0,.26);animation:ads-drawer-in .22s ease-out}.ads-drawer-heading{height:48px;display:flex;align-items:center;justify-content:space-between;padding:0 4px 0 12px;font-weight:600}.ads-drawer-heading button{width:44px;height:44px;display:grid;place-items:center;border:0;border-radius:50%;background:#E9F9EF}.ads-mobile-drawer>button{width:100%;min-height:48px;display:flex;align-items:center;gap:12px;padding:0 14px;border:0;border-radius:12px;background:transparent;color:#1E293B;text-align:left}.ads-mobile-drawer>button.is-active{background:#E9F9EF;color:#163B2C;font-weight:600}.ads-toast{bottom:14px}@keyframes ads-drawer-in{from{transform:translateX(-100%)}}}
 @media(prefers-reduced-motion:reduce){.ads-save-app *{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 .ads-install-card p{color:#656b67}.ads-install-card>button,.ads-download-link{width:100%;height:41px;display:flex;align-items:center;justify-content:center;flex:none;border:0;border-radius:999px;color:#fff;background:linear-gradient(90deg,var(--cv-cta-button-start, #2c872b),var(--cv-cta-button-end, #8add48));font-size:14px;font-weight:500;cursor:pointer;transition:transform .18s cubic-bezier(.2,.8,.2,1),filter .18s}.ads-install-card>button:hover,.ads-download-link:hover{filter:saturate(1.08) brightness(1.03);transform:translateY(-1px)}.ads-install-card>button:active,.ads-download-link:active{transform:scale(.98)}.ads-install-card>button:disabled{background:rgba(0,0,0,.06);color:rgba(0,0,0,.4);cursor:not-allowed}.ads-retry-row{color:#667069}.ads-retry-row button{color:var(--cv-outline-text, #397d2a)}
 .ads-install-heading p{color:#68716b}
-@media(max-width:767px){.ads-save-app{min-height:0}.ads-workspace{min-height:0}.ads-main-panel{overflow-y:auto}.ads-install-heading h1{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;transform:none}.ads-install-heading p{margin:20px 0 0}.ads-install-card{height:auto}.ads-install-card>button,.ads-download-link{width:100%;height:41px}.ads-mobile-drawer nav>button{width:100%;min-height:48px;display:flex;align-items:center;gap:12px;padding:0 14px;border:0;border-radius:12px;background:transparent;color:#1E293B;text-align:left}.ads-mobile-drawer nav>button.is-active{background:#DBEAFE;color:#1E40AF;font-weight:600}}
+@media(max-width:767px){.ads-save-app{min-height:0}.ads-workspace{min-height:0}.ads-main-panel{overflow-y:auto}.ads-install-heading h1{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;transform:none}.ads-install-heading p{margin:20px 0 0}.ads-install-card{height:auto}.ads-install-card>button,.ads-download-link{width:100%;height:41px}.ads-mobile-drawer nav>button{width:100%;min-height:48px;display:flex;align-items:center;gap:12px;padding:0 14px;border:0;border-radius:12px;background:transparent;color:#1E293B;text-align:left}.ads-mobile-drawer nav>button.is-active{background:#E9F9EF;color:#163B2C;font-weight:600}}
 @media(max-width:767px){.ads-main-panel{scrollbar-width:none}.ads-main-panel::-webkit-scrollbar{display:none}}

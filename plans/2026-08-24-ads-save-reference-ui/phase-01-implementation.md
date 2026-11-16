@@ -17,7 +17,7 @@
 
 - Add route-level lazy import before the shared shell routes.
 - Compose semantic header, navigation, main content, install cards, and promotion.
-- Use CSS variables scoped to `.ads-save-app` to avoid HRM token conflicts.
+- Use CSS variables scoped to `.ads-save-app` to avoid shared token conflicts.
 - Use local state for edition switch, mobile menu, promo dismissal, and toast feedback.
 
 ## Todo

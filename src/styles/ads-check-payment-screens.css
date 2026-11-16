@@ -5,11 +5,11 @@
   background:
     radial-gradient(circle at 90% 2%, rgba(45, 255, 133, .1), transparent 25%),
     linear-gradient(145deg, rgba(5, 35, 24, .98), rgba(3, 18, 14, .98));
-  --payment-green: var(--cv-brand-primary, #2563EB);
-  --payment-green-strong: var(--cv-brand-primary-hover, #1D4ED8);
+  --payment-green: var(--cv-brand-primary, #287151);
+  --payment-green-strong: var(--cv-brand-primary-hover, #1C5A3E);
   --payment-muted: #9ab9aa;
-  --payment-border: rgba(59, 130, 246, .14);
-  --payment-panel: rgba(11, 31, 58, .76);
+  --payment-border: rgba(40, 113, 81, .14);
+  --payment-panel: rgba(9, 46, 34, .76);
 }
 
 .ads-payment-heading,
@@ -31,7 +31,7 @@
 .ads-payment-settings-column { display: grid; gap: 18px; }
 .ads-payment-card,
 .ads-payment-preview-card,
-.ads-billing-summary { border: 1px solid var(--payment-border); border-radius: 18px; background: linear-gradient(145deg, rgba(11, 31, 58, .9), rgba(7, 20, 38, .82)); box-shadow: 0 14px 42px rgba(0, 0, 0, .18); }
+.ads-billing-summary { border: 1px solid var(--payment-border); border-radius: 18px; background: linear-gradient(145deg, rgba(9, 46, 34, .9), rgba(7, 31, 24, .82)); box-shadow: 0 14px 42px rgba(0, 0, 0, .18); }
 .ads-payment-card { padding: 21px; }
 .ads-payment-card-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
 .ads-payment-card-heading > div { display: flex; align-items: center; gap: 11px; }
@@ -142,17 +142,17 @@
 .ads-billing-panel { max-width: 1320px; margin: 0 auto; }
 .ads-billing-checkout-panel { max-width: 760px; }
 .ads-billing-checkout-card { padding: clamp(24px, 5vw, 46px); text-align: center; }
-.ads-billing-checkout-icon { width: 62px; height: 62px; margin: 0 auto 18px; display: grid; place-items: center; border: 1px solid rgba(37, 99, 235, .24); border-radius: 18px; color: var(--payment-green); background: rgba(37, 99, 235, .1); }
+.ads-billing-checkout-icon { width: 62px; height: 62px; margin: 0 auto 18px; display: grid; place-items: center; border: 1px solid rgba(40, 113, 81, .24); border-radius: 18px; color: var(--payment-green); background: rgba(40, 113, 81, .1); }
 .ads-billing-checkout-card h2 { margin: 10px 0 8px; font-size: clamp(25px, 3vw, 34px); letter-spacing: -.035em; }
 .ads-billing-checkout-card > p { max-width: 620px; margin: 0 auto; color: var(--payment-muted); font-size: 13px; line-height: 1.7; }
-.ads-billing-checkout-summary { margin: 26px 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); overflow: hidden; border: 1px solid #DBEAFE; border-radius: 13px; background: #F0F7FF; text-align: left; }
+.ads-billing-checkout-summary { margin: 26px 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); overflow: hidden; border: 1px solid #E9F9EF; border-radius: 13px; background: #F8FAF7; text-align: left; }
 .ads-billing-checkout-summary > span { min-width: 0; padding: 15px; }
 .ads-billing-checkout-summary > span + span { border-left: 1px solid var(--payment-border); }
 .ads-billing-checkout-summary strong,
 .ads-billing-checkout-summary small { display: block; }
 .ads-billing-checkout-summary strong { margin-bottom: 5px; color: #1E293B; font-size: 11px; }
 .ads-billing-checkout-summary small { color: #4f5f54; font-size: 10px; }
-.ads-billing-checkout-back { min-height: 42px; padding: 0 16px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; border: 1px solid #1D4ED8; border-radius: 10px; color: #fff; background: #1D4ED8; font: inherit; font-size: 12px; font-weight: 750; cursor: pointer; }
+.ads-billing-checkout-back { min-height: 42px; padding: 0 16px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; border: 1px solid #1C5A3E; border-radius: 10px; color: #fff; background: #1C5A3E; font: inherit; font-size: 12px; font-weight: 750; cursor: pointer; }
 .ads-billing-purchase-layout { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(300px, .62fr); gap: 22px; align-items: start; }
 .ads-billing-plan-builder { display: grid; gap: 18px; }
 .ads-billing-tier-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 17px; }
@@ -262,7 +262,7 @@
 .ads-payment-page button:focus-visible,
 .ads-payment-page select:focus-visible,
 .ads-payment-page input:focus-visible,
-.ads-payment-page textarea:focus-visible { outline: 3px solid var(--cv-brand-primary, #2563EB); outline-offset: 2px; box-shadow: 0 0 0 5px #fff; }
+.ads-payment-page textarea:focus-visible { outline: 3px solid var(--cv-brand-primary, #287151); outline-offset: 2px; box-shadow: 0 0 0 5px #fff; }
 
 @media (max-width: 1050px) {
   .ads-payment-layout,

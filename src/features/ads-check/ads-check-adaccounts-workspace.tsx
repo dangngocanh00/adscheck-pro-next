@@ -36,7 +36,6 @@ import { AdsProTkqcRunLogModal } from './ads-check-pro-tkqc-run-log-modal'
 import { AdsProTkqcHistoryModal } from './ads-check-pro-tkqc-history-modal'
 import { bmRowFixtures, type BmAdminRole, type BmRow } from './ads-check-pro-bm-data'
 import { AdsProBmResourcePanel, type BmResourceKind } from './ads-check-pro-bm-resource-panels'
-import { AdsCheckProNotificationRequiredModal } from './ads-check-pro-notification-required-modal'
 import { AdsCheckProControlHubCharterModal } from './ads-check-pro-control-hub-charter-modal'
 import { AdsCheckProControlHubSecurityModal } from './ads-check-pro-control-hub-security-modal'
 import { AdsCheckProControlHubPasswordModal } from './ads-check-pro-control-hub-password-modal'
@@ -146,15 +145,6 @@ export function AdsCheckAdAccountsWorkspace({ onAnnounce }: WorkspaceProps) {
   const [delayMs, setDelayMs] = useState(RUNNER_DELAY_MS_DEFAULT)
   const [functionOpen, setFunctionOpen] = useState(false)
   const [workflowOpen, setWorkflowOpen] = useState(false)
-  // Auto-opens once per genuine module entry — mount-only effect (empty
-  // deps), so it fires exactly once when this workspace component itself
-  // mounts (real Ads Check Pro entry/refresh) and never again from
-  // setActiveAsset alone (VIA/TKQC/BM/Page/Pixel switches are state changes
-  // inside this SAME mounted component, not a remount). Leaving/returning
-  // to Ads Check Pro unmounts+remounts this component (separate top-level
-  // route in app.tsx), so it naturally reopens then too.
-  const [notificationRequiredOpen, setNotificationRequiredOpen] = useState(false)
-  useEffect(() => { setNotificationRequiredOpen(true) }, [])
   // Workflow Mode is global (not per-asset) — production's own dO()/dV are a
   // single module-level ref shared across every asset's tool list, not a
   // per-tab setting. Lifted here since this component already owns every
@@ -1139,7 +1129,7 @@ export function AdsCheckAdAccountsWorkspace({ onAnnounce }: WorkspaceProps) {
         </linearGradient>
         <radialGradient id={surfaceId + "-notch-highlight"} cx="50%" cy="-20%" r="42%">
           <stop offset="0" stopColor="var(--cv-app-ambient, rgba(57, 178, 82, 0.24))" />
-          <stop offset="1" stopColor="var(--cv-app-ambient-transparent, rgba(59, 130, 246, 0))" />
+          <stop offset="1" stopColor="var(--cv-app-ambient-transparent, rgba(40, 113, 81, 0))" />
         </radialGradient>
       </defs>
       <rect x="0" y="0" width="100%" height="100%" fill={`url(#${surfaceId}-notch-fill)`} />
@@ -1389,7 +1379,6 @@ export function AdsCheckAdAccountsWorkspace({ onAnnounce }: WorkspaceProps) {
     {moveFolderOpen && <AdsProMoveFolderDialog folders={folders.via} counts={folderCounts} selectedCount={selectedIds.length} onClose={() => setMoveFolderOpen(false)} onConfirm={moveSelected} onCreate={createViaFolderForMove} />}
     {folderDeleteTarget && <AdsProConfirmDialog title={t("ui.d7a8b7c302")} description={t("ui.e8b9c8d403", { 0: folderDeleteTarget })} confirmLabel={t("ui.aa1d94fc16")} onConfirm={() => deleteFolder(folderDeleteTarget)} onClose={() => setFolderDeleteTarget(null)} />}
     {removeFolderConfirmOpen && <div className="ads-move-folder-layer" role="presentation"><section className="ads-remove-folder-dialog" role="alertdialog" aria-modal="true" aria-labelledby="ads-remove-folder-title"><h2 id="ads-remove-folder-title">{t("ui.98546e09a7")}</h2><p>{t("ui.a0d4114e39")}{" "}{selectedIds.length} {" "}{t("ui.293ac4c130")}{selectedFolder}”?</p><footer><button type="button" onClick={() => setRemoveFolderConfirmOpen(false)}>{t("ui.34ca764caf")}</button><button type="button" className="is-danger" onClick={removeSelectedFromFolder}>{t("ui.98546e09a7")}</button></footer></section></div>}
-    {notificationRequiredOpen && <AdsCheckProNotificationRequiredModal onClose={() => setNotificationRequiredOpen(false)} />}
     {/* Control Hub setup — Step 1 ("Tôn chỉ của Adscheck"). Closing it (X) just
         exits the flow with no trace — the "deferred" warning is Step 2's
         own concern (its content only makes sense once the user has

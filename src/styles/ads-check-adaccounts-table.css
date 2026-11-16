@@ -58,7 +58,7 @@
   z-index: 3;
   background: #fff;
 }
-.ads-pro-table tr.is-selected td.is-frozen { background: #EFF6FF; }
+.ads-pro-table tr.is-selected td.is-frozen { background: #F1FFDC; }
 /* BM Round 1 Final Correction #2 — checkbox is a PERMANENT frozen system
    column on all 5 tabs, left:0, never part of the configurable freeze
    mechanism above. Generalized here from a rule that used to be scoped to
@@ -74,8 +74,8 @@
   z-index: 4;
   background: #fff;
 }
-.ads-pro-table tr.is-selected td.is-sticky-checkbox { background: #EFF6FF; }
-.ads-pro-table tbody tr:hover:not(.is-selected) td.is-sticky-checkbox { background: #F0F7FF; }
+.ads-pro-table tr.is-selected td.is-sticky-checkbox { background: #F1FFDC; }
+.ads-pro-table tbody tr:hover:not(.is-selected) td.is-sticky-checkbox { background: #F8FAF7; }
 /* BM Round 1 Shared Rule #6 — the frozen/scrollable boundary shadow lives
    ONLY on the LAST frozen column (whichever one is currently closest to
    the scrollable region), not on every frozen cell's own right edge (the
@@ -92,8 +92,8 @@
    handle — same slot/sizing, just non-interactive and visually muted. */
 .ads-column-locked-handle { display: inline-flex; flex: none; color: #8b938d; }
 .ads-pro-table td { height: 42px; overflow: hidden; color: #151a16; text-overflow: ellipsis; white-space: nowrap; }
-.ads-pro-table tbody tr:hover:not(.is-selected) td { background: #F0F7FF; }
-.ads-pro-table tr.is-selected td { background: #EFF6FF; }
+.ads-pro-table tbody tr:hover:not(.is-selected) td { background: #F8FAF7; }
+.ads-pro-table tr.is-selected td { background: #F1FFDC; }
 .ads-pro-table th:first-child,
 .ads-pro-table td:first-child { width: 44px; text-align: center; }
 /* Shared Summary Geometry Correction — this `is-empty th:first-child:56px`
@@ -148,7 +148,7 @@
 .ads-pro-person i { width: 19px; height: 19px; flex: none; display: grid; place-items: center; border-radius: 50%; background: linear-gradient(135deg, #deebe0, #a8ceb0); color: #34533b; font-size: 8px; font-style: normal; }
 .ads-pro-history { display: flex; align-items: center; gap: 5px; }
 .ads-pro-history svg { flex: none; width: 11px; height: 11px; color: #8b938d; }
-.ads-pro-cell-action { min-width: 26px; min-height: 26px; display: inline-grid; place-items: center; border: 0; border-radius: 50%; background: #fff; color: #0a48ff; cursor: pointer; }
+.ads-pro-cell-action { min-width: 26px; min-height: 26px; display: inline-grid; place-items: center; border: 0; border-radius: 50%; background: #fff; color: #35D48C; cursor: pointer; }
 .ads-pro-cell-action svg { width: 13px; height: 13px; }
 .ads-pro-cell-action.is-tag { color: #2fcf54; }
 .ads-pro-cell-action.is-note { max-width: 138px; border-radius: 7px; }
@@ -190,7 +190,7 @@
 .ads-pro-selection-summary strong { color: #00a32e; font-weight: 700; }
 .ads-pro-selection-summary i { color: #778078; font-style: normal; font-weight: 500; }
 .ads-pro-selection-divider { width: 1px; height: 24px; flex: none; background: #e0e9e2; }
-.ads-pro-selection-bar button:hover { background: #EFF6FF; }
+.ads-pro-selection-bar button:hover { background: #F1FFDC; }
 
 .ads-move-folder-layer { position: fixed; z-index: 150; inset: 0; display: grid; place-items: center; padding: 18px; background: rgba(0, 24, 8, .45); backdrop-filter: blur(5px); }
 .ads-move-folder-dialog, .ads-remove-folder-dialog { width: min(520px, 100%); overflow: hidden; border: 1px solid #b9d9c0; border-radius: 24px; background: #fff; color: #1b281e; box-shadow: 0 28px 80px rgba(0, 28, 9, .28); }
@@ -204,7 +204,7 @@
 .ads-move-folder-list > button { width: 100%; min-height: 46px; padding: 0 12px; display: flex; align-items: center; gap: 10px; border: 1px solid transparent; border-radius: 12px; background: transparent; color: #354039; text-align: left; }
 .ads-move-folder-list > button span { flex: 1; }
 .ads-move-folder-list > button small { color: #8a948c; }
-.ads-move-folder-list > button.is-selected { border-color: var(--cv-brand-border, #BFDBFE); background: var(--cv-brand-soft, #EFF6FF); color: var(--cv-brand-primary-hover, #1D4ED8); }
+.ads-move-folder-list > button.is-selected { border-color: var(--cv-brand-border, #CCE5CE); background: var(--cv-brand-soft, #F1FFDC); color: var(--cv-brand-primary-hover, #1C5A3E); }
 .ads-move-folder-list > p { margin: 24px 0; color: #8a948c; text-align: center; }
 .ads-move-folder-create { min-height: 42px; margin: 4px 20px 12px; padding: 0 10px; display: inline-flex; align-items: center; gap: 7px; border: 0; background: transparent; color: #00a32e; font-weight: 600; }
 .ads-move-folder-create-inline { min-height: 42px; margin: 4px 20px 12px; padding: 4px 7px 4px 11px; display: flex; align-items: center; gap: 7px; border: 1px solid #9ed6aa; border-radius: 12px; background: #f4fbf5; color: #00a32e; }
@@ -249,11 +249,11 @@
 .ads-workflow-mode-dialog > header { padding: 16px 18px; display: flex; align-items: center; gap: 8px; flex: none; border-bottom: 1px solid #e2eee3; color: #258e38; }
 .ads-workflow-mode-dialog > header h2 { margin: 0; flex: 1; color: #1a271d; font-size: 14px; font-weight: 500; }
 .ads-workflow-mode-dialog-close { width: 30px; height: 30px; display: grid; place-items: center; border: 0; border-radius: 50%; background: transparent; color: #58625a; cursor: pointer; }
-.ads-workflow-mode-dialog-close:hover { background: #EFF6FF; }
+.ads-workflow-mode-dialog-close:hover { background: #F1FFDC; }
 .ads-workflow-mode-body { min-height: 0; padding: 16px 18px 4px; display: flex; gap: 16px; overflow-y: auto; }
 .ads-workflow-mode-options { flex: 1; min-width: 0; display: grid; gap: 10px; }
 .ads-workflow-mode-option { padding: 13px 14px; display: grid; gap: 6px; border: 1.5px solid #dce8de; border-radius: 16px; background: #fff; cursor: pointer; }
-.ads-workflow-mode-option.is-selected { border-color: var(--cv-brand-border, #BFDBFE); background: var(--cv-brand-soft, #EFF6FF); }
+.ads-workflow-mode-option.is-selected { border-color: var(--cv-brand-border, #CCE5CE); background: var(--cv-brand-soft, #F1FFDC); }
 .ads-workflow-mode-option > div { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
 .ads-workflow-mode-option-title { margin: 0; color: #1a271d; font-size: 13px; }
 .ads-workflow-mode-option.is-selected .ads-workflow-mode-option-title { font-weight: 600; }
@@ -310,5 +310,5 @@
   box-shadow: 0 1px 2px rgba(15, 60, 25, .08);
   cursor: pointer;
 }
-.ads-pixel-lazy-reveal:hover { color: var(--cv-brand-primary-hover, #1D4ED8); background: var(--cv-brand-soft, #EFF6FF); }
+.ads-pixel-lazy-reveal:hover { color: var(--cv-brand-primary-hover, #1C5A3E); background: var(--cv-brand-soft, #F1FFDC); }
 .ads-pixel-lazy-reveal:disabled { cursor: default; opacity: .8; }

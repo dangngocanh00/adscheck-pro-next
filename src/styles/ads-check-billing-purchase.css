@@ -9,8 +9,8 @@
    specific stacking constraint) — that shell rule is `.ads-save-app` in
    ads-save.css, using the exact same tokens:
      background:
-       radial-gradient(circle at 50% -20%, var(--cv-app-ambient, rgba(59,130,246,.20)), transparent 42%),
-       linear-gradient(135deg, var(--cv-app-bg-dark, #071426), var(--cv-app-bg-dark-2, #0B1F3A));
+       radial-gradient(circle at 50% -20%, var(--cv-app-ambient, rgba(40, 113, 81, .20)), transparent 42%),
+       linear-gradient(135deg, var(--cv-app-bg-dark, #071F18), var(--cv-app-bg-dark-2, #092E22));
    Billing has no SVG-stacking constraint, so it reuses that CSS declaration
    directly (same --cv-app-bg-dark/-2/--cv-app-ambient tokens Curve B's own
    notch layers use) — fully theme-aware, V1–V5, matching Ads Check Pro's
@@ -22,8 +22,8 @@
   padding: 8px;
   overflow: hidden;
   background:
-    radial-gradient(circle at 50% -20%, var(--cv-app-ambient, rgba(59, 130, 246, .20)), transparent 42%),
-    linear-gradient(135deg, var(--cv-app-bg-dark, #071426), var(--cv-app-bg-dark-2, #0B1F3A));
+    radial-gradient(circle at 50% -20%, var(--cv-app-ambient, rgba(40, 113, 81, .20)), transparent 42%),
+    linear-gradient(135deg, var(--cv-app-bg-dark, #071F18), var(--cv-app-bg-dark-2, #092E22));
   color: #111713;
   --purchase-line: #d7e5da;
 }
@@ -99,13 +99,13 @@
   mask-repeat: no-repeat, no-repeat;
   mask-composite: add;
 }
-.ads-billing-tabs > button:hover { background: linear-gradient(rgba(255, 255, 255, .14) 0%, rgba(255, 255, 255, .34) 100%); color: var(--cv-brand-hover-soft, #DBEAFE); }
+.ads-billing-tabs > button:hover { background: linear-gradient(rgba(255, 255, 255, .14) 0%, rgba(255, 255, 255, .34) 100%); color: var(--cv-brand-hover-soft, #E9F9EF); }
 .ads-billing-tabs > button:active { transform: translateY(-4px) scale(.97); }
-.ads-billing-tabs > button:focus-visible { outline: 3px solid var(--cv-brand-focus-soft, #DBEAFE); outline-offset: 2px; }
+.ads-billing-tabs > button:focus-visible { outline: 3px solid var(--cv-brand-focus-soft, #E9F9EF); outline-offset: 2px; }
 .ads-billing-tabs > button + button { margin-left: 7px; }
 .ads-billing-tabs > button.is-active {
   color: #fff;
-  background: linear-gradient(105deg, var(--cv-billing-tab-active-start, #1D4ED8), var(--cv-billing-tab-active-end, #2563EB));
+  background: linear-gradient(105deg, var(--cv-billing-tab-active-start, #1C5A3E), var(--cv-billing-tab-active-end, #287151));
   -webkit-backdrop-filter: none;
   backdrop-filter: none;
 }
@@ -122,12 +122,43 @@
    surface/rounded corners; an opaque background here would hide it. See
    ads-check-billing-workspace-surface.ts. */
 .ads-purchase-builder { min-width: 0; min-height: 0; padding: 86px 18px 28px; position: relative; display: grid; align-content: start; gap: 16px; overflow: auto; border: 0; border-radius: 16px; background: transparent; scrollbar-width: thin; scrollbar-color: #b8cdbd transparent; }
+/* Preserve the existing header space, but keep it outside the scrollport.
+   The remaining grid track is bounded by the workspace, not the content. */
+.ads-purchase-header-region,
+.ads-purchase-scroll-viewport { display: contents; }
+@media (min-width: 1051px) {
+  .ads-purchase-builder.is-purchase-scroll-shell {
+    height: 100%;
+    padding: 0;
+    gap: 0;
+    grid-template-rows: auto minmax(0, 1fr);
+    overflow: hidden;
+  }
+  .is-purchase-scroll-shell > .ads-purchase-header-region {
+    display: block;
+    position: relative;
+    min-height: 86px;
+  }
+  .is-purchase-scroll-shell > .ads-purchase-scroll-viewport {
+    display: grid;
+    align-content: start;
+    gap: 16px;
+    min-width: 0;
+    min-height: 0;
+    padding: 0 18px 28px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    overscroll-behavior-y: contain;
+    scrollbar-width: thin;
+    scrollbar-color: #b8cdbd transparent;
+  }
+}
 .ads-purchase-progress { height: 45px; position: absolute; z-index: 6; right: 20px; top: 4px; display: flex; align-items: center; gap: 10px; color: #65716a; font-size: 11px; }
 .ads-purchase-progress button { min-height: 36px; padding: 0 7px; display: inline-flex; align-items: center; gap: 7px; border: 0; border-radius: 9px; background: transparent; color: inherit; font-size: 11px; cursor: pointer; }
-.ads-purchase-progress button[aria-current='step'] { color: var(--cv-brand-primary-hover, #1D4ED8); font-weight: 650; }
-.ads-purchase-progress button[aria-current='step'] svg { width: 25px; height: 25px; padding: 5px; border-radius: 50%; color: #fff; background: var(--cv-brand-primary, #2563EB); }
-.ads-purchase-progress button.is-done { color: var(--cv-brand-primary-hover, #1D4ED8); font-weight: 650; }
-.ads-purchase-progress button.is-done svg { color: var(--cv-brand-primary, #2563EB); }
+.ads-purchase-progress button[aria-current='step'] { color: var(--cv-brand-primary-hover, #1C5A3E); font-weight: 650; }
+.ads-purchase-progress button[aria-current='step'] svg { width: 25px; height: 25px; padding: 5px; border-radius: 50%; color: #fff; background: var(--cv-brand-primary, #287151); }
+.ads-purchase-progress button.is-done { color: var(--cv-brand-primary-hover, #1C5A3E); font-weight: 650; }
+.ads-purchase-progress button.is-done svg { color: var(--cv-brand-primary, #287151); }
 .ads-purchase-progress button:disabled { cursor: not-allowed; opacity: .55; }
 .ads-purchase-progress > span { color: #9ba49e; }
 
@@ -135,26 +166,26 @@
    picker; ACB is the sole real option today, default-selected. */
 .ads-purchase-bank-step { padding: 22px; display: grid; gap: 16px; border: 1px solid #cadacc; border-radius: 18px; background: #fff; }
 .ads-purchase-bank-step > h2 { margin: 0; display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 700; }
-.ads-purchase-bank-step > h2 svg { color: var(--cv-brand-primary, #2563EB); }
+.ads-purchase-bank-step > h2 svg { color: var(--cv-brand-primary, #287151); }
 .ads-purchase-bank-list { display: grid; gap: 10px; }
 .ads-purchase-bank-row { min-height: 64px; padding: 0 20px; position: relative; display: flex; align-items: center; gap: 14px; border: 1.5px solid #e2e8e3; border-radius: 15px; background: #fff; cursor: pointer; }
-.ads-purchase-bank-row.is-selected { border-color: var(--cv-brand-primary, #2563EB); background: var(--cv-brand-soft, #EFF6FF); }
+.ads-purchase-bank-row.is-selected { border-color: var(--cv-brand-primary, #287151); background: var(--cv-brand-soft, #F1FFDC); }
 .ads-purchase-bank-row input { position: absolute; opacity: 0; }
 .ads-purchase-bank-mark { min-width: 44px; height: 28px; padding: 0 8px; display: grid; place-items: center; border-radius: 8px; background: #eef2ef; color: #273229; font-size: 13px; font-weight: 800; letter-spacing: .02em; }
-.ads-purchase-bank-row.is-selected .ads-purchase-bank-mark { background: var(--cv-brand-icon-badge-bg, #DBEAFE); color: var(--cv-brand-primary-hover, #1D4ED8); }
+.ads-purchase-bank-row.is-selected .ads-purchase-bank-mark { background: var(--cv-brand-icon-badge-bg, #E9F9EF); color: var(--cv-brand-primary-hover, #1C5A3E); }
 .ads-purchase-bank-divider { width: 1px; height: 26px; background: #e2e8e3; }
 .ads-purchase-bank-row > strong { min-width: 0; flex: 1; font-size: 13px; font-weight: 600; color: #202721; }
 .ads-purchase-bank-status { margin-left: auto; display: flex; align-items: center; gap: 8px; }
-.ads-purchase-bank-status small { color: var(--cv-brand-primary-hover, #1D4ED8); font-size: 11px; font-weight: 700; }
+.ads-purchase-bank-status small { color: var(--cv-brand-primary-hover, #1C5A3E); font-size: 11px; font-weight: 700; }
 .ads-purchase-bank-radio { width: 18px; height: 18px; flex: none; display: grid; place-items: center; border: 1.5px solid #c7d8cb; border-radius: 50%; background: #fff; }
-.ads-purchase-bank-row.is-selected .ads-purchase-bank-radio { border-color: var(--cv-brand-primary, #2563EB); }
-.ads-purchase-bank-row.is-selected .ads-purchase-bank-radio::before { content: ''; width: 10px; height: 10px; border-radius: 50%; background: var(--cv-brand-primary, #2563EB); }
-.ads-purchase-bank-row:focus-within { outline: 3px solid var(--cv-brand-focus-soft, #DBEAFE); outline-offset: 2px; }
+.ads-purchase-bank-row.is-selected .ads-purchase-bank-radio { border-color: var(--cv-brand-primary, #287151); }
+.ads-purchase-bank-row.is-selected .ads-purchase-bank-radio::before { content: ''; width: 10px; height: 10px; border-radius: 50%; background: var(--cv-brand-primary, #287151); }
+.ads-purchase-bank-row:focus-within { outline: 3px solid var(--cv-brand-focus-soft, #E9F9EF); outline-offset: 2px; }
 
 /* Step 3 — Thanh toán (QR / chuyển khoản + Lưu ý). */
 .ads-purchase-payment-section { padding: 22px; display: grid; gap: 16px; border: 1px solid #cadacc; border-radius: 18px; background: #fff; }
 .ads-purchase-payment-section > h2 { margin: 0; display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 700; }
-.ads-purchase-payment-section > h2 svg { color: var(--cv-brand-primary, #2563EB); }
+.ads-purchase-payment-section > h2 svg { color: var(--cv-brand-primary, #287151); }
 .ads-purchase-payment-grid { display: grid; grid-template-columns: minmax(200px, .8fr) minmax(280px, 1.35fr); gap: 20px; align-items: start; }
 .ads-purchase-payment-qr-col { padding: 18px; display: grid; justify-items: center; gap: 6px; border: 1px solid #e2e8e3; border-radius: 15px; background: #fafcfa; text-align: center; }
 .ads-purchase-payment-qr-col strong { margin-top: 6px; font-size: 12.5px; }
@@ -176,13 +207,13 @@
 .ads-purchase-transfer-card dd { margin: 0; display: flex; align-items: center; gap: 8px; font-size: 12.5px; font-weight: 600; color: #202721; }
 .ads-purchase-transfer-card dd button { width: 26px; height: 26px; flex: none; display: grid; place-items: center; border: 0; border-radius: 8px; background: #eef2ef; color: #445048; cursor: pointer; }
 .ads-purchase-transfer-card dd button:hover { background: #e2e8e3; }
-.ads-purchase-transfer-card div.is-emphasized dd { color: var(--cv-brand-primary-hover, #1D4ED8); font-weight: 700; }
-.ads-purchase-transfer-card div.is-emphasized dd button { color: var(--cv-brand-primary-hover, #1D4ED8); background: var(--cv-brand-icon-badge-bg, #DBEAFE); }
+.ads-purchase-transfer-card div.is-emphasized dd { color: var(--cv-brand-primary-hover, #1C5A3E); font-weight: 700; }
+.ads-purchase-transfer-card div.is-emphasized dd button { color: var(--cv-brand-primary-hover, #1C5A3E); background: var(--cv-brand-icon-badge-bg, #E9F9EF); }
 
 .ads-purchase-countdown-row { margin-top: 14px; padding-top: 14px; display: flex; align-items: center; justify-content: space-between; gap: 10px; border-top: 1px dashed #e2e8e3; flex-wrap: wrap; }
 .ads-purchase-countdown-row > span { color: #59645b; font-size: 11px; }
-.ads-purchase-countdown { display: flex; align-items: center; gap: 4px; color: var(--cv-brand-primary-hover, #1D4ED8); font-size: 12px; font-weight: 700; }
-.ads-purchase-countdown-pill { min-width: 28px; padding: 5px 7px; border-radius: 8px; background: var(--cv-brand-icon-badge-bg, #DBEAFE); text-align: center; font-variant-numeric: tabular-nums; }
+.ads-purchase-countdown { display: flex; align-items: center; gap: 4px; color: var(--cv-brand-primary-hover, #1C5A3E); font-size: 12px; font-weight: 700; }
+.ads-purchase-countdown-pill { min-width: 28px; padding: 5px 7px; border-radius: 8px; background: var(--cv-brand-icon-badge-bg, #E9F9EF); text-align: center; font-variant-numeric: tabular-nums; }
 
 .ads-purchase-payment-warning { margin: 0; padding: 12px 14px; display: flex; align-items: flex-start; gap: 8px; border-radius: 12px; background: #fff6e8; color: #8a5a06; font-size: 11.5px; line-height: 1.5; }
 .ads-purchase-payment-warning svg { flex: none; margin-top: 1px; color: #e8ad2f; }
@@ -214,10 +245,10 @@
 .ads-purchase-payment-result-detail > div:first-child { padding-top: 0; border-top: 0; }
 .ads-purchase-payment-result-detail dt { color: #59645b; font-size: 10.5px; }
 .ads-purchase-payment-result-detail dd { margin: 0; color: #202721; font-size: 11.5px; font-weight: 600; }
-.ads-purchase-step3-complete { width: 100%; min-height: 46px; margin-top: 10px; display: flex; align-items: center; justify-content: center; padding: 0 18px; border: 0; border-radius: 999px; background: var(--cv-brand-primary, #2563EB); color: #fff; font-size: 12px; font-weight: 750; white-space: nowrap; cursor: pointer; transition: background-color .15s ease; }
-.ads-purchase-step3-complete:hover { background: var(--cv-brand-primary-hover, #1D4ED8); }
-.ads-purchase-step3-complete:active { background: var(--cv-brand-primary-active, #1E40AF); }
-.ads-purchase-step3-complete:focus-visible { outline: 3px solid var(--cv-brand-focus-soft, #DBEAFE); outline-offset: 2px; }
+.ads-purchase-step3-complete { width: 100%; min-height: 46px; margin-top: 10px; display: flex; align-items: center; justify-content: center; padding: 0 18px; border: 0; border-radius: 999px; background: var(--cv-brand-primary, #287151); color: #fff; font-size: 12px; font-weight: 750; white-space: nowrap; cursor: pointer; transition: background-color .15s ease; }
+.ads-purchase-step3-complete:hover { background: var(--cv-brand-primary-hover, #1C5A3E); }
+.ads-purchase-step3-complete:active { background: var(--cv-brand-primary-active, #163B2C); }
+.ads-purchase-step3-complete:focus-visible { outline: 3px solid var(--cv-brand-focus-soft, #E9F9EF); outline-offset: 2px; }
 
 @media (max-width: 1050px) {
   .ads-purchase-payment-grid { grid-template-columns: 1fr; }
@@ -236,14 +267,14 @@
    of Priority's identity, just a gap; giving Priority its own gold value
    there (matching its already-established badge/copy gold) completes its
    identity instead of leaking Pro's brand into it. */
-.ads-purchase-tier-grid > button:not(.ads-purchase-tier-swap) { min-width: 0; min-height: 244px; padding: 25px 30px; position: relative; overflow: hidden; border: 1px solid #1D4ED8; border-radius: 18px; background: radial-gradient(circle at 80% 25%, rgba(59, 130, 246, .22), transparent 38%), linear-gradient(120deg, #0B1F3A, #071426); color: #fff; text-align: left; cursor: pointer; }
+.ads-purchase-tier-grid > button:not(.ads-purchase-tier-swap) { min-width: 0; min-height: 244px; padding: 25px 30px; position: relative; overflow: hidden; border: 1px solid #1C5A3E; border-radius: 18px; background: radial-gradient(circle at 80% 25%, rgba(40, 113, 81, .22), transparent 38%), linear-gradient(120deg, #092E22, #071F18); color: #fff; text-align: left; cursor: pointer; }
 .ads-purchase-tier-grid > button.is-priority { border-color: #866a1f; background: radial-gradient(circle at 80% 25%, rgba(255, 211, 66, .2), transparent 38%), linear-gradient(120deg, #4b3506, #1b1302); color: #fff1ae; }
 /* PA4 luminous fill: static light and depth, with stable border geometry. */
 .ads-purchase-tier-grid > button:not(.ads-purchase-tier-swap) {
-  --tier-selected-border: #40BFFF;
-  --tier-selected-glow: rgba(37, 160, 255, .35);
-  --tier-selected-inner: rgba(39, 194, 255, .14);
-  --tier-selected-fill: radial-gradient(circle at 70% 40%, rgba(39, 194, 255, .30), rgba(29, 124, 255, .22) 35%, rgba(7, 26, 58, .96) 75%), linear-gradient(120deg, #071A3A, #0B2B66 55%, #0E5BFF);
+  --tier-selected-border: #61DEA6;
+  --tier-selected-glow: rgba(75, 217, 153, .35);
+  --tier-selected-inner: rgba(77, 217, 154, .14);
+  --tier-selected-fill: radial-gradient(circle at 70% 40%, rgba(77, 217, 154, .30), rgba(69, 215, 149, .22) 35%, rgba(11, 54, 35, .96) 75%), linear-gradient(120deg, #0B3623, #145D3C 55%, #38D58E);
   transition: border-color .24s ease, box-shadow .24s ease, filter .24s ease, transform .24s ease;
 }
 .ads-purchase-tier-grid > button.is-priority {
@@ -272,18 +303,18 @@
   .ads-purchase-tier-grid > button:not(.ads-purchase-tier-swap) { transition: none; }
   .ads-purchase-tier-grid > button:not(.ads-purchase-tier-swap):not(.is-selected):hover { transform: none; }
 }
-.ads-purchase-tier-label { min-height: 32px; padding: 0 13px; position: absolute; left: 27px; top: 24px; display: inline-flex; align-items: center; border: 1px solid currentColor; border-radius: 999px; color: #60A5FA; font-size: 12px; font-weight: 700; }
+.ads-purchase-tier-label { min-height: 32px; padding: 0 13px; position: absolute; left: 27px; top: 24px; display: inline-flex; align-items: center; border: 1px solid currentColor; border-radius: 999px; color: #67C780; font-size: 12px; font-weight: 700; }
 .is-priority .ads-purchase-tier-label { color: #f4d46c; }
-.ads-purchase-selected-label { min-height: 34px; padding: 0 15px; position: absolute; z-index: 2; right: 13px; top: -2px; display: inline-flex; align-items: center; border-radius: 0 0 17px 17px; background: linear-gradient(115deg, #0F2F6B, #1D4ED8); color: #fff; font-size: 11px; font-weight: 700; }
+.ads-purchase-selected-label { min-height: 34px; padding: 0 15px; position: absolute; z-index: 2; right: 13px; top: -2px; display: inline-flex; align-items: center; border-radius: 0 0 17px 17px; background: linear-gradient(115deg, #156541, #1C5A3E); color: #fff; font-size: 11px; font-weight: 700; }
 .is-priority .ads-purchase-selected-label { background: linear-gradient(115deg, #EAB308, #FCD34D); color: #3f2d00; }
-.ads-purchase-tier-art { width: 255px; height: 290px; position: absolute; right: 15px; top: -28px; opacity: .9; filter: drop-shadow(0 0 18px rgba(59, 130, 246, .34)); transform: rotate(7deg); }
-.ads-purchase-tier-art i { position: absolute; display: block; border-radius: 8px; background: linear-gradient(145deg, #1D4ED8, #60A5FA 50%, #2563EB); box-shadow: inset 8px 6px 10px rgba(255, 255, 255, .28), inset -9px -8px 15px rgba(11, 31, 58, .32); transform: skew(-24deg); }
+.ads-purchase-tier-art { width: 255px; height: 290px; position: absolute; right: 15px; top: -28px; opacity: .9; filter: drop-shadow(0 0 18px rgba(40, 113, 81, .34)); transform: rotate(7deg); }
+.ads-purchase-tier-art i { position: absolute; display: block; border-radius: 8px; background: linear-gradient(145deg, #1C5A3E, #67C780 50%, #287151); box-shadow: inset 8px 6px 10px rgba(255, 255, 255, .28), inset -9px -8px 15px rgba(9, 46, 34, .32); transform: skew(-24deg); }
 .ads-purchase-tier-art i:first-child { width: 82px; height: 285px; left: 102px; top: -8px; }
 .ads-purchase-tier-art i:last-child { width: 190px; height: 78px; left: 22px; bottom: 37px; }
 .is-priority .ads-purchase-tier-art { filter: drop-shadow(0 0 18px rgba(255, 203, 36, .3)); opacity: .95; }
 .is-priority .ads-purchase-tier-art i { background: linear-gradient(145deg, #bc7d00, #ffe35c 51%, #c98900); box-shadow: inset 8px 6px 10px rgba(255, 255, 255, .34), inset -9px -8px 15px rgba(94, 48, 0, .33); }
 .ads-purchase-tier-copy { position: absolute; z-index: 2; left: 31px; bottom: 30px; display: grid; gap: 5px; }
-.ads-purchase-tier-copy strong { color: #60A5FA; font-size: 19px; }
+.ads-purchase-tier-copy strong { color: #67C780; font-size: 19px; }
 .is-priority .ads-purchase-tier-copy strong { color: #ffe486; }
 .ads-purchase-tier-copy small { color: rgba(255, 255, 255, .84); font-size: 13px; }
 .ads-purchase-tier-swap { width: 50px; height: 50px; position: absolute; z-index: 3; left: 50%; top: 50%; display: grid; place-items: center; border: 6px solid #fff; border-radius: 50%; background: #f8ca3f; color: #1b2b1e; cursor: pointer; transform: translate(-50%, -50%); box-shadow: 0 5px 16px rgba(54, 40, 0, .18); }
@@ -314,26 +345,26 @@
 .ads-purchase-bundle input:checked ~ .ads-purchase-checkbox,
 .ads-purchase-control-hub input:checked ~ .ads-purchase-checkbox,
 .ads-purchase-feature-card input:checked + .ads-purchase-checkbox,
-.ads-purchase-consent-agree input:checked + .ads-purchase-checkbox { border-color: var(--cv-purchase-checkbox-border, #2563EB); background: var(--cv-purchase-checkbox-bg, #3B82F6); color: #fff; }
+.ads-purchase-consent-agree input:checked + .ads-purchase-checkbox { border-color: var(--cv-purchase-checkbox-border, #287151); background: var(--cv-purchase-checkbox-bg, #287151); color: #fff; }
 .ads-purchase-bundle:focus-within,
 .ads-purchase-control-hub:focus-within,
 .ads-purchase-feature-card:focus-within,
-.ads-purchase-consent-agree:focus-within { outline: 3px solid var(--cv-brand-primary, #2563EB); outline-offset: 2px; box-shadow: 0 0 0 5px #fff; }
+.ads-purchase-consent-agree:focus-within { outline: 3px solid var(--cv-brand-primary, #287151); outline-offset: 2px; box-shadow: 0 0 0 5px #fff; }
 
-.ads-purchase-control-hub { min-height: 92px; padding: 0 18px 0 110px; border-color: var(--cv-purchase-card-border, #3B82F6); background: #fff; }
-.ads-purchase-control-hub.is-selected { box-shadow: inset 0 0 0 2px rgba(37, 99, 235, .13); }
-.ads-purchase-phone-art { width: 78px; height: 105px; position: absolute; left: 14px; bottom: 0; overflow: hidden; border: 6px solid #0B1F3A; border-bottom: 0; border-radius: 20px 20px 0 0; background: var(--cv-purchase-card-bg, #F0F7FF); transform: rotate(-5deg); }
-.ads-purchase-phone-art i { height: 7px; margin: 11px 8px 0; display: block; border-radius: 5px; background: #60A5FA; }
-.ads-purchase-phone-art i:first-child { height: 24px; margin-top: 7px; background: #2563EB; }
+.ads-purchase-control-hub { min-height: 92px; padding: 0 18px 0 110px; border-color: var(--cv-purchase-card-border, #287151); background: #fff; }
+.ads-purchase-control-hub.is-selected { box-shadow: inset 0 0 0 2px rgba(40, 113, 81, .13); }
+.ads-purchase-phone-art { width: 78px; height: 105px; position: absolute; left: 14px; bottom: 0; overflow: hidden; border: 6px solid #092E22; border-bottom: 0; border-radius: 20px 20px 0 0; background: var(--cv-purchase-card-bg, #F8FAF7); transform: rotate(-5deg); }
+.ads-purchase-phone-art i { height: 7px; margin: 11px 8px 0; display: block; border-radius: 5px; background: #67C780; }
+.ads-purchase-phone-art i:first-child { height: 24px; margin-top: 7px; background: #287151; }
 .ads-purchase-control-copy { min-width: 0; display: grid; gap: 8px; }
 .ads-purchase-control-copy strong { display: flex; align-items: center; gap: 7px; font-size: 15px; }
-.ads-purchase-control-copy strong > svg { color: var(--cv-purchase-accent, #2563EB); }
+.ads-purchase-control-copy strong > svg { color: var(--cv-purchase-accent, #287151); }
 /* "Đã dùng" — real status badge (semantic success), kept green per spec;
    everything else about this card (border/selection/icons/illustration
    above) is brand/interactive and follows the AdsMeta Blue system. */
 .ads-purchase-control-copy strong b { padding: 3px 8px; border-radius: 999px; background: #dcf5df; color: #076226; font-size: 10px; }
 .ads-purchase-control-copy small { display: flex; align-items: center; color: #39433b; font-size: 11px; }
-.ads-purchase-control-copy small svg { color: var(--cv-purchase-accent, #2563EB); }
+.ads-purchase-control-copy small svg { color: var(--cv-purchase-accent, #287151); }
 .ads-purchase-control-price { margin-left: auto; margin-right: 13px; display: flex; align-items: baseline; gap: 7px; white-space: nowrap; }
 .ads-purchase-control-price strong { font-size: 14px; }
 .ads-purchase-control-price s { color: #59625b; font-size: 11px; }
@@ -341,13 +372,13 @@
 
 .ads-purchase-feature-section { padding: 17px; border-radius: 18px; background: #fff; }
 .ads-purchase-feature-section > h2 { margin: 0 0 15px; display: flex; align-items: center; gap: 8px; font-size: 14px; }
-.ads-purchase-feature-section > h2 svg { color: var(--cv-purchase-section-icon, #2563EB); }
+.ads-purchase-feature-section > h2 svg { color: var(--cv-purchase-section-icon, #287151); }
 
 .ads-purchase-asset-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
 .ads-purchase-feature-card { min-width: 0; min-height: 208px; padding: 22px; position: relative; display: block; border-radius: 18px; background: #f7f7f7; color: #141a15; cursor: pointer; scroll-margin-top: 72px; }
-.ads-purchase-feature-card.is-selected { box-shadow: inset 0 0 0 2px var(--cv-purchase-card-border, #3B82F6); background: var(--cv-purchase-card-bg, #F0F7FF); }
+.ads-purchase-feature-card.is-selected { box-shadow: inset 0 0 0 2px var(--cv-purchase-card-border, #287151); background: var(--cv-purchase-card-bg, #F8FAF7); }
 .ads-purchase-feature-card > .ads-purchase-checkbox { position: absolute; right: 18px; top: 18px; }
-.ads-purchase-feature-icon { width: 34px; height: 34px; margin-bottom: 12px; display: grid; place-items: center; border-radius: 10px; color: var(--cv-purchase-accent, #2563EB); background: var(--cv-purchase-accent-icon-bg, #EFF6FF); }
+.ads-purchase-feature-icon { width: 34px; height: 34px; margin-bottom: 12px; display: grid; place-items: center; border-radius: 10px; color: var(--cv-purchase-accent, #287151); background: var(--cv-purchase-accent-icon-bg, #F1FFDC); }
 .ads-purchase-feature-card > strong { min-height: 20px; display: block; padding-right: 26px; font-size: 14px; font-weight: 650; }
 .ads-purchase-feature-card > div { min-height: 29px; margin-top: 10px; display: flex; align-items: baseline; gap: 6px; white-space: nowrap; }
 .ads-purchase-feature-card > div b { font-size: 18px; font-weight: 750; }
@@ -359,8 +390,8 @@
 
 .ads-purchase-feature-rows { display: grid; gap: 8px; }
 .ads-purchase-feature-row { min-height: 52px; padding: 0 16px; position: relative; display: flex; align-items: center; gap: 10px; border-radius: 13px; background: #f7f7f7; color: #141a15; cursor: pointer; }
-.ads-purchase-feature-row.is-selected { box-shadow: inset 0 0 0 2px var(--cv-purchase-card-border, #3B82F6); background: var(--cv-purchase-card-bg, #F0F7FF); }
-.ads-purchase-feature-row-icon { width: 26px; height: 26px; flex: none; display: grid; place-items: center; border-radius: 8px; color: var(--cv-purchase-accent, #2563EB); background: var(--cv-purchase-accent-icon-bg, #EFF6FF); }
+.ads-purchase-feature-row.is-selected { box-shadow: inset 0 0 0 2px var(--cv-purchase-card-border, #287151); background: var(--cv-purchase-card-bg, #F8FAF7); }
+.ads-purchase-feature-row-icon { width: 26px; height: 26px; flex: none; display: grid; place-items: center; border-radius: 8px; color: var(--cv-purchase-accent, #287151); background: var(--cv-purchase-accent-icon-bg, #F1FFDC); }
 .ads-purchase-feature-row > strong { min-width: 0; flex: 1; font-size: 12px; font-weight: 600; }
 .ads-purchase-feature-row-price { margin-left: auto; display: flex; align-items: baseline; gap: 5px; white-space: nowrap; }
 .ads-purchase-feature-row-price b { font-size: 13px; font-weight: 700; }
@@ -374,21 +405,21 @@
 
 .ads-purchase-session-heading { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 15px; }
 .ads-purchase-session-heading > h2 { margin: 0; }
-.ads-purchase-session-gift { padding: 7px 12px; display: inline-flex; align-items: center; gap: 6px; border-radius: 999px; color: var(--cv-purchase-accent, #2563EB); background: var(--cv-purchase-accent-icon-bg, #EFF6FF); font-size: 11px; font-weight: 600; }
+.ads-purchase-session-gift { padding: 7px 12px; display: inline-flex; align-items: center; gap: 6px; border-radius: 999px; color: var(--cv-purchase-accent, #287151); background: var(--cv-purchase-accent-icon-bg, #F1FFDC); font-size: 11px; font-weight: 600; }
 .ads-purchase-session-options { display: flex; flex-wrap: wrap; gap: 10px; }
 .ads-purchase-session-options button { min-width: 140px; flex: 1; padding: 12px 14px; display: grid; gap: 4px; border: 1px solid #e2e8e3; border-radius: 13px; background: #f7f7f7; color: #141a15; text-align: left; cursor: pointer; }
 .ads-purchase-session-options button > i { width: 15px; height: 15px; display: block; border: 1px solid #c7d8cb; border-radius: 50%; background: #fff; }
 .ads-purchase-session-options button strong { font-size: 12px; font-weight: 600; }
 .ads-purchase-session-options button small { color: #59645b; font-size: 10px; }
-.ads-purchase-session-options button.is-selected { border-color: var(--cv-purchase-card-border, #3B82F6); background: var(--cv-purchase-card-bg, #F0F7FF); }
-.ads-purchase-session-options button.is-selected > i { border-color: var(--cv-purchase-accent, #2563EB); background: var(--cv-purchase-accent, #2563EB); box-shadow: inset 0 0 0 3px #fff; }
-.ads-purchase-session-options button.is-selected strong { color: var(--cv-purchase-accent, #2563EB); }
+.ads-purchase-session-options button.is-selected { border-color: var(--cv-purchase-card-border, #287151); background: var(--cv-purchase-card-bg, #F8FAF7); }
+.ads-purchase-session-options button.is-selected > i { border-color: var(--cv-purchase-accent, #287151); background: var(--cv-purchase-accent, #287151); box-shadow: inset 0 0 0 3px #fff; }
+.ads-purchase-session-options button.is-selected strong { color: var(--cv-purchase-accent, #287151); }
 
 .ads-purchase-builder-status { min-height: 16px; color: #5b7761; font-size: 10px; }
 
-.ads-purchase-summary { min-width: 0; min-height: 0; height: 100%; padding: 0 22px 24px; overflow: auto; border: 1px solid #cadacc; border-radius: 16px; background: var(--cv-brand-subtle, #F0F7FF); scrollbar-width: thin; scrollbar-color: #b8cdbd transparent; }
+.ads-purchase-summary { min-width: 0; min-height: 0; height: 100%; padding: 0 22px 24px; overflow: auto; border: 1px solid #cadacc; border-radius: 16px; background: var(--cv-brand-subtle, #F8FAF7); scrollbar-width: thin; scrollbar-color: #b8cdbd transparent; }
 .ads-purchase-summary > header { height: 64px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid var(--purchase-line); }
-.ads-purchase-summary > header svg { color: var(--cv-purchase-accent, #2563EB); }
+.ads-purchase-summary > header svg { color: var(--cv-purchase-accent, #287151); }
 .ads-purchase-summary > header h2 { margin: 0; font-size: 16px; }
 .ads-purchase-summary-card,
 .ads-purchase-summary-section,
@@ -400,34 +431,34 @@
 .ads-purchase-summary-count strong i { color: #59645b; font-size: 10px; font-style: normal; font-weight: 400; }
 .ads-purchase-summary-count small { color: #69736c; font-size: 10px; }
 .ads-purchase-summary-product { min-height: 52px; padding-top: 14px; display: flex; align-items: center; gap: 10px; }
-.ads-purchase-summary-product > svg { color: var(--cv-purchase-accent, #2563EB); }
+.ads-purchase-summary-product > svg { color: var(--cv-purchase-accent, #287151); }
 .ads-purchase-summary-product span { display: grid; gap: 3px; }
 .ads-purchase-summary-product strong { font-size: 12px; }
 .ads-purchase-summary-product small { color: #59645b; font-size: 10px; }
 .ads-purchase-duration { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
 .ads-purchase-duration button { min-height: 44px; padding: 0 8px; border: 1px solid transparent; border-radius: 999px; background: #f4f4f4; color: #1c231e; font-size: 11px; font-weight: 600; cursor: pointer; }
-.ads-purchase-duration button.is-selected { border-color: var(--cv-purchase-duration-border, #3B82F6); background: var(--cv-purchase-duration-bg, #F0F7FF); }
-.ads-purchase-duration button:hover:not(.is-selected) { border-color: var(--cv-brand-border, #BFDBFE); background: var(--cv-brand-subtle, #F0F7FF); }
-.ads-purchase-duration button:focus-visible { outline: 3px solid var(--cv-brand-focus-soft, #DBEAFE); outline-offset: 2px; }
+.ads-purchase-duration button.is-selected { border-color: var(--cv-purchase-duration-border, #287151); background: var(--cv-purchase-duration-bg, #F8FAF7); }
+.ads-purchase-duration button:hover:not(.is-selected) { border-color: var(--cv-brand-border, #CCE5CE); background: var(--cv-brand-subtle, #F8FAF7); }
+.ads-purchase-duration button:focus-visible { outline: 3px solid var(--cv-brand-focus-soft, #E9F9EF); outline-offset: 2px; }
 .ads-purchase-daily-cost { margin: 10px 0 0; color: #5a6b60; font-size: 10.5px; line-height: 1.5; }
 .ads-purchase-daily-cost b { color: #202721; font-weight: 700; }
 .ads-purchase-coupon-section { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 9px; }
-.ads-purchase-coupon { min-width: 0; min-height: 45px; padding: 0 13px; display: flex; align-items: center; gap: 8px; border-radius: 999px; background: #f4f4f4; color: var(--cv-purchase-accent, #2563EB); }
-.ads-purchase-coupon:focus-within { outline: 3px solid var(--cv-brand-focus-soft, #DBEAFE); outline-offset: 2px; }
+.ads-purchase-coupon { min-width: 0; min-height: 45px; padding: 0 13px; display: flex; align-items: center; gap: 8px; border-radius: 999px; background: #f4f4f4; color: var(--cv-purchase-accent, #287151); }
+.ads-purchase-coupon:focus-within { outline: 3px solid var(--cv-brand-focus-soft, #E9F9EF); outline-offset: 2px; }
 .ads-purchase-coupon input { min-width: 0; width: 100%; border: 0; outline: 0; background: transparent; color: #202721; font-size: 12px; }
-.ads-purchase-coupon-section > button { min-height: 45px; padding: 0 18px; border: 0; border-radius: 999px; background: var(--cv-brand-soft, #EFF6FF); color: var(--cv-brand-primary-hover, #1D4ED8); font-size: 11px; font-weight: 650; cursor: pointer; transition: background-color .15s ease; }
-.ads-purchase-coupon-section > button:hover { background: var(--cv-brand-soft-strong, #DBEAFE); }
-.ads-purchase-coupon-section > button:focus-visible { outline: 3px solid var(--cv-brand-focus-soft, #DBEAFE); outline-offset: 2px; }
+.ads-purchase-coupon-section > button { min-height: 45px; padding: 0 18px; border: 0; border-radius: 999px; background: var(--cv-brand-soft, #F1FFDC); color: var(--cv-brand-primary-hover, #1C5A3E); font-size: 11px; font-weight: 650; cursor: pointer; transition: background-color .15s ease; }
+.ads-purchase-coupon-section > button:hover { background: var(--cv-brand-soft-strong, #E9F9EF); }
+.ads-purchase-coupon-section > button:focus-visible { outline: 3px solid var(--cv-brand-focus-soft, #E9F9EF); outline-offset: 2px; }
 .ads-purchase-coupon-status { min-height: 14px; grid-column: 1 / -1; color: #5f6c62; font-size: 9px; }
 .ads-purchase-total-card > div { display: flex; align-items: center; justify-content: space-between; min-height: 40px; font-size: 12px; }
 .ads-purchase-total-card > div strong { font-size: 12px; }
 .ads-purchase-payable { margin-top: 10px; padding-top: 10px; border-top: 1px dashed #d8e4da; }
 .ads-purchase-payable span,
 .ads-purchase-payable strong { font-size: 16px !important; font-weight: 700; }
-.ads-purchase-total-card > button { width: 100%; min-height: 46px; margin-top: 8px; display: flex; align-items: center; justify-content: center; gap: 7px; border: 0; border-radius: 999px; background: var(--cv-brand-primary, #2563EB); color: #fff; font-size: 12px; font-weight: 750; cursor: pointer; transition: background-color .15s ease; }
-.ads-purchase-total-card > button:hover:not(:disabled) { background: var(--cv-brand-primary-hover, #1D4ED8); }
-.ads-purchase-total-card > button:active:not(:disabled) { background: var(--cv-brand-primary-active, #1E40AF); }
-.ads-purchase-total-card > button:focus-visible { outline: 3px solid var(--cv-brand-focus-soft, #DBEAFE); outline-offset: 2px; }
+.ads-purchase-total-card > button { width: 100%; min-height: 46px; margin-top: 8px; display: flex; align-items: center; justify-content: center; gap: 7px; border: 0; border-radius: 999px; background: var(--cv-brand-primary, #287151); color: #fff; font-size: 12px; font-weight: 750; cursor: pointer; transition: background-color .15s ease; }
+.ads-purchase-total-card > button:hover:not(:disabled) { background: var(--cv-brand-primary-hover, #1C5A3E); }
+.ads-purchase-total-card > button:active:not(:disabled) { background: var(--cv-brand-primary-active, #163B2C); }
+.ads-purchase-total-card > button:focus-visible { outline: 3px solid var(--cv-brand-focus-soft, #E9F9EF); outline-offset: 2px; }
 .ads-purchase-total-card > button:disabled { opacity: .55; cursor: not-allowed; }
 
 /* Step 2 footer — Quay lại (secondary) + Tiến hành thanh toán (primary),
@@ -443,15 +474,15 @@
 .ads-purchase-step2-actions .is-secondary:hover,
 .ads-purchase-step3-actions .is-secondary:hover { background: #e5ede7; }
 .ads-purchase-step2-actions .is-primary,
-.ads-purchase-step3-actions .is-primary { background: var(--cv-brand-primary, #2563EB); color: #fff; }
+.ads-purchase-step3-actions .is-primary { background: var(--cv-brand-primary, #287151); color: #fff; }
 .ads-purchase-step2-actions .is-primary:hover:not(:disabled),
-.ads-purchase-step3-actions .is-primary:hover:not(:disabled) { background: var(--cv-brand-primary-hover, #1D4ED8); }
+.ads-purchase-step3-actions .is-primary:hover:not(:disabled) { background: var(--cv-brand-primary-hover, #1C5A3E); }
 .ads-purchase-step2-actions .is-primary:active:not(:disabled),
-.ads-purchase-step3-actions .is-primary:active:not(:disabled) { background: var(--cv-brand-primary-active, #1E40AF); }
+.ads-purchase-step3-actions .is-primary:active:not(:disabled) { background: var(--cv-brand-primary-active, #163B2C); }
 .ads-purchase-step2-actions .is-primary:focus-visible,
 .ads-purchase-step2-actions .is-secondary:focus-visible,
 .ads-purchase-step3-actions .is-primary:focus-visible,
-.ads-purchase-step3-actions .is-secondary:focus-visible { outline: 3px solid var(--cv-brand-focus-soft, #DBEAFE); outline-offset: 2px; }
+.ads-purchase-step3-actions .is-secondary:focus-visible { outline: 3px solid var(--cv-brand-focus-soft, #E9F9EF); outline-offset: 2px; }
 .ads-purchase-step2-actions .is-primary:disabled,
 .ads-purchase-step3-actions .is-primary:disabled { opacity: .55; cursor: not-allowed; }
 
@@ -477,20 +508,20 @@
   color: #17281b;
 }
 .ads-purchase-consent-close { width: 30px; height: 30px; position: absolute; right: 14px; top: 14px; display: grid; place-items: center; border: 0; border-radius: 50%; background: #f1f6f2; color: #445048; cursor: pointer; }
-.ads-purchase-consent-illustration { width: 60px; height: 60px; margin-bottom: 6px; position: relative; display: grid; place-items: center; border-radius: 50%; background: var(--cv-brand-icon-badge-bg, #DBEAFE); color: var(--cv-brand-primary-hover, #1D4ED8); }
+.ads-purchase-consent-illustration { width: 60px; height: 60px; margin-bottom: 6px; position: relative; display: grid; place-items: center; border-radius: 50%; background: var(--cv-brand-icon-badge-bg, #E9F9EF); color: var(--cv-brand-primary-hover, #1C5A3E); }
 .ads-purchase-consent-illustration-badge { width: 22px; height: 22px; position: absolute; right: -4px; bottom: -4px; display: grid; place-items: center; border: 2px solid #fff; border-radius: 50%; background: #f7a828; color: #fff; }
 .ads-purchase-consent-modal h2 { margin: 4px 0 0; font-size: 17px; font-weight: 700; }
 .ads-purchase-consent-body { margin-top: 12px; display: grid; gap: 10px; text-align: left; }
 .ads-purchase-consent-body p { margin: 0; color: #4a564d; font-size: 12.5px; line-height: 1.6; }
 .ads-purchase-consent-agree { width: 100%; min-height: 20px; margin-top: 16px; padding: 2px 0; position: relative; display: flex; align-items: center; gap: 9px; cursor: pointer; }
 .ads-purchase-consent-agree span { color: #202721; font-size: 12.5px; font-weight: 550; text-align: left; }
-.ads-purchase-consent-continue { width: 100%; min-height: 46px; margin-top: 16px; display: flex; align-items: center; justify-content: center; border: 0; border-radius: 999px; background: var(--cv-brand-primary, #2563EB); color: #fff; font-size: 13px; font-weight: 700; cursor: pointer; transition: background-color .15s ease; }
-.ads-purchase-consent-continue:hover:not(:disabled) { background: var(--cv-brand-primary-hover, #1D4ED8); }
-.ads-purchase-consent-continue:active:not(:disabled) { background: var(--cv-brand-primary-active, #1E40AF); }
-.ads-purchase-consent-continue:focus-visible { outline: 3px solid var(--cv-brand-focus-soft, #DBEAFE); outline-offset: 2px; }
+.ads-purchase-consent-continue { width: 100%; min-height: 46px; margin-top: 16px; display: flex; align-items: center; justify-content: center; border: 0; border-radius: 999px; background: var(--cv-brand-primary, #287151); color: #fff; font-size: 13px; font-weight: 700; cursor: pointer; transition: background-color .15s ease; }
+.ads-purchase-consent-continue:hover:not(:disabled) { background: var(--cv-brand-primary-hover, #1C5A3E); }
+.ads-purchase-consent-continue:active:not(:disabled) { background: var(--cv-brand-primary-active, #163B2C); }
+.ads-purchase-consent-continue:focus-visible { outline: 3px solid var(--cv-brand-focus-soft, #E9F9EF); outline-offset: 2px; }
 .ads-purchase-consent-continue:disabled { opacity: .5; cursor: not-allowed; }
 .ads-purchase-consent-terms { margin: 12px 0 0; color: #6b756e; font-size: 10.5px; line-height: 1.5; }
-.ads-purchase-consent-link { color: var(--cv-brand-primary-hover, #1D4ED8); font-weight: 600; text-decoration: underline; text-underline-offset: 2px; }
+.ads-purchase-consent-link { color: var(--cv-brand-primary-hover, #1C5A3E); font-weight: 600; text-decoration: underline; text-underline-offset: 2px; }
 
 /* Step 2 → Step 3 domestic-bank-transfer acknowledgement (Modal 2) —
    deliberately more compact than the Modal 1 consent dialog above.
@@ -503,7 +534,7 @@
   display: flex;
   flex-direction: column;
   gap: 14px;
-  border: 1.5px solid var(--cv-brand-primary, #2563EB);
+  border: 1.5px solid var(--cv-brand-primary, #287151);
   border-radius: 20px;
   background: #fff;
   box-shadow: 0 30px 80px rgba(0, 0, 0, .3);
@@ -514,15 +545,15 @@
 .ads-purchase-bank-warning-header h2 { margin: 0; font-size: 16px; font-weight: 700; color: #17281b; }
 .ads-purchase-bank-warning-list { margin: 0; padding: 0; display: grid; gap: 10px; list-style: none; }
 .ads-purchase-bank-warning-list li { display: flex; align-items: flex-start; gap: 10px; }
-.ads-purchase-bank-warning-index { width: 20px; height: 20px; flex: none; display: grid; place-items: center; border-radius: 50%; background: var(--cv-brand-primary, #2563EB); color: #fff; font-size: 11px; font-weight: 700; }
+.ads-purchase-bank-warning-index { width: 20px; height: 20px; flex: none; display: grid; place-items: center; border-radius: 50%; background: var(--cv-brand-primary, #287151); color: #fff; font-size: 11px; font-weight: 700; }
 .ads-purchase-bank-warning-list p { margin: 1px 0 0; color: #3d4a41; font-size: 12.5px; line-height: 1.5; }
-.ads-purchase-bank-warning-confirm { width: 100%; min-height: 46px; margin-top: 4px; border: 0; border-radius: 999px; background: var(--cv-brand-primary, #2563EB); color: #fff; font-size: 12.5px; font-weight: 700; cursor: pointer; transition: background-color .15s ease; }
-.ads-purchase-bank-warning-confirm:hover { background: var(--cv-brand-primary-hover, #1D4ED8); }
-.ads-purchase-bank-warning-confirm:active { background: var(--cv-brand-primary-active, #1E40AF); }
-.ads-purchase-bank-warning-confirm:focus-visible { outline: 3px solid var(--cv-brand-focus-soft, #DBEAFE); outline-offset: 2px; }
+.ads-purchase-bank-warning-confirm { width: 100%; min-height: 46px; margin-top: 4px; border: 0; border-radius: 999px; background: var(--cv-brand-primary, #287151); color: #fff; font-size: 12.5px; font-weight: 700; cursor: pointer; transition: background-color .15s ease; }
+.ads-purchase-bank-warning-confirm:hover { background: var(--cv-brand-primary-hover, #1C5A3E); }
+.ads-purchase-bank-warning-confirm:active { background: var(--cv-brand-primary-active, #163B2C); }
+.ads-purchase-bank-warning-confirm:focus-visible { outline: 3px solid var(--cv-brand-focus-soft, #E9F9EF); outline-offset: 2px; }
 .ads-purchase-bank-warning-close { width: 100%; min-height: 44px; border: 0; border-radius: 999px; background: #f1f6f2; color: #445048; font-size: 12.5px; font-weight: 600; cursor: pointer; }
 .ads-purchase-bank-warning-close:hover { background: #e5ede7; }
-.ads-purchase-bank-warning-close:focus-visible { outline: 3px solid var(--cv-brand-focus-soft, #DBEAFE); outline-offset: 2px; }
+.ads-purchase-bank-warning-close:focus-visible { outline: 3px solid var(--cv-brand-focus-soft, #E9F9EF); outline-offset: 2px; }
 
 /* Modal 3 — Lưu ý khi tiến hành thanh toán. Reuses the illustration
    (.ads-purchase-consent-illustration) and Modal 2's numbered-list /
@@ -620,10 +651,10 @@
    ("Đang dùng") and .ads-billing-session-list article > span.is-current
    ("Phiên hiện tại") — both are real status indicators (semantic success),
    not brand actions, so they keep their existing green regardless of version. */
-.ads-payment-step { border-color: var(--cv-brand-border, rgba(59, 130, 246, .18)); color: var(--cv-brand-primary-hover, #1D4ED8); background: var(--cv-brand-icon-badge-bg, #DBEAFE); }
-.ads-billing-add-session { border-color: var(--cv-brand-border, #BFDBFE); color: var(--cv-brand-primary-hover, #1D4ED8); background: var(--cv-brand-icon-badge-bg, #DBEAFE); }
-.ads-billing-add-session:hover { background: var(--cv-brand-soft, #EFF6FF); }
-.ads-billing-add-session:focus-visible { outline: 3px solid var(--cv-brand-focus-soft, #DBEAFE); outline-offset: 2px; }
+.ads-payment-step { border-color: var(--cv-brand-border, rgba(40, 113, 81, .18)); color: var(--cv-brand-primary-hover, #1C5A3E); background: var(--cv-brand-icon-badge-bg, #E9F9EF); }
+.ads-billing-add-session { border-color: var(--cv-brand-border, #CCE5CE); color: var(--cv-brand-primary-hover, #1C5A3E); background: var(--cv-brand-icon-badge-bg, #E9F9EF); }
+.ads-billing-add-session:hover { background: var(--cv-brand-soft, #F1FFDC); }
+.ads-billing-add-session:focus-visible { outline: 3px solid var(--cv-brand-focus-soft, #E9F9EF); outline-offset: 2px; }
 
 /* Quản lý gói cước — visual refinement pass (LEFT feature cards + toolbar,
    RIGHT session summary/toolbar/bulk-select/list). Replaces the earlier,
@@ -650,7 +681,7 @@
 .ads-billing-giftcode-trigger,
 .ads-billing-plan-search { min-height: 32px; padding: 0 9px; display: flex; align-items: center; gap: 6px; border: 1px solid #dbe5dc; border-radius: 999px; background: #fff; color: #5f6c62; }
 .ads-billing-giftcode-trigger { flex: none; font-size: 11.5px; font-weight: 600; cursor: pointer; white-space: nowrap; }
-.ads-billing-giftcode-trigger:hover { background: var(--cv-brand-soft, #EFF6FF); }
+.ads-billing-giftcode-trigger:hover { background: var(--cv-brand-soft, #F1FFDC); }
 .ads-billing-plan-search { width: 190px; }
 .ads-billing-plan-search input { min-width: 0; flex: 1; border: 0; outline: 0; background: transparent; color: #202721; font-size: 11.5px; }
 /* Prefixed with .ads-billing-tabs-trailing so this always outranks the
@@ -659,23 +690,23 @@
    own unscoped one) which would otherwise leak their dark tab-pill
    background/color/padding onto this button too, since it lives inside
    .ads-billing-tabs for layout. */
-.ads-billing-tabs-trailing .ads-billing-plan-filter { width: 32px; height: 32px; margin: 0; padding: 0; flex: none; display: inline-flex; align-items: center; justify-content: center; border: 1px solid #dbe5dc; border-radius: 999px; background: #fff; color: var(--cv-brand-primary-hover, #1D4ED8); line-height: 0; cursor: pointer; }
+.ads-billing-tabs-trailing .ads-billing-plan-filter { width: 32px; height: 32px; margin: 0; padding: 0; flex: none; display: inline-flex; align-items: center; justify-content: center; border: 1px solid #dbe5dc; border-radius: 999px; background: #fff; color: var(--cv-brand-primary-hover, #1C5A3E); line-height: 0; cursor: pointer; }
 /* Explicit `display:block` + `flex-shrink:0` on the glyph itself — an
    inline SVG's own baseline/vertical-align never gets a chance to nudge it
    off-center once flex centering (above) fully governs its box. */
 .ads-billing-tabs-trailing .ads-billing-plan-filter svg { display: block; flex-shrink: 0; }
 .ads-billing-tabs-trailing .ads-billing-plan-filter:hover,
-.ads-billing-tabs-trailing .ads-billing-plan-filter[aria-expanded='true'] { background: var(--cv-brand-soft, #EFF6FF); }
+.ads-billing-tabs-trailing .ads-billing-plan-filter[aria-expanded='true'] { background: var(--cv-brand-soft, #F1FFDC); }
 .ads-billing-giftcode-trigger:focus-visible,
 .ads-billing-plan-search:focus-within,
-.ads-billing-tabs-trailing .ads-billing-plan-filter:focus-visible { border-color: var(--cv-brand-primary, #2563EB); outline: 3px solid var(--cv-brand-focus-soft, #DBEAFE); outline-offset: 1px; }
+.ads-billing-tabs-trailing .ads-billing-plan-filter:focus-visible { border-color: var(--cv-brand-primary, #287151); outline: 3px solid var(--cv-brand-focus-soft, #E9F9EF); outline-offset: 1px; }
 .ads-billing-giftcode-trigger svg,
-.ads-billing-plan-search svg { flex: none; color: var(--cv-brand-primary-hover, #1D4ED8); }
+.ads-billing-plan-search svg { flex: none; color: var(--cv-brand-primary-hover, #1C5A3E); }
 
 .ads-billing-managed-plan { padding: 16px; display: grid; align-content: start; gap: 6px; border: 1px solid #e2e8e3; border-radius: 14px; background: #fff; transition: border-color .15s ease, box-shadow .15s ease; }
 /* Subtle brand-tokenized hover — the only theme-controlled thing about the
    card surface itself; default border/background stay neutral (section 5/11). */
-.ads-billing-managed-plan:hover { border-color: var(--cv-brand-border, #BFDBFE); box-shadow: 0 0 0 1px var(--cv-brand-border, #BFDBFE); }
+.ads-billing-managed-plan:hover { border-color: var(--cv-brand-border, #CCE5CE); box-shadow: 0 0 0 1px var(--cv-brand-border, #CCE5CE); }
 .ads-billing-plan-logo { width: 32px; height: 32px; display: grid; place-items: center; border-radius: 9px; }
 .ads-billing-managed-plan h3 { margin: 2px 0 0; font-size: 12.5px; font-weight: 650; color: #1c231e; }
 .ads-billing-plan-badge { justify-self: start; padding: 2px 8px; border-radius: 999px; color: #0f7a3c; background: #e4f6e8; font-size: 9px; font-weight: 800; }
@@ -704,17 +735,17 @@
   height: auto;
   min-height: 30px;
   margin-top: 4px;
-  border: 1px solid var(--cv-brand-border, #BFDBFE);
+  border: 1px solid var(--cv-brand-border, #CCE5CE);
   border-radius: 8px;
-  color: var(--cv-brand-primary-hover, #1D4ED8);
-  background: var(--cv-brand-icon-badge-bg, #DBEAFE);
+  color: var(--cv-brand-primary-hover, #1C5A3E);
+  background: var(--cv-brand-icon-badge-bg, #E9F9EF);
   font-size: 10.5px;
   font-weight: 700;
   cursor: pointer;
 }
-.ads-billing-managed-plan > .ads-billing-plan-upgrade:hover { background: var(--cv-brand-soft, #EFF6FF); }
-.ads-billing-managed-plan > .ads-billing-plan-upgrade:active { background: var(--cv-brand-soft-strong, #DBEAFE); }
-.ads-billing-managed-plan > .ads-billing-plan-upgrade:focus-visible { outline: 3px solid var(--cv-brand-focus-soft, #DBEAFE); outline-offset: 2px; }
+.ads-billing-managed-plan > .ads-billing-plan-upgrade:hover { background: var(--cv-brand-soft, #F1FFDC); }
+.ads-billing-managed-plan > .ads-billing-plan-upgrade:active { background: var(--cv-brand-soft-strong, #E9F9EF); }
+.ads-billing-managed-plan > .ads-billing-plan-upgrade:focus-visible { outline: 3px solid var(--cv-brand-focus-soft, #E9F9EF); outline-offset: 2px; }
 .ads-billing-plan-cards > .ads-billing-empty { grid-column: 1 / -1; min-height: 120px; }
 .ads-billing-plan-cards > .ads-billing-empty p { margin: 0; }
 
@@ -733,7 +764,7 @@
    header's most prominent element. */
 .ads-billing-session-header { flex: none; padding: 3px 0 12px; margin-bottom: 0; border-bottom: 1px solid rgba(20, 30, 24, .08); }
 .ads-billing-session-title-group { display: flex; align-items: center; gap: 9px; }
-.ads-billing-session-title-icon { width: 33px; height: 33px; flex: none; display: grid; place-items: center; border-radius: 10px; color: var(--cv-brand-primary-hover, #1D4ED8); background: var(--cv-brand-icon-badge-bg, #DBEAFE); }
+.ads-billing-session-title-icon { width: 33px; height: 33px; flex: none; display: grid; place-items: center; border-radius: 10px; color: var(--cv-brand-primary-hover, #1C5A3E); background: var(--cv-brand-icon-badge-bg, #E9F9EF); }
 .ads-billing-session-title { margin: 0; font-size: 15.5px; font-weight: 650; line-height: 1.2; color: #1c231e; }
 
 .ads-billing-session-summary { flex: none; margin-top: 14px; padding: 14px; display: grid; gap: 8px; border-radius: 14px; background: #f5f7f5; }
@@ -753,23 +784,23 @@
 .ads-billing-session-toolbar { flex: none; display: flex; align-items: center; gap: 8px; margin-top: 12px; }
 .ads-billing-session-search { min-width: 0; flex: 1; min-height: 34px; padding: 0 10px; display: flex; align-items: center; gap: 7px; border: 1px solid #dbe5dc; border-radius: 999px; background: #fff; color: #5f6c62; }
 .ads-billing-session-search input { min-width: 0; flex: 1; border: 0; outline: 0; background: transparent; color: #202721; font-size: 11.5px; }
-.ads-billing-session-search:focus-within { border-color: var(--cv-brand-primary, #2563EB); outline: 3px solid var(--cv-brand-focus-soft, #DBEAFE); outline-offset: 1px; }
-.ads-billing-session-search svg { flex: none; color: var(--cv-brand-primary-hover, #1D4ED8); }
+.ads-billing-session-search:focus-within { border-color: var(--cv-brand-primary, #287151); outline: 3px solid var(--cv-brand-focus-soft, #E9F9EF); outline-offset: 1px; }
+.ads-billing-session-search svg { flex: none; color: var(--cv-brand-primary-hover, #1C5A3E); }
 .ads-billing-session-toolbar .ads-billing-add-session { flex: none; min-height: 34px; padding: 0 12px; font-size: 10.5px; }
 
 .ads-billing-session-bulk { flex: none; display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 10px; padding: 0 2px; }
 .ads-billing-session-bulk label { display: flex; align-items: center; gap: 6px; color: #4a564d; font-size: 11px; font-weight: 600; cursor: pointer; }
-.ads-billing-session-bulk input[type='checkbox'] { accent-color: var(--cv-brand-primary, #2563EB); }
-.ads-billing-session-bulk button { min-height: 28px; padding: 0 11px; display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--cv-brand-border, #BFDBFE); border-radius: 8px; color: var(--cv-brand-primary-hover, #1D4ED8); background: var(--cv-brand-icon-badge-bg, #DBEAFE); font-size: 10.5px; font-weight: 700; cursor: pointer; }
-.ads-billing-session-bulk button:hover:not(:disabled) { background: var(--cv-brand-soft, #EFF6FF); }
+.ads-billing-session-bulk input[type='checkbox'] { accent-color: var(--cv-brand-primary, #287151); }
+.ads-billing-session-bulk button { min-height: 28px; padding: 0 11px; display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--cv-brand-border, #CCE5CE); border-radius: 8px; color: var(--cv-brand-primary-hover, #1C5A3E); background: var(--cv-brand-icon-badge-bg, #E9F9EF); font-size: 10.5px; font-weight: 700; cursor: pointer; }
+.ads-billing-session-bulk button:hover:not(:disabled) { background: var(--cv-brand-soft, #F1FFDC); }
 .ads-billing-session-bulk button:disabled { opacity: .5; cursor: not-allowed; }
 
 .ads-billing-session-list { flex: 1; min-height: 0; margin-top: 8px; padding-right: 2px; display: grid; align-content: start; gap: 5px; overflow-y: auto; scrollbar-width: thin; scrollbar-color: #b8cdbd transparent; }
 .ads-billing-session-list article { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 10px; min-height: 42px; padding: 7px 10px; border: 1px solid #edf1ee; border-radius: 9px; background: #fff; }
-.ads-billing-session-list article.is-current { border-color: var(--cv-brand-border, rgba(59, 130, 246, .18)); background: var(--cv-brand-icon-badge-bg, #DBEAFE); }
+.ads-billing-session-list article.is-current { border-color: var(--cv-brand-border, rgba(40, 113, 81, .18)); background: var(--cv-brand-icon-badge-bg, #E9F9EF); }
 .ads-billing-session-list article.is-revoked { opacity: .45; }
 .ads-billing-session-check input,
-.ads-billing-session-bulk input[type='checkbox'] { accent-color: var(--cv-brand-primary, #2563EB); }
+.ads-billing-session-bulk input[type='checkbox'] { accent-color: var(--cv-brand-primary, #287151); }
 .ads-billing-session-id { min-width: 0; display: grid; gap: 1px; }
 .ads-billing-session-id strong { display: block; overflow: hidden; color: #1c231e; font-size: 11.5px; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; }
 .ads-billing-session-id small { display: block; color: #79867e; font-size: 9.5px; }
@@ -795,28 +826,28 @@
   color: #17281b;
 }
 .ads-giftcode-header { display: flex; align-items: center; gap: 9px; }
-.ads-giftcode-header-icon { width: 33px; height: 33px; flex: none; display: grid; place-items: center; border-radius: 10px; color: var(--cv-brand-primary-hover, #1D4ED8); background: var(--cv-brand-icon-badge-bg, #DBEAFE); }
+.ads-giftcode-header-icon { width: 33px; height: 33px; flex: none; display: grid; place-items: center; border-radius: 10px; color: var(--cv-brand-primary-hover, #1C5A3E); background: var(--cv-brand-icon-badge-bg, #E9F9EF); }
 .ads-giftcode-header h2 { margin: 0; flex: 1; font-size: 15.5px; font-weight: 650; color: #1c231e; }
 .ads-giftcode-close { width: 28px; height: 28px; flex: none; display: grid; place-items: center; border: 0; border-radius: 50%; background: #f1f6f2; color: #445048; cursor: pointer; }
 .ads-giftcode-close:hover { background: #e5ede7; }
 
 .ads-giftcode-tabs { display: flex; gap: 6px; padding-bottom: 12px; border-bottom: 1px solid #e2e8e3; }
 .ads-giftcode-tabs button { min-height: 32px; padding: 0 14px; border: 0; border-radius: 999px; background: transparent; color: #6b756e; font-size: 12px; font-weight: 600; cursor: pointer; }
-.ads-giftcode-tabs button.is-active { color: var(--cv-brand-primary-hover, #1D4ED8); background: var(--cv-brand-icon-badge-bg, #DBEAFE); }
+.ads-giftcode-tabs button.is-active { color: var(--cv-brand-primary-hover, #1C5A3E); background: var(--cv-brand-icon-badge-bg, #E9F9EF); }
 
 .ads-giftcode-panel { display: grid; gap: 14px; }
 .ads-giftcode-instructions { margin: 0; padding: 0; display: grid; gap: 6px; list-style: none; }
-.ads-giftcode-instructions li { padding-left: 14px; position: relative; color: var(--cv-brand-primary-hover, #1D4ED8); font-size: 12px; line-height: 1.5; }
+.ads-giftcode-instructions li { padding-left: 14px; position: relative; color: var(--cv-brand-primary-hover, #1C5A3E); font-size: 12px; line-height: 1.5; }
 .ads-giftcode-instructions li::before { content: ''; width: 4px; height: 4px; position: absolute; left: 2px; top: 8px; border-radius: 50%; background: currentColor; }
 .ads-giftcode-input-row { display: flex; gap: 8px; }
 .ads-giftcode-input { min-width: 0; flex: 1; min-height: 42px; padding: 0 12px; display: flex; align-items: center; gap: 8px; border: 1px solid #dbe5dc; border-radius: 999px; background: #fafcfa; }
 .ads-giftcode-input input { min-width: 0; flex: 1; border: 0; outline: 0; background: transparent; color: #202721; font-size: 12.5px; }
 .ads-giftcode-input svg { flex: none; color: #9aa6a0; }
-.ads-giftcode-input:focus-within { border-color: var(--cv-brand-primary, #2563EB); outline: 3px solid var(--cv-brand-focus-soft, #DBEAFE); outline-offset: 1px; }
-.ads-giftcode-check { flex: none; min-height: 42px; padding: 0 18px; border: 0; border-radius: 999px; background: var(--cv-brand-primary, #2563EB); color: #fff; font-size: 12px; font-weight: 700; cursor: pointer; white-space: nowrap; }
-.ads-giftcode-check:hover:not(:disabled) { background: var(--cv-brand-primary-hover, #1D4ED8); }
+.ads-giftcode-input:focus-within { border-color: var(--cv-brand-primary, #287151); outline: 3px solid var(--cv-brand-focus-soft, #E9F9EF); outline-offset: 1px; }
+.ads-giftcode-check { flex: none; min-height: 42px; padding: 0 18px; border: 0; border-radius: 999px; background: var(--cv-brand-primary, #287151); color: #fff; font-size: 12px; font-weight: 700; cursor: pointer; white-space: nowrap; }
+.ads-giftcode-check:hover:not(:disabled) { background: var(--cv-brand-primary-hover, #1C5A3E); }
 .ads-giftcode-check:disabled { opacity: .5; cursor: not-allowed; }
-.ads-giftcode-status { margin: 0; color: var(--cv-brand-primary-hover, #1D4ED8); font-size: 11px; line-height: 1.5; }
+.ads-giftcode-status { margin: 0; color: var(--cv-brand-primary-hover, #1C5A3E); font-size: 11px; line-height: 1.5; }
 
 .ads-giftcode-history { min-height: 160px; display: grid; place-items: center; }
 .ads-giftcode-history p { margin: 0; color: #8b968f; font-size: 12.5px; text-align: center; }
@@ -834,7 +865,7 @@
   padding: 14px;
   display: grid;
   gap: 14px;
-  border: 1px solid var(--cv-brand-border, #BFDBFE);
+  border: 1px solid var(--cv-brand-border, #CCE5CE);
   border-radius: 18px;
   background: #fff;
   box-shadow: 0 18px 44px rgba(0, 0, 0, .16);
@@ -844,10 +875,10 @@
 .ads-billing-filter-group h3 { margin: 0 0 4px; color: #6b756e; font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .03em; }
 .ads-billing-filter-group button { min-height: 38px; padding: 0 12px; display: flex; align-items: center; justify-content: space-between; gap: 10px; border: 1px solid transparent; border-radius: 12px; background: transparent; color: #202721; font-size: 12.5px; font-weight: 550; text-align: left; cursor: pointer; }
 .ads-billing-filter-group button:hover { background: #f5f7f5; }
-.ads-billing-filter-group button.is-selected { border-color: var(--cv-brand-border, #BFDBFE); background: var(--cv-brand-soft, #EFF6FF); color: var(--cv-brand-primary-hover, #1D4ED8); }
+.ads-billing-filter-group button.is-selected { border-color: var(--cv-brand-border, #CCE5CE); background: var(--cv-brand-soft, #F1FFDC); color: var(--cv-brand-primary-hover, #1C5A3E); }
 .ads-billing-filter-radio { width: 16px; height: 16px; flex: none; display: grid; place-items: center; border: 1.5px solid #c7d8cb; border-radius: 50%; background: #fff; }
-.ads-billing-filter-group button.is-selected .ads-billing-filter-radio { border-color: var(--cv-brand-primary, #2563EB); }
-.ads-billing-filter-group button.is-selected .ads-billing-filter-radio::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--cv-brand-primary, #2563EB); }
+.ads-billing-filter-group button.is-selected .ads-billing-filter-radio { border-color: var(--cv-brand-primary, #287151); }
+.ads-billing-filter-group button.is-selected .ads-billing-filter-radio::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--cv-brand-primary, #287151); }
 
 /* Lịch sử giao dịch — toolbar controls (Filter/Toàn thời gian/Search reuse
    the shared .ads-billing-plan-filter / .ads-billing-plan-search classes
@@ -857,11 +888,11 @@
    in ads-check-billing-history-panel.tsx); everything else brand-controlled
    below follows the same --cv-brand-* tokens as the rest of Billing. */
 .ads-billing-daterange-trigger { min-height: 32px; padding: 0 11px; display: inline-flex; align-items: center; gap: 6px; border: 1px solid #dbe5dc; border-radius: 999px; background: #fff; color: #5f6c62; font-size: 11.5px; font-weight: 600; white-space: nowrap; cursor: pointer; }
-.ads-billing-daterange-trigger svg:first-child { flex: none; color: var(--cv-brand-primary-hover, #1D4ED8); }
+.ads-billing-daterange-trigger svg:first-child { flex: none; color: var(--cv-brand-primary-hover, #1C5A3E); }
 .ads-billing-daterange-trigger svg:last-child { flex: none; color: #9aa6a0; }
-.ads-billing-daterange-trigger:hover { background: var(--cv-brand-soft, #EFF6FF); }
-.ads-billing-daterange-trigger.is-active { border-color: var(--cv-brand-border, #BFDBFE); color: var(--cv-brand-primary-hover, #1D4ED8); background: var(--cv-brand-icon-badge-bg, #DBEAFE); }
-.ads-billing-daterange-trigger:focus-visible { border-color: var(--cv-brand-primary, #2563EB); outline: 3px solid var(--cv-brand-focus-soft, #DBEAFE); outline-offset: 1px; }
+.ads-billing-daterange-trigger:hover { background: var(--cv-brand-soft, #F1FFDC); }
+.ads-billing-daterange-trigger.is-active { border-color: var(--cv-brand-border, #CCE5CE); color: var(--cv-brand-primary-hover, #1C5A3E); background: var(--cv-brand-icon-badge-bg, #E9F9EF); }
+.ads-billing-daterange-trigger:focus-visible { border-color: var(--cv-brand-primary, #287151); outline: 3px solid var(--cv-brand-focus-soft, #E9F9EF); outline-offset: 1px; }
 
 .ads-billing-history-panel { display: flex; flex-direction: column; height: 100%; }
 .ads-billing-history-table-wrap { flex: 1; min-height: 0; overflow: auto; border: 1px solid #e2e8e3; border-radius: 16px; background: #fff; }
@@ -882,11 +913,11 @@
 .ads-billing-history-table .col-status { width: 140px; }
 .ads-billing-history-table .col-action { width: 70px; text-align: center; }
 .ads-billing-history-feature-icon { width: 24px; height: 24px; flex: none; display: grid; place-items: center; border-radius: 7px; }
-.ads-billing-history-feature-more { flex: none; padding: 1px 7px; border-radius: 999px; color: var(--cv-brand-primary-hover, #1D4ED8); background: var(--cv-brand-icon-badge-bg, #DBEAFE); font-size: 9.5px; font-weight: 700; }
+.ads-billing-history-feature-more { flex: none; padding: 1px 7px; border-radius: 999px; color: var(--cv-brand-primary-hover, #1C5A3E); background: var(--cv-brand-icon-badge-bg, #E9F9EF); font-size: 9.5px; font-weight: 700; }
 .ads-billing-history-status-pill { display: inline-block; padding: 3px 9px; border-radius: 999px; font-size: 10px; font-weight: 700; white-space: nowrap; }
 .ads-billing-history-action { width: 30px; height: 30px; margin: 0 auto; padding: 0; display: inline-flex; align-items: center; justify-content: center; border: 1px solid #e2e8e3; border-radius: 999px; background: #f7f8f7; color: #5f6c62; cursor: pointer; }
-.ads-billing-history-action:hover { border-color: var(--cv-brand-border, #BFDBFE); color: var(--cv-brand-primary-hover, #1D4ED8); background: var(--cv-brand-icon-badge-bg, #DBEAFE); }
-.ads-billing-history-action:focus-visible { outline: 3px solid var(--cv-brand-focus-soft, #DBEAFE); outline-offset: 2px; }
+.ads-billing-history-action:hover { border-color: var(--cv-brand-border, #CCE5CE); color: var(--cv-brand-primary-hover, #1C5A3E); background: var(--cv-brand-icon-badge-bg, #E9F9EF); }
+.ads-billing-history-action:focus-visible { outline: 3px solid var(--cv-brand-focus-soft, #E9F9EF); outline-offset: 2px; }
 
 .ads-billing-history-footer { flex: none; margin-top: 12px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .ads-billing-history-footer > span:first-child { color: #8b968f; font-size: 10.5px; }
@@ -904,7 +935,7 @@
   padding: 12px;
   display: grid;
   gap: 4px;
-  border: 1px solid var(--cv-brand-border, #BFDBFE);
+  border: 1px solid var(--cv-brand-border, #CCE5CE);
   border-radius: 18px;
   background: #fff;
   box-shadow: 0 18px 44px rgba(0, 0, 0, .16);
@@ -913,7 +944,7 @@
 .ads-billing-history-status-menu h3 { margin: 0 0 4px; color: #6b756e; font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .03em; }
 .ads-billing-history-status-row { min-height: 34px; padding: 4px; display: flex; align-items: center; justify-content: space-between; gap: 10px; border-radius: 9px; cursor: pointer; }
 .ads-billing-history-status-row:hover { background: #f5f7f5; }
-.ads-billing-history-status-row input[type='checkbox'] { accent-color: var(--cv-brand-primary, #2563EB); }
+.ads-billing-history-status-row input[type='checkbox'] { accent-color: var(--cv-brand-primary, #287151); }
 
 /* Date-range picker — same algorithm/structure as AdsProTkqcDateRangePicker
    (ads-check-adaccounts-tkqc-round1.css), ported with Billing's own class
@@ -935,7 +966,7 @@
 .ads-billing-daterange-presets { width: 150px; flex: none; padding: 10px; display: flex; flex-direction: column; gap: 2px; border-right: 1px solid #eef3ef; }
 .ads-billing-daterange-preset { height: 32px; padding: 0 10px; border: 0; border-radius: 8px; background: transparent; color: #445048; font-size: 12px; text-align: left; cursor: pointer; }
 .ads-billing-daterange-preset:hover { background: #f1f8f2; }
-.ads-billing-daterange-preset.is-selected { background: var(--cv-brand-icon-badge-bg, #DBEAFE); color: var(--cv-brand-primary, #2563EB); font-weight: 600; }
+.ads-billing-daterange-preset.is-selected { background: var(--cv-brand-icon-badge-bg, #E9F9EF); color: var(--cv-brand-primary, #287151); font-weight: 600; }
 .ads-billing-daterange-calendar { min-width: 0; flex: 1; padding: 12px; }
 .ads-billing-daterange-calendar header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
 .ads-billing-daterange-calendar header button { width: 26px; height: 26px; display: grid; place-items: center; border: 0; border-radius: 999px; background: #f1f8f2; color: #445048; cursor: pointer; }
@@ -945,17 +976,17 @@
 .ads-billing-daterange-weekdays span { padding: 4px 0; color: #8ba393; font-size: 11px; text-align: center; }
 .ads-billing-daterange-cell { height: 30px; border: 0; border-radius: 8px; background: transparent; color: #17281b; font-size: 12px; cursor: pointer; }
 .ads-billing-daterange-cell:hover { background: #f1f8f2; }
-.ads-billing-daterange-cell.is-in-range { background: var(--cv-brand-soft, #EFF6FF); }
-.ads-billing-daterange-cell.is-edge { background: var(--cv-brand-primary, #2563EB); color: #fff; font-weight: 600; }
-.ads-billing-daterange-cell.is-today:not(.is-edge) { box-shadow: inset 0 0 0 1px var(--cv-brand-border, #BFDBFE); font-weight: 700; }
+.ads-billing-daterange-cell.is-in-range { background: var(--cv-brand-soft, #F1FFDC); }
+.ads-billing-daterange-cell.is-edge { background: var(--cv-brand-primary, #287151); color: #fff; font-weight: 600; }
+.ads-billing-daterange-cell.is-today:not(.is-edge) { box-shadow: inset 0 0 0 1px var(--cv-brand-border, #CCE5CE); font-weight: 700; }
 .ads-billing-daterange-cell.is-empty { cursor: default; }
 .ads-billing-daterange-fields { padding: 10px 14px; display: flex; align-items: center; gap: 8px; border-top: 1px solid #eef3ef; }
 .ads-billing-daterange-field { min-width: 0; flex: 1; min-height: 32px; padding: 0 12px; display: flex; align-items: center; border: 1px solid #e2e8e3; border-radius: 999px; background: #fafcfa; color: #445048; font-size: 11.5px; }
 .ads-billing-daterange-field-arrow { flex: none; color: #9aa6a0; }
 .ads-billing-daterange-panel footer { padding: 10px 14px; display: flex; align-items: center; justify-content: flex-end; gap: 8px; border-top: 1px solid #eef3ef; background: #f8faf8; }
 .ads-billing-daterange-panel footer .is-secondary { height: 32px; padding: 0 14px; border: 0; border-radius: 999px; background: #eef2ef; color: #445048; font-size: 12px; cursor: pointer; }
-.ads-billing-daterange-panel footer .is-primary { height: 32px; padding: 0 16px; border: 0; border-radius: 999px; background: var(--cv-brand-primary, #2563EB); color: #fff; font-size: 12px; font-weight: 600; cursor: pointer; }
-.ads-billing-daterange-panel footer .is-primary:hover { background: var(--cv-brand-primary-hover, #1D4ED8); }
+.ads-billing-daterange-panel footer .is-primary { height: 32px; padding: 0 16px; border: 0; border-radius: 999px; background: var(--cv-brand-primary, #287151); color: #fff; font-size: 12px; font-weight: 600; cursor: pointer; }
+.ads-billing-daterange-panel footer .is-primary:hover { background: var(--cv-brand-primary-hover, #1C5A3E); }
 
 @media (max-width: 767px) {
   .ads-billing-daterange-body { flex-direction: column; }

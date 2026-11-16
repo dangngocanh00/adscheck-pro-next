@@ -11,7 +11,7 @@ export const featureAccent: Record<string, { color: string; background: string }
   // system existed, not a deliberate identity choice; teal so it can never
   // be mistaken for "still branded green" at V2–V5.
   'ads-account': { color: '#0f766e', background: '#e6f5f3' },
-  businesses: { color: '#2f7dd8', background: '#e8f1fc' },
+  businesses: { color: '#33D48C', background: '#EAFAF3' },
   pages: { color: '#e0940f', background: '#fdf1de' },
   'advance-toolkit': { color: '#c2410c', background: '#fdece2' },
   'ads-save': { color: '#c026a3', background: '#fbe8f7' },

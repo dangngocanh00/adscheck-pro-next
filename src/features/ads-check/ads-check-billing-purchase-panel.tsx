@@ -1,17 +1,15 @@
+import { ProPurchaseExperience } from './purchase-pro-experience'
+import { PriorityPurchaseExperience } from './purchase-priority-experience'
+import { PurchasePlanSwitch } from './purchase-experience-shared'
+import '@/styles/ads-check-purchase-experiences.css'
 import { useAppLanguage, tx, m, t } from '@/i18n'
 import { useCallback, useMemo, useRef, useState, type FC } from 'react'
 import {
-  ArrowRightLeft,
   Check,
   CreditCard,
-  Crown,
   Gift,
   Landmark,
-  LayoutGrid,
-  LockKeyhole,
   PackageCheck,
-  Smartphone,
-  Sparkles,
   Users,
 } from 'lucide-react'
 import { AdsCheckBankTransferWarningModal } from './ads-check-billing-bank-transfer-modal'
@@ -22,14 +20,10 @@ import type { PaymentCheckResult, PaymentCheckState } from './ads-check-billing-
 import { BillingOrderSummary } from './ads-check-billing-order-summary'
 import {
   allBillingFeatures,
-  assetManagementFeatures,
   bundlePrice,
   roundUsd,
   sessionUpgradeOptions,
-  controlHubFeature,
   formatUsd,
-  otherBillingFeatures,
-  type BillingFeature,
   type BillingOrderDraft,
   type BillingTier,
 } from './ads-check-billing-data'
@@ -37,42 +31,6 @@ import {
 type BillingPurchasePanelProps = {
   hidden?: boolean
   onCheckout: (draft: BillingOrderDraft) => void
-}
-
-type BillingFeatureCardProps = {
-  feature: BillingFeature
-  checked: boolean
-  onToggle: (featureId: string) => void
-}
-
-const BillingFeatureCard: FC<BillingFeatureCardProps> = ({ feature, checked, onToggle }) => {
-  useAppLanguage();
-  const Icon = feature.icon
-  return (
-    <label className={`ads-purchase-feature-card${checked ? ' is-selected' : ''}`}>
-      <input type="checkbox" aria-label={tx(m("ui.84da3235c3", { 0: feature.title }))} checked={checked} onChange={() => onToggle(feature.id)} />
-      <i className="ads-purchase-checkbox" aria-hidden="true"><Check size={12} /></i>
-      <span className="ads-purchase-feature-icon"><Icon size={17} /></span>
-      <strong>{tx(feature.title)}</strong>
-      <div><b>{tx(formatUsd(feature.price))}</b><small>{t("ui.03be1e7c75")}</small></div>
-      {feature.featureCount && <span className="ads-purchase-feature-count">{feature.featureCount} {" "}{t("ui.c8afce04f5")}</span>}
-      <p><Gift size={13} />{tx(feature.note)}</p>
-    </label>
-  )
-}
-
-const BillingFeatureRow: FC<BillingFeatureCardProps> = ({ feature, checked, onToggle }) => {
-  useAppLanguage();
-  const Icon = feature.icon
-  return (
-    <label className={`ads-purchase-feature-row${checked ? ' is-selected' : ''}`}>
-      <input type="checkbox" aria-label={tx(m("ui.84da3235c3", { 0: feature.title }))} checked={checked} onChange={() => onToggle(feature.id)} />
-      <span className="ads-purchase-feature-row-icon"><Icon size={16} /></span>
-      <strong>{tx(feature.title)}</strong>
-      <span className="ads-purchase-feature-row-price"><b>{tx(formatUsd(feature.price))}</b><small>{t("ui.03be1e7c75")}</small></span>
-      <i className="ads-purchase-checkbox" aria-hidden="true"><Check size={12} /></i>
-    </label>
-  )
 }
 
 type BillingBankOption = { id: string; shortLabel: string; fullName: string }
@@ -137,8 +95,6 @@ export const AdsCheckBillingPurchasePanel: FC<BillingPurchasePanelProps> = ({ hi
   const [showPaymentNoticeModal, setShowPaymentNoticeModal] = useState(false)
   const [sessionOption, setSessionOption] = useState('none')
   const selectionStepRef = useRef<HTMLButtonElement>(null)
-
-  const adsSaveFeature = useMemo(() => otherBillingFeatures.find((feature) => feature.id === 'ads-save'), [])
 
   const selectedCount = selectedFeatureIds.length
   const monthlyPrice = useMemo(() => bundleSelected
@@ -290,9 +246,10 @@ export const AdsCheckBillingPurchasePanel: FC<BillingPurchasePanelProps> = ({ hi
   const completePayment = useCallback(() => checkout(), [checkout])
 
   return (
-    <section className="ads-billing-panel ads-purchase-panel" aria-label={t("ui.1e184e0f1f")} hidden={hidden}>
+    <section className="ads-billing-panel ads-purchase-panel purchase-themed" data-plan={tier} aria-label={t("ui.1e184e0f1f")} hidden={hidden}>
       <div className="ads-purchase-layout">
-        <div className="ads-purchase-builder">
+        <div className="ads-purchase-builder is-purchase-scroll-shell">
+          <div className="ads-purchase-header-region">
           <nav className="ads-purchase-progress" aria-label={t("ui.8f34f10790")}>
             <button ref={selectionStepRef} type="button" className={paymentStep !== 'selection' ? 'is-done' : ''} aria-current={paymentStep === 'selection' ? 'step' : undefined} onClick={() => setPaymentStep('selection')}>{paymentStep !== 'selection' ? <Check size={15} /> : <PackageCheck size={15} />}{t("ui.e8f6699f67")}</button>
             <span aria-hidden="true">»</span>
@@ -306,7 +263,9 @@ export const AdsCheckBillingPurchasePanel: FC<BillingPurchasePanelProps> = ({ hi
             <span aria-hidden="true">»</span>
             <button type="button" aria-current={paymentStep === 'payment' ? 'step' : undefined} disabled={selectedCount === 0 || !selectedBank} onClick={checkout}><CreditCard size={15} />{t("ui.9d5a6614ca")}</button>
           </nav>
+          </div>
 
+          <div className="ads-purchase-scroll-viewport">
           {paymentStep === 'payment' && paymentSession && (
             <AdsCheckBillingPaymentStep
               bank={selectedBank}
@@ -338,51 +297,10 @@ export const AdsCheckBillingPurchasePanel: FC<BillingPurchasePanelProps> = ({ hi
           )}
 
           {paymentStep === 'selection' && <>
-          <div className="ads-purchase-tier-grid" role="group" aria-label={t("ui.6109cb170c")}>
-            <button type="button" className={tier === 'pro' ? 'is-selected' : ''} aria-label={t("ui.dd69516c2d")} aria-pressed={tier === 'pro'} onClick={() => changeTier('pro')}>
-              <span className="ads-purchase-tier-label">{t("ui.66d0c5e6b1")}</span>
-              {tx(tier === 'pro' && <span className="ads-purchase-selected-label">{t("ui.20c40e7551")}</span>)}
-              <span className="ads-purchase-tier-art" aria-hidden="true"><i /><i /></span>
-              <span className="ads-purchase-tier-copy"><strong>{t("ui.374e4a6930")}</strong><small>{t("ui.c309b3cf00")}</small></span>
-            </button>
-            <button type="button" className={`is-priority${tier === 'priority' ? ' is-selected' : ''}`} aria-label={t("ui.bb74df3b4e")} aria-pressed={tier === 'priority'} onClick={() => changeTier('priority')}>
-              <span className="ads-purchase-tier-label">{t("ui.886cbff9d9")}</span>
-              {tx(tier === 'priority' && <span className="ads-purchase-selected-label">{t("ui.20c40e7551")}</span>)}
-              <span className="ads-purchase-tier-art" aria-hidden="true"><i /><i /></span>
-              <span className="ads-purchase-tier-copy"><strong>{t("ui.b61e0ed795")}</strong><small>{t("ui.389e8566a5")}</small></span>
-            </button>
-            <button className="ads-purchase-tier-swap" type="button" aria-label={t("ui.2e761f1a26")} onClick={() => changeTier(tier === 'pro' ? 'priority' : 'pro')}><ArrowRightLeft size={18} /></button>
-          </div>
-
-          <label className={`ads-purchase-bundle${bundleSelected ? ' is-selected' : ''}`}>
-            <span><strong>{t("ui.8ed4abee74")}</strong><b>{t("ui.94dffe47a1")}</b></span>
-            <span><strong>{tx(formatUsd(bundlePrice))}</strong><small>{t("ui.03be1e7c75")}</small></span>
-            <input type="checkbox" aria-label={t("ui.4fe64e8209")} checked={bundleSelected} onChange={toggleBundle} />
-            <i className="ads-purchase-checkbox" aria-hidden="true"><Check size={12} /></i>
-          </label>
-
-          <label className={`ads-purchase-control-hub${selectedFeatureIds.includes(controlHubFeature.id) ? ' is-selected' : ''}`}>
-            <span className="ads-purchase-phone-art" aria-hidden="true"><i /><i /><i /></span>
-            <span className="ads-purchase-control-copy"><strong><Smartphone size={17} />{t("ui.83612f5980")}{" "}<b>{t("ui.2cc668ec65")}</b></strong><small><Smartphone size={13} />{t("ui.980d0958da")}</small></span>
-            <span className="ads-purchase-control-price"><strong>{tx(formatUsd(controlHubFeature.price))}</strong><small>{t("ui.03be1e7c75")}</small></span>
-            <input type="checkbox" aria-label={t("ui.20941760ce")} checked={selectedFeatureIds.includes(controlHubFeature.id)} onChange={() => toggleFeature(controlHubFeature.id)} />
-            <i className="ads-purchase-checkbox" aria-hidden="true"><Check size={12} /></i>
-          </label>
-
-          <section className="ads-purchase-feature-section" aria-labelledby="asset-features-title">
-            <h2 id="asset-features-title"><LayoutGrid size={17} />{t("ui.33f94ab6d6")}</h2>
-            <div className="ads-purchase-asset-grid">
-              {assetManagementFeatures.map((feature) => <BillingFeatureCard key={feature.id} feature={feature} checked={selectedFeatureIds.includes(feature.id)} onToggle={toggleFeature} />)}
-            </div>
-          </section>
-
-          <section className="ads-purchase-feature-section ads-purchase-other-section" aria-labelledby="other-features-title">
-            <h2 id="other-features-title"><Sparkles size={17} />{t("ui.b6e118962b")}</h2>
-            <div className="ads-purchase-feature-rows">
-              {adsSaveFeature && <BillingFeatureRow feature={adsSaveFeature} checked={selectedFeatureIds.includes(adsSaveFeature.id)} onToggle={toggleFeature} />}
-            </div>
-            <article className="ads-purchase-priority-note"><Crown size={18} /><strong>{t("ui.93221f4891")}</strong><p><LockKeyhole size={13} />{t("ui.39d9ca085d")}</p></article>
-          </section>
+          <PurchasePlanSwitch tier={tier} onChange={changeTier} />
+          {tier === 'pro'
+            ? <ProPurchaseExperience selectedFeatureIds={selectedFeatureIds} bundleSelected={bundleSelected} toggleBundle={toggleBundle} toggleFeature={toggleFeature} />
+            : <PriorityPurchaseExperience selectedFeatureIds={selectedFeatureIds} bundleSelected={bundleSelected} toggleBundle={toggleBundle} toggleFeature={toggleFeature} />}
 
           <section className="ads-purchase-feature-section ads-purchase-session-section" aria-labelledby="session-upgrade-title">
             <div className="ads-purchase-session-heading">
@@ -408,9 +326,11 @@ export const AdsCheckBillingPurchasePanel: FC<BillingPurchasePanelProps> = ({ hi
           </section>
           <span className="ads-purchase-builder-status" role="status" aria-live="polite">{tx(builderStatus)}</span>
           </>}
+          </div>
         </div>
 
         <BillingOrderSummary
+          tier={tier}
           step={paymentStep}
           selectedCount={selectedCount}
           monthlyPrice={monthlyPrice}

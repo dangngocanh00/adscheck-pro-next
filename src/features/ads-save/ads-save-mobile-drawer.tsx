@@ -22,6 +22,7 @@ type MobileDrawerProps = {
 export function AdsSaveMobileDrawer(props: MobileDrawerProps) {
   useAppLanguage();
   const drawerRef = useRef<HTMLElement>(null)
+  const languageTriggerRef = useRef<HTMLButtonElement>(null)
   const [languagesOpen, setLanguagesOpen] = useState(false)
   useOverlayFocus(props.open, drawerRef, props.onClose)
   if (!props.open) return null
@@ -40,8 +41,8 @@ export function AdsSaveMobileDrawer(props: MobileDrawerProps) {
       <div className="ads-drawer-divider" />
       <div className="ads-drawer-tools">
         <button type="button" onClick={() => run(props.onControlHub)}><Grid2X2 size={18} />{t("ui.83612f5980")}{" "}<b>{t("ui.c2649c2792")}</b></button>
-        <button type="button" aria-expanded={languagesOpen} aria-controls="ads-mobile-languages" onClick={() => setLanguagesOpen((value) => !value)}><Languages size={18} />{props.languageLabel}</button>
-        {tx(languagesOpen && <div id="ads-mobile-languages" className="ads-mobile-languages">{appLanguageOptions.map((item) => <button key={item.code} type="button" aria-pressed={props.language === item.code} onClick={() => { props.onLanguage(item.code); setLanguagesOpen(false) }}>{item.label}</button>)}</div>)}
+        <button ref={languageTriggerRef} type="button" aria-expanded={languagesOpen} aria-controls="ads-mobile-languages" onClick={() => setLanguagesOpen((value) => !value)}><Languages size={18} />{props.languageLabel}</button>
+        {tx(languagesOpen && <div id="ads-mobile-languages" className="ads-mobile-languages">{appLanguageOptions.map((item) => <button key={item.code} type="button" aria-pressed={props.language === item.code} onClick={() => { props.onLanguage(item.code); setLanguagesOpen(false); languageTriggerRef.current?.focus() }}>{item.label}</button>)}</div>)}
         <a href="https://www.facebook.com/adscheck.official/" target="_blank" rel="noreferrer" onClick={props.onClose}><Headphones size={18} />{t("ui.ed2a55ae3b")}</a>
         <Link to="/app/notification" onClick={props.onClose}><Bell size={18} />{t("ui.5d6af377c2")}</Link>
         <button type="button" onClick={() => run(props.onAccount)}><UserRound size={18} />{tx(props.standardEditionLabel === 'Pro' ? m("ui.4a60abe525") : m("ui.0f366f2fcc"))}</button>

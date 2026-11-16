@@ -126,7 +126,7 @@ export function AdsCheckShellCurve({ showLeftCurve = false, neon = true, enableL
   </svg>
     <svg className="ads-content-corner-accents" aria-hidden="true" focusable="false" viewBox={`0 0 ${inner.width} ${inner.height}`}
       style={{ left: inner.left, top: inner.top, width: inner.width, height: inner.height }}>
-      {neon && config.map(({ corner, ...motion }) => <AdsCheckCurveNeon key={corner} path={innerPaths[corner]} curve={corner} {...motion} inner runnerLength={16} coreWidth={1} runnerWidth={1.6} color="#0284C7" />)}
+      {neon && config.map(({ corner, ...motion }) => <AdsCheckCurveNeon key={corner} path={innerPaths[corner]} curve={corner} {...motion} inner runnerLength={16} coreWidth={1} runnerWidth={1.6} color="#23A66B" />)}
     </svg>
   </>
 }

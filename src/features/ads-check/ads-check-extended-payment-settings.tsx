@@ -98,9 +98,9 @@ const SIGNATURE_COLORS: { label: string; value: string }[] = [
   { label: 'Cam', value: '#f59e0b' },
   { label: m("ui.d194ce4d12"), value: '#22c55e' },
   { label: m("ui.14098b0cad"), value: '#0f7a34' },
-  { label: m("ui.b140779526"), value: '#06b6d4' },
-  { label: m("ui.95beb52003"), value: '#2563eb' },
-  { label: m("ui.08e76f5726"), value: '#4f46e5' },
+  { label: m("ui.b140779526"), value: '#26B474' },
+  { label: m("ui.95beb52003"), value: '#287151' },
+  { label: m("ui.08e76f5726"), value: '#51DA9C' },
   { label: m("ui.684e596629"), value: '#9333ea' },
   { label: m("ui.5a43ba9e2d"), value: '#db2777' },
 ]

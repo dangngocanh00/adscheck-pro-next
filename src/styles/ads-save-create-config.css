@@ -51,7 +51,7 @@
   font: inherit;
   font-weight: 400;
 }
-.ads-save-create-field input[type="text"]:focus { outline: none; border-color: var(--cv-brand-primary, #2563EB); background: #fff; }
+.ads-save-create-field input[type="text"]:focus { outline: none; border-color: var(--cv-brand-primary, #287151); background: #fff; }
 
 .ads-save-create-toggle-row { display: flex; gap: 8px; }
 .ads-save-create-toggle-row label {
@@ -203,7 +203,7 @@
   font: inherit;
   resize: vertical;
 }
-.ads-save-create-id-textarea:focus { outline: none; border-color: var(--cv-brand-primary, #2563EB); background: #fff; }
+.ads-save-create-id-textarea:focus { outline: none; border-color: var(--cv-brand-primary, #287151); background: #fff; }
 .ads-save-create-load-list {
   flex: none;
   width: 100%;
@@ -222,7 +222,7 @@
 
 .ads-save-create-result-row { flex: none; display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 12.5px; color: #5c6b60; }
 .ads-save-create-result-row b { color: var(--cv-brand-primary-hover, #0a7a34); font-weight: 700; }
-.ads-save-create-select-all { border: 0; background: none; padding: 0; color: #2f6fed; font-size: 12.5px; font-weight: 600; cursor: pointer; }
+.ads-save-create-select-all { border: 0; background: none; padding: 0; color: #45D795; font-size: 12.5px; font-weight: 600; cursor: pointer; }
 .ads-save-create-select-all:hover { text-decoration: underline; }
 
 /* Correction — Fixed Step 2 panel size: the ONLY element that scrolls.

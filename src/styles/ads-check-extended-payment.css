@@ -56,7 +56,7 @@
 .ads-extended-rate-error { padding-left: 8px; color: #b42318; font-size: 10px; line-height: 1.35; }
 
 .ads-extended-control-label-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-.ads-extended-edit-link { width: auto; height: auto; padding: 0; display: inline-flex; align-items: center; gap: 4px; border: 0; background: transparent; color: #2563eb; font-size: 11px; font-weight: 600; cursor: pointer; }
+.ads-extended-edit-link { width: auto; height: auto; padding: 0; display: inline-flex; align-items: center; gap: 4px; border: 0; background: transparent; color: #287151; font-size: 11px; font-weight: 600; cursor: pointer; }
 .ads-extended-edit-link:hover { text-decoration: underline; }
 
 /* Extended Payment Round 1 Part #5/#7 — one shared dropdown used by both
@@ -90,7 +90,7 @@
 .ads-extended-fields { min-height: 346px; }
 .ads-extended-fields-grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 14px; }
 .ads-extended-field-option { min-width: 0; min-height: 63px; padding: 8px 13px; position: relative; display: grid; grid-template-columns: 36px minmax(0, 1fr); align-items: center; gap: 10px; border: 1px solid var(--cv-ext-field-border, #138b35); border-radius: 16px; background: #fff; color: var(--cv-ext-brand-text, #08762d); text-align: left; cursor: pointer; transition: transform 180ms ease-out, background-color 180ms ease-out, box-shadow 180ms ease-out; }
-.ads-extended-field-option:hover { transform: translateY(-1px); box-shadow: 0 7px 18px rgba(29, 78, 216, .12); }
+.ads-extended-field-option:hover { transform: translateY(-1px); box-shadow: 0 7px 18px rgba(28, 90, 62, .12); }
 .ads-extended-field-option:not(.is-selected) { border-color: #d8e3da; color: #59645b; background: #f7f8f7; }
 .ads-extended-field-option > span { width: 36px; height: 36px; display: grid; place-items: center; border-radius: 12px; color: var(--cv-ext-icon-4, #4caf47); background: var(--cv-ext-icon-badge-bg, #eff9f0); }
 .ads-extended-field-option b { min-width: 0; overflow: hidden; font-size: 12px; font-weight: 550; text-overflow: ellipsis; white-space: nowrap; }
@@ -156,7 +156,7 @@
    white icons, does not increase the header's own height. */
 .ads-extended-brand-controls { margin-left: auto; display: flex; align-items: center; gap: 5px; }
 .ads-extended-brand-button { width: 26px; height: 26px; flex: none; display: grid; place-items: center; gap: 1px; border: 0; border-radius: 999px; background: var(--cv-ext-dark-control-bg, rgba(4, 40, 20, .38)); color: #fff; cursor: pointer; }
-.ads-extended-brand-button:hover { background: rgba(11, 31, 58, .55); }
+.ads-extended-brand-button:hover { background: rgba(9, 46, 34, .55); }
 .ads-extended-share-menu { position: relative; }
 /* Extended Payment Round 3 — root cause: `.ads-extended-brand-button`'s
    base rule is `display: grid`, so this trigger's two children (Share
@@ -242,7 +242,7 @@
 .ads-extended-rate-modal > header { min-height: 56px; padding: 0 16px; display: flex; align-items: center; gap: 9px; border-bottom: 1px solid #e4ece6; }
 .ads-extended-rate-modal-icon { width: 26px; height: 26px; display: grid; place-items: center; border-radius: 9px; color: #fff; background: var(--extended-green); }
 .ads-extended-rate-modal > header h2 { flex: 1; min-width: 0; margin: 0; color: #121713; font-size: 15px; font-weight: 650; }
-.ads-extended-rate-reset { width: auto; height: auto; padding: 0; border: 0; background: transparent; color: #2563eb; font-size: 12px; font-weight: 600; cursor: pointer; }
+.ads-extended-rate-reset { width: auto; height: auto; padding: 0; border: 0; background: transparent; color: #287151; font-size: 12px; font-weight: 600; cursor: pointer; }
 .ads-extended-rate-reset:hover { text-decoration: underline; }
 .ads-extended-rate-close { width: 30px; height: 30px; flex: none; display: grid; place-items: center; border: 0; border-radius: 50%; background: #f2f4f2; color: #4b5563; cursor: pointer; }
 /* Extended Payment Round 2 Part #10 — root cause: this row had only a

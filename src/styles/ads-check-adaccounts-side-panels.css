@@ -103,7 +103,7 @@
   font-weight: 600;
   line-height: 1;
 }
-.ads-function-pin-filter.is-active .ads-function-pin-count-badge { background: #fff; color: #1D4ED8; }
+.ads-function-pin-filter.is-active .ads-function-pin-count-badge { background: #fff; color: #1C5A3E; }
 .ads-function-groups { min-height: 0; padding: 0 10px 14px; overflow-y: auto; scrollbar-width: thin; scrollbar-color: #b7c4b9 transparent; }
 .ads-function-groups::-webkit-scrollbar { width: 8px; }
 .ads-function-groups::-webkit-scrollbar-track { background: transparent; }
@@ -383,7 +383,7 @@
 .ads-workflow-step-title-row { margin-top: 8px; display: flex; align-items: center; gap: 6px; }
 .ads-workflow-step.is-expanded .ads-workflow-step-title-row { padding-bottom: 8px; border-bottom: 1px solid #eef1ef; }
 .ads-workflow-step-handle { width: 24px; height: 24px; flex: none; display: grid; place-items: center; border: 0; background: transparent; color: #a2aaa5; cursor: grab; touch-action: none; }
-.ads-workflow-step-handle:hover { background: #F0F7FF; color: #1D4ED8; }
+.ads-workflow-step-handle:hover { background: #F8FAF7; color: #1C5A3E; }
 .ads-workflow-step-handle:focus-visible { outline: 2px solid var(--cv-brand-primary, #0d9f39); outline-offset: 1px; border-radius: 50%; }
 .ads-workflow-step-label { min-width: 0; flex: 1; padding: 4px 6px; display: flex; align-items: center; gap: 7px; border: 0; border-radius: 12px; background: transparent; color: #1a2620; font-size: 13px; text-align: left; cursor: pointer; }
 .ads-workflow-step-label:hover { background: rgba(0, 0, 0, .03); }
@@ -399,7 +399,7 @@
 .ads-workflow-step-field textarea { min-height: 64px; resize: vertical; }
 .ads-workflow-step-field input:focus,
 .ads-workflow-step-field select:focus,
-.ads-workflow-step-field textarea:focus { border-color: var(--cv-brand-primary, #2563EB); }
+.ads-workflow-step-field textarea:focus { border-color: var(--cv-brand-primary, #287151); }
 .ads-workflow-step-field input[aria-invalid="true"],
 .ads-workflow-step-field select[aria-invalid="true"],
 .ads-workflow-step-field textarea[aria-invalid="true"] { border-color: #d84a4a; }
@@ -428,12 +428,12 @@
    enabled; a flat, distinctly pale, shadow-less fill when disabled — the
    two states must be tell-apart-able at a glance, at full opacity. */
 .ads-workflow-actions button.is-primary {
-  background: linear-gradient(180deg, #3B82F6, #1D4ED8);
+  background: linear-gradient(180deg, #287151, #1C5A3E);
   color: #fff;
-  box-shadow: 0 6px 16px rgba(29, 78, 216, .3);
+  box-shadow: 0 6px 16px rgba(28, 90, 62, .3);
 }
-.ads-workflow-actions button.is-primary:hover:not(:disabled) { background: linear-gradient(180deg, #2563EB, #1D4ED8); }
-.ads-workflow-actions button.is-primary:active:not(:disabled) { background: linear-gradient(180deg, #1D4ED8, #1E3A8A); box-shadow: 0 3px 8px rgba(29, 78, 216, .28); }
+.ads-workflow-actions button.is-primary:hover:not(:disabled) { background: linear-gradient(180deg, #287151, #1C5A3E); }
+.ads-workflow-actions button.is-primary:active:not(:disabled) { background: linear-gradient(180deg, #1C5A3E, #123528); box-shadow: 0 3px 8px rgba(28, 90, 62, .28); }
 .ads-workflow-actions button:disabled { background: #e6ede7; color: #a7b3a9; cursor: not-allowed; box-shadow: none; }
 
 @media (prefers-reduced-motion: reduce) {

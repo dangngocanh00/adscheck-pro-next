@@ -2,7 +2,7 @@
 
 ## Goal
 
-Build a standalone React route at `/app/ads-save` that faithfully reproduces the supplied Ads Save installation screen without disturbing the existing HRM routes.
+Build a standalone React route at `/app/ads-save` that faithfully reproduces the supplied Ads Save installation screen within the AdsCheck application.
 
 ## Direction
 
@@ -24,7 +24,7 @@ Build a standalone React route at `/app/ads-save` that faithfully reproduces the
 
 ## Success criteria
 
-- Route loads outside the HRM `AppShell`.
+- Route uses its dedicated AdsCheck workspace shell.
 - Desktop and mobile composition match measured geometry.
 - Toggle, retry, account, language, version, Control Hub, Explore V8, dismiss, and purchase feedback work locally.
 - Keyboard focus and semantic labels remain visible.

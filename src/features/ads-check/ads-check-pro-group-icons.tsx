@@ -40,32 +40,32 @@ export function SuperShareGroupIcon({ size = 15 }: { size?: number }) {
 <stop offset="1" stopColor="#339D36"/>
 </linearGradient>
 <linearGradient id={ids[1]} x1="10.5" y1="1.60449" x2="10.5" y2="5.97949" gradientUnits="userSpaceOnUse">
-<stop stopColor="#2E94FF"/>
-<stop offset="1" stopColor="#2ED9FF"/>
+<stop stopColor="#53DA9D"/>
+<stop offset="1" stopColor="#53DA9D"/>
 </linearGradient>
 <linearGradient id={ids[2]} x1="5.6875" y1="7" x2="1.3125" y2="7" gradientUnits="userSpaceOnUse">
 <stop stopColor="#7CD249"/>
 <stop offset="1" stopColor="#339D36"/>
 </linearGradient>
 <linearGradient id={ids[3]} x1="3.5" y1="4.8125" x2="3.5" y2="9.1875" gradientUnits="userSpaceOnUse">
-<stop stopColor="#2E94FF"/>
-<stop offset="1" stopColor="#2ED9FF"/>
+<stop stopColor="#53DA9D"/>
+<stop offset="1" stopColor="#53DA9D"/>
 </linearGradient>
 <linearGradient id={ids[4]} x1="12.6875" y1="10.208" x2="8.3125" y2="10.208" gradientUnits="userSpaceOnUse">
 <stop stopColor="#7CD249"/>
 <stop offset="1" stopColor="#339D36"/>
 </linearGradient>
 <linearGradient id={ids[5]} x1="10.5" y1="8.02051" x2="10.5" y2="12.3955" gradientUnits="userSpaceOnUse">
-<stop stopColor="#2E94FF"/>
-<stop offset="1" stopColor="#2ED9FF"/>
+<stop stopColor="#53DA9D"/>
+<stop offset="1" stopColor="#53DA9D"/>
 </linearGradient>
 <linearGradient id={ids[6]} x1="9.12718" y1="7.00086" x2="4.84668" y2="7.00086" gradientUnits="userSpaceOnUse">
 <stop stopColor="#7CD249"/>
 <stop offset="1" stopColor="#339D36"/>
 </linearGradient>
 <linearGradient id={ids[7]} x1="6.98693" y1="3.99219" x2="6.98693" y2="10.0095" gradientUnits="userSpaceOnUse">
-<stop stopColor="#2E94FF"/>
-<stop offset="1" stopColor="#2ED9FF"/>
+<stop stopColor="#53DA9D"/>
+<stop offset="1" stopColor="#53DA9D"/>
 </linearGradient>
 </defs>
 </svg>
@@ -149,8 +149,8 @@ export function PaymentBillingGroupIcon({ size = 15 }: { size?: number }) {
 <path d="M12.9199 5.6875C13.0819 5.6875 13.1627 5.68776 13.2139 5.73828C13.265 5.7889 13.2659 5.86946 13.2676 6.03027C13.2706 6.32088 13.2705 6.63318 13.2705 6.96875V7.03125C13.2705 8.03669 13.2707 8.83333 13.1904 9.46289C13.1078 10.111 12.9344 10.6393 12.5459 11.0752C12.4307 11.2045 12.3037 11.3237 12.167 11.4316C11.7101 11.7925 11.1602 11.9527 10.4824 12.0293C9.81825 12.1043 8.9751 12.1045 7.90234 12.1045H6.09766C5.0249 12.1045 4.18175 12.1043 3.51758 12.0293C2.83976 11.9527 2.28992 11.7925 1.83301 11.4316C1.69632 11.3237 1.56934 11.2045 1.4541 11.0752C1.06557 10.6393 0.892219 10.111 0.80957 9.46289C0.729277 8.83323 0.729484 8.03593 0.729492 7.03027V6.96875C0.72949 6.63319 0.729438 6.32088 0.732422 6.03027C0.734075 5.86946 0.734988 5.7889 0.786133 5.73828C0.837283 5.68776 0.918145 5.6875 1.08008 5.6875H12.9199ZM6.41699 8.89551C6.17548 8.89551 5.97967 9.09153 5.97949 9.33301C5.97949 9.57463 6.17537 9.77051 6.41699 9.77051H7.29199C7.53347 9.77033 7.72949 9.57452 7.72949 9.33301C7.72932 9.09164 7.53336 8.89569 7.29199 8.89551H6.41699ZM9.04199 8.89551C8.80048 8.89551 8.60467 9.09153 8.60449 9.33301C8.60449 9.57463 8.80037 9.77051 9.04199 9.77051H11.083C11.3246 9.77051 11.5205 9.57463 11.5205 9.33301C11.5203 9.09153 11.3245 8.89551 11.083 8.89551H9.04199ZM7.90234 1.89551C8.9751 1.8955 9.81825 1.89568 10.4824 1.9707C11.1602 2.04729 11.7101 2.20751 12.167 2.56836C12.3037 2.67634 12.4307 2.79554 12.5459 2.9248C12.9344 3.36066 13.1078 3.88899 13.1904 4.53711C13.1999 4.61163 13.2048 4.6489 13.1963 4.68164C13.1826 4.73399 13.142 4.77962 13.0918 4.7998C13.0605 4.81227 13.0214 4.8125 12.9434 4.8125H1.05762C0.979271 4.8125 0.939563 4.8123 0.908203 4.7998C0.857999 4.77962 0.81738 4.73399 0.803711 4.68164C0.795184 4.6489 0.800068 4.61162 0.80957 4.53711C0.892219 3.889 1.06558 3.36066 1.4541 2.9248C1.56934 2.79555 1.69632 2.67634 1.83301 2.56836C2.28992 2.20752 2.83976 2.04729 3.51758 1.9707C4.18175 1.89568 5.0249 1.8955 6.09766 1.89551H7.90234Z" fill={`url(#${ids[0]})`}/>
 <defs>
 <linearGradient id={ids[0]} x1="7" y1="1.89551" x2="7" y2="12.1045" gradientUnits="userSpaceOnUse">
-<stop stopColor="#3377FF"/>
-<stop offset="1" stopColor="#80AAFF"/>
+<stop stopColor="#57DBA0"/>
+<stop offset="1" stopColor="#96E9C4"/>
 </linearGradient>
 </defs>
 </svg>
@@ -166,16 +166,16 @@ export function AdsManagementGroupIcon({ size = 15 }: { size?: number }) {
 <path d="M5.78415 9.27692C6.04438 9.68992 6.37102 9.98854 6.76825 10.2487C7.49982 10.7279 7.73029 11.8201 6.96154 12.4537L6.0916 13.1707C5.93239 13.3019 5.70314 13.3041 5.54149 13.1759C4.52648 12.3709 4.01117 11.7211 3.79262 10.8374C3.68795 10.4141 3.65609 9.95643 3.64775 9.4376C3.64355 9.17611 3.646 8.81726 3.64897 8.48241C3.64968 8.40168 3.70582 8.33207 3.78454 8.31417C3.97589 8.27065 4.15177 8.2912 4.32505 8.37566L5.53006 8.963C5.5814 8.98802 5.60707 9.00053 5.62667 9.01917C5.64628 9.03781 5.66112 9.06474 5.69081 9.1186C5.72111 9.17356 5.75224 9.22627 5.78415 9.27692Z" fill={`url(#${ids[2]})`}/>
 <defs>
 <linearGradient id={ids[0]} x1="7" y1="0.729492" x2="7" y2="10.3545" gradientUnits="userSpaceOnUse">
-<stop stopColor="#403DFF"/>
-<stop offset="1" stopColor="#9B99FF"/>
+<stop stopColor="#5FDDA4"/>
+<stop offset="1" stopColor="#ABEDCF"/>
 </linearGradient>
 <linearGradient id={ids[1]} x1="7" y1="0.729492" x2="7" y2="10.3545" gradientUnits="userSpaceOnUse">
-<stop stopColor="#403DFF"/>
-<stop offset="1" stopColor="#9B99FF"/>
+<stop stopColor="#5FDDA4"/>
+<stop offset="1" stopColor="#ABEDCF"/>
 </linearGradient>
 <linearGradient id={ids[2]} x1="5.54204" y1="8.29199" x2="5.54204" y2="13.2706" gradientUnits="userSpaceOnUse">
-<stop stopColor="#403DFF"/>
-<stop offset="1" stopColor="#9B99FF"/>
+<stop stopColor="#5FDDA4"/>
+<stop offset="1" stopColor="#ABEDCF"/>
 </linearGradient>
 </defs>
 </svg>

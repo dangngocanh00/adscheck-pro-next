@@ -1,17 +1,19 @@
+import { adsCheckShellNavigation as navigationItems } from '@/features/ads-check/ads-check-shell-navigation'
+import { AdsCheckShellBottomNav } from '@/features/ads-check/ads-check-shell-bottom-nav'
+import { useShellDrawerMode } from '@/features/ads-check/use-shell-drawer-mode'
 import { AdsCheckModuleIsland } from '@/features/ads-check/ads-check-module-island'
 import { appLanguageOptions, m, useAppLanguage, tx, t } from '@/i18n'
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import {
-  Bell, Bookmark, CreditCard, Headphones, Home,
-  Languages, Menu, Package, RefreshCw, ShoppingCart,
+  Bell, Headphones,
+  Languages, Menu, ShoppingCart,
 } from 'lucide-react'
-import { AdsCheckProAppIcon } from '@/features/ads-check/ads-check-pro-app-icon'
 import { AdsCheckModuleIcon } from '@/features/ads-check/ads-check-module-icon'
 import { AdsCheckNavIcon } from '@/features/ads-check/ads-check-nav-icon'
-import { AdsCheckBrandMark } from '@/features/ads-check/ads-check-brand-mark'
+import { ToolmetaWordmark } from '@/features/ads-check/ads-check-brand-mark'
 import { Link, useNavigate } from 'react-router-dom'
 import { AccountPanel, RailMenus, type AdsLanguage, type AdsRailMenu } from '@/features/ads-save/ads-save-panels'
-import { ControlHubModal, VersionWelcomeModal } from '@/features/ads-save/ads-save-modals'
+import { ControlHubModal } from '@/features/ads-save/ads-save-modals'
 import { ExploreV8Modal } from '@/features/ads-save/ads-save-explore-modal'
 import { AdsSaveMobileDrawer } from '@/features/ads-save/ads-save-mobile-drawer'
 import { AdsCheckAdAccountsWorkspace } from '@/features/ads-check/ads-check-adaccounts-workspace'
@@ -20,18 +22,13 @@ import { AdsSaveConfiguredWorkspace } from '@/features/ads-save/ads-save-configu
 import { AdsSaveCreateConfigModal } from '@/features/ads-save/ads-save-create-config-modal'
 import { createStoredConfiguration, triggerLocalCsvDownload, type AdsSaveStoredConfiguration } from '@/features/ads-save/ads-save-configuration-store'
 import { AdsCheckShellCurve } from '@/features/ads-check/ads-check-shell-curve'
-import { AdsCheckDeviceLoginDialog, type AdsCheckLoginSession } from '@/features/ads-check/ads-check-device-login-dialog'
 import {
   readAdsCheckDefaultV6,
-  readAdsCheckExtensionReady,
   readAdsCheckLanguage,
-  readAdsCheckLoginSession,
   readAdsCheckVersion,
   subscribeAdsCheckSessionState,
   writeAdsCheckDefaultV6,
-  writeAdsCheckExtensionReady,
   writeAdsCheckLanguage,
-  writeAdsCheckLoginSession,
   writeAdsCheckVersion,
 } from '@/features/ads-check/ads-check-session-state'
 
@@ -39,11 +36,6 @@ type Notice = { message: string; tone?: 'success' | 'info' } | null
 type DialogName = 'control' | 'explore' | null
 export type AdsWorkspaceVariant = 'ads-save' | 'ads-check-pro'
 
-const navigationItems = [
-  { label: 'Dashboard', icon: Home, to: '/app/home' }, { label: 'Ads Check Pro', icon: AdsCheckProAppIcon, to: '/app/adscheck-pro/adaccounts' },
-  { label: 'Extended Payment', icon: CreditCard, to: '/app/extended-payment' }, { label: 'Ads Save', icon: Bookmark, to: '/app/ads-save' },
-  { label: m("ui.b90857eb2c"), icon: Package, to: '/app/billing/payment' },
-]
 const languageLabels: Record<AdsLanguage, string> = Object.fromEntries(
   appLanguageOptions.map((item) => [item.code, item.label]),
 ) as Record<AdsLanguage, string>
@@ -70,21 +62,14 @@ export default function AdsSavePage({ variant = 'ads-save' }: { variant?: AdsWor
   }))
   const initialVersion = useRef(readAdsCheckVersion()).current
   const initialDefaultV6 = useRef(readAdsCheckDefaultV6()).current
-  const initialLoginSession = useRef(readAdsCheckLoginSession()).current
   const [mobileOpen, setMobileOpen] = useState(false)
+  useShellDrawerMode(setMobileOpen)
   const [accountOpen, setAccountOpen] = useState(false)
   const [activeMenu, setActiveMenu] = useState<AdsRailMenu>(null)
   const [dialog, setDialog] = useState<DialogName>(null)
   const [language, setLanguage] = useState<AdsLanguage>(readAdsCheckLanguage)
   const [version, setVersion] = useState<'v6' | 'v8'>(initialVersion ?? 'v8')
-  const [versionDraft, setVersionDraft] = useState<'v6' | 'v8'>(initialVersion ?? 'v8')
   const [defaultV6, setDefaultV6] = useState(initialDefaultV6)
-  const [versionPromptOpen, setVersionPromptOpen] = useState(initialVersion === null)
-  const [rememberVersion, setRememberVersion] = useState(false)
-  const [retrying, setRetrying] = useState(false)
-  const [loginSession, setLoginSession] = useState(initialLoginSession)
-  const [extensionReady, setExtensionReady] = useState(isAdsCheckPro && initialLoginSession !== null && readAdsCheckExtensionReady())
-  const [deviceLoginOpen, setDeviceLoginOpen] = useState(isAdsCheckPro && initialVersion !== null && initialLoginSession === null)
   const [notice, setNotice] = useState<Notice>(null)
   const [createConfigOpen, setCreateConfigOpen] = useState(false)
   // No real Ads Save configuration backend/store exists in this project —
@@ -97,7 +82,6 @@ export default function AdsSavePage({ variant = 'ads-save' }: { variant?: AdsWor
   // a later "+ Thêm cấu hình mới" never accidentally reopens in edit mode.
   const [editingConfigId, setEditingConfigId] = useState<string | null>(null)
   const mainRef = useRef<HTMLElement>(null)
-  const retryTimer = useRef<number | null>(null)
 
   useEffect(() => {
     const previousTitle = document.title
@@ -105,63 +89,27 @@ export default function AdsSavePage({ variant = 'ads-save' }: { variant?: AdsWor
     return () => { document.title = previousTitle }
   }, [isAdsCheckPro])
   useEffect(() => {
-    if (versionPromptOpen || deviceLoginOpen) return
     const frame = window.requestAnimationFrame(() => mainRef.current?.focus({ preventScroll: true }))
     return () => window.cancelAnimationFrame(frame)
-  }, [deviceLoginOpen, extensionReady, isAdsCheckPro, loginSession, versionPromptOpen])
+  }, [])
   useEffect(() => { if (!notice) return; const timer = window.setTimeout(() => setNotice(null), 3200); return () => window.clearTimeout(timer) }, [notice])
-  useEffect(() => () => { if (retryTimer.current !== null) window.clearTimeout(retryTimer.current) }, [])
   useEffect(() => subscribeAdsCheckSessionState(() => {
     const sharedVersion = readAdsCheckVersion()
     if (sharedVersion) {
       setVersion(sharedVersion)
-      setVersionDraft(sharedVersion)
     }
     setLanguage(readAdsCheckLanguage())
-    setLoginSession(readAdsCheckLoginSession())
   }), [])
 
   const announce = (message: string, tone: 'success' | 'info' = 'info') => setNotice({ message, tone })
   const openDialog = (next: Exclude<DialogName, null>) => { setAccountOpen(false); setActiveMenu(null); setMobileOpen(false); setDialog(next) }
   const toggleMenu = (next: Exclude<AdsRailMenu, null>) => { setAccountOpen(false); setDialog(null); setActiveMenu((current) => current === next ? null : next) }
-  const retry = () => {
-    if (retryTimer.current !== null) window.clearTimeout(retryTimer.current)
-    if (isAdsCheckPro && readAdsCheckLoginSession() === null) {
-      setDeviceLoginOpen(true)
-      announce(m("ui.def89cc37b"))
-      return
-    }
-    setRetrying(true)
-    retryTimer.current = window.setTimeout(() => {
-      retryTimer.current = null
-      setRetrying(false)
-      if (isAdsCheckPro) {
-        setExtensionReady(true)
-        writeAdsCheckExtensionReady(true)
-        announce(m("ui.c17a9d6783"), 'success')
-        return
-      }
-      announce(m("ui.a2c383f3e9"))
-    }, 800)
-  }
   const navigatePreview = (label: string, active?: boolean) => {
     setMobileOpen(false)
     if (active) return
     const target = navigationItems.find((item) => item.label === label)?.to
     if (target) navigate(target)
     else announce(m("ui.9556e04180", { 0: label }))
-  }
-  const confirmVersion = () => {
-    setVersion(versionDraft)
-    setDefaultV6(rememberVersion && versionDraft === 'v6')
-    setVersionPromptOpen(false)
-    if (isAdsCheckPro) setDeviceLoginOpen(true)
-    let storageUpdated = true
-    storageUpdated = writeAdsCheckVersion(versionDraft, rememberVersion)
-    const versionLabel = versionDraft === 'v6' ? 'Ads Check V6' : 'Ads Check'
-    announce(storageUpdated
-      ? m("ui.bf3180b3e7", { 0: versionLabel, 1: rememberVersion ? ' làm phiên bản mặc định' : '' })
-      : m("ui.f711e8ed37", { 0: versionLabel }), storageUpdated ? 'success' : 'info')
   }
   const updateDefaultV6 = (enabled: boolean) => {
     setDefaultV6(enabled)
@@ -173,23 +121,15 @@ export default function AdsSavePage({ variant = 'ads-save' }: { variant?: AdsWor
   }
   const activateV8 = (message: string) => {
     setVersion('v8')
-    setVersionDraft('v8')
     setDialog(null)
     writeAdsCheckVersion('v8')
     announce(message, 'success')
   }
   const selectVersion = (value: 'v6' | 'v8') => {
     setVersion(value)
-    setVersionDraft(value)
     setActiveMenu(null)
     writeAdsCheckVersion(value)
     announce(m("ui.0bff507373", { 0: value === 'v6' ? 'Ads Check V6' : 'Ads Check' }), 'success')
-  }
-  const chooseLoginSession = (session: AdsCheckLoginSession) => {
-    setDeviceLoginOpen(false)
-    setLoginSession(session)
-    writeAdsCheckLoginSession(session)
-    announce(session === 'pro' ? m("ui.01764dc36a") : m("ui.e476cdb811"), 'success')
   }
   const handleOpenCreateConfig = () => { setEditingConfigId(null); setCreateConfigOpen(true) }
   const handleOpenEditConfig = (id: string) => { setEditingConfigId(id); setCreateConfigOpen(true) }
@@ -208,7 +148,7 @@ export default function AdsSavePage({ variant = 'ads-save' }: { variant?: AdsWor
     <a className="ads-skip-link" href="#ads-save-main">{t("ui.9af88ffc6d")}</a>
     <header className="ads-topbar">
       <button className="ads-mobile-menu" type="button" aria-label={t("ui.23e29182f4")} aria-expanded={mobileOpen} aria-controls="ads-mobile-drawer" onClick={() => setMobileOpen(true)}><Menu size={17} /></button>
-      <Link className="ads-brand" to={isAdsCheckPro ? '/app/adscheck-pro/adaccounts' : '/app/ads-save'} aria-label="Ads Check home"><AdsCheckBrandMark className="ads-brand-header-logo" /><span><strong>{t("ui.0a099528df")}</strong><small>{t("ui.44a1737be5")}</small></span></Link>
+      <Link className="ads-brand" to={isAdsCheckPro ? '/app/adscheck-pro/adaccounts' : '/app/ads-save'} aria-label="Ads Check home"><ToolmetaWordmark /></Link>
       <div className="ads-top-actions">
         <button className="ads-buy-button" type="button" aria-label={t("ui.b90857eb2c")} onClick={() => navigate('/app/billing/payment')}><ShoppingCart size={15} /><span>{t("ui.b90857eb2c")}</span></button>
         <button className="ads-profile" type="button" aria-haspopup="dialog" aria-expanded={accountOpen} onClick={() => { setActiveMenu(null); setDialog(null); setAccountOpen((value) => !value) }}>{tx(isAdsCheckPro ? m("ui.4f4d141887") : m("ui.0f366f2fcc"))}</button>
@@ -228,18 +168,7 @@ export default function AdsSavePage({ variant = 'ads-save' }: { variant?: AdsWor
       </nav>
 
       <main ref={mainRef} id="ads-save-main" className="ads-main-panel" tabIndex={-1}>
-        {tx(isAdsCheckPro ? (extensionReady && loginSession !== null ? <AdsCheckAdAccountsWorkspace onAnnounce={announce} /> : <div className="ads-install-content">
-          <header className="ads-install-heading"><h1>{t("ui.607ce9f4e7")}</h1><p>{t("ui.8853a78d4b")}</p></header>
-          <div className="ads-install-cards">
-            <article className="ads-install-card"><div className="ads-card-main"><AdsCheckBrandMark className="ads-install-hero-logo" /><h2>{t("ui.82403fe59c")}</h2><p>{t("ui.1e087a46f2")}</p></div><a className="ads-download-link" href="https://adscheck.app/connect" target="_blank" rel="noreferrer">{t("ui.1a4df19079")}</a></article>
-          </div>
-          <div className="ads-retry-row"><span>{t("ui.381ad79ee5")}</span><button type="button" disabled={retrying} aria-busy={retrying} onClick={retry}><RefreshCw size={16} className={retrying ? 'is-spinning' : ''} />{tx(retrying ? m("ui.aa41e2cfe7") : m("ui.e353f2f3d3"))}</button></div>
-        </div>)
-        // Ads Save's own workspace content slot, never the Ads Check Pro
-        // extension-install gate (previously fell through to it
-        // unconditionally). Which of the two real states renders is
-        // derived from `configurations` — never a separate hardcoded demo
-        // page.
+        {tx(isAdsCheckPro ? <AdsCheckAdAccountsWorkspace onAnnounce={announce} />
         : configurations.length === 0
           ? <AdsSaveWorkspace onCreateConfig={handleOpenCreateConfig} />
           : <AdsSaveConfiguredWorkspace
@@ -253,13 +182,12 @@ export default function AdsSavePage({ variant = 'ads-save' }: { variant?: AdsWor
       </main>
     </section>
 
+    <AdsCheckShellBottomNav open={mobileOpen} drawerId="ads-mobile-drawer" onMore={() => setMobileOpen(true)} />
     <RailMenus active={activeMenu} language={language} version={version} defaultV6={defaultV6} onClose={() => setActiveMenu(null)} onLanguage={(value) => { setLanguage(value); writeAdsCheckLanguage(value); setActiveMenu(null); announce(m("ui.1e074cd52d", { 0: languageLabels[value] }), 'success') }} onVersion={selectVersion} onDefaultV6={updateDefaultV6} />
     <AccountPanel open={accountOpen} authenticated={isAdsCheckPro} onClose={() => setAccountOpen(false)} onExplore={() => openDialog('explore')} onManageAccount={() => navigate('/app/account')} onAction={announce} />
     {tx(mobileOpen && <AdsSaveMobileDrawer open navigation={navigation} standardEditionLabel={standardEditionLabel} language={language} languageLabel={languageLabels[language]} onClose={() => setMobileOpen(false)} onNavigate={navigatePreview} onControlHub={() => openDialog('control')} onAccount={() => { setMobileOpen(false); setAccountOpen(true) }} onLanguage={(value) => { const next = value as AdsLanguage; setLanguage(next); writeAdsCheckLanguage(next); announce(m("ui.1e074cd52d", { 0: languageLabels[next] }), 'success') }} />)}
     {dialog === 'control' && <ControlHubModal open onClose={() => setDialog(null)} onAction={announce} onRequestUpgrade={() => navigate('/app/billing/payment')} />}
     {tx(dialog === 'explore' && <ExploreV8Modal open onClose={() => setDialog(null)} onAction={announce} onOpenControlHub={() => setDialog('control')} onChooseV8={() => activateV8(m("ui.d36d533285"))} onExperienceV8={() => activateV8(m("ui.61ee591bad"))} />)}
-    <VersionWelcomeModal open={versionPromptOpen} value={versionDraft} remember={rememberVersion} onChange={setVersionDraft} onRemember={setRememberVersion} onClose={() => { setVersionDraft(version); setVersionPromptOpen(false) }} onConfirm={confirmVersion} />
-    <AdsCheckDeviceLoginDialog open={deviceLoginOpen} onClose={() => setDeviceLoginOpen(false)} onChoose={chooseLoginSession} />
     {tx(createConfigOpen && <AdsSaveCreateConfigModal
       mode={editingConfigId ? 'edit' : 'create'}
       initialConfiguration={editingConfigId ? configurations.find((item) => item.id === editingConfigId)?.configuration : undefined}

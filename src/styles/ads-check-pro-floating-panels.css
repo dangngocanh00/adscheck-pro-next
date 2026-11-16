@@ -11,11 +11,11 @@
   --panel-gap: 6px;
   --panel-right-inset: 8px;
   --quick-access-gap: 6px;
-  --cv-brand-primary: #67d8f5;
-  --cv-brand-hover-soft: #203853;
-  --cv-brand-focus-soft: #203853;
-  --cv-fw-pin-active-start: #237bb6;
-  --cv-fw-pin-active-end: #2854ac;
+  --cv-brand-primary: #79E3B3;
+  --cv-brand-hover-soft: #20533C;
+  --cv-brand-focus-soft: #20533C;
+  --cv-fw-pin-active-start: #26B374;
+  --cv-fw-pin-active-end: #28AC71;
   position: absolute;
   z-index: 30;
   inset: 60px var(--panel-right-inset) 64px 12px;
@@ -42,13 +42,13 @@
   transform: translate(-50%, -100%);
 }
 .ads-pro-panel-launcher {
-  --qa-closed-gradient: linear-gradient(145deg, rgba(31, 78, 133, .92) 0%, rgba(28, 70, 124, .90) 45%, rgba(22, 54, 103, .94) 100%);
-  --qa-open-gradient: linear-gradient(145deg, #56dff5 0%, #2aaeeb 38%, #3c72f0 100%);
-  --qa-closed-border: rgba(107, 188, 255, .38);
-  --qa-open-border: rgba(177, 237, 255, .78);
-  --qa-icon: #bfe9ff;
-  --qa-closed-glow: 0 4px 12px rgba(26, 122, 204, .16);
-  --qa-open-glow: 0 0 10px rgba(55, 191, 255, .55), 0 8px 18px rgba(32, 112, 220, .34);
+  --qa-closed-gradient: linear-gradient(145deg, rgba(31, 133, 87, .92) 0%, rgba(28, 124, 81, .90) 45%, rgba(22, 103, 67, .94) 100%);
+  --qa-open-gradient: linear-gradient(145deg, #6BE0AB 0%, #3FD692 38%, #52DA9D 100%);
+  --qa-closed-border: rgba(133, 229, 186, .38);
+  --qa-open-border: rgba(191, 241, 219, .78);
+  --qa-icon: #CAF4E1;
+  --qa-closed-glow: 0 4px 12px rgba(40, 190, 122, .16);
+  --qa-open-glow: 0 0 10px rgba(90, 220, 162, .55), 0 8px 18px rgba(44, 208, 134, .34);
   width: 46px;
   height: 46px;
   position: relative;
@@ -93,7 +93,7 @@
   border-radius: 11px;
   border: 1px solid transparent;
   border-top-color: rgba(255, 255, 255, .22);
-  border-left-color: rgba(225, 242, 255, .10);
+  border-left-color: rgba(230, 250, 241, .10);
   background: linear-gradient(160deg, rgba(255, 255, 255, .05), transparent 45%, rgba(255, 255, 255, .04));
   opacity: .6;
 }
@@ -111,7 +111,7 @@
 .ads-pro-panel-launcher[aria-expanded="true"]::before,
 .ads-pro-panel-launcher[aria-expanded="true"]::after { opacity: 1; }
 .ads-pro-panel-launcher[aria-expanded="true"]:hover { filter: brightness(1.04); }
-.ads-pro-floating-panels :focus-visible { outline: 2px solid #7dd3fc; outline-offset: 2px; }
+.ads-pro-floating-panels :focus-visible { outline: 2px solid #B9FF39; outline-offset: 2px; }
 .ads-pro-floating-panels > :is(.ads-function-library, .ads-workflow-panel) {
   position: relative;
   inset: auto;
@@ -123,54 +123,54 @@
   max-height: 720px;
   align-self: flex-end;
   height: 100%;
-  border: 1px solid #35516f;
+  border: 1px solid #356F55;
   border-radius: 18px;
-  background: linear-gradient(155deg, #17273e, #101b2e);
-  color: #e2ebf8;
-  box-shadow: 0 16px 40px #02081755, inset 0 1px 0 #ffffff06;
+  background: linear-gradient(155deg, #173E2C, #102E20);
+  color: #E2F8EE;
+  box-shadow: 0 16px 40px #04150D55, inset 0 1px 0 #ffffff06;
   pointer-events: auto;
 }
-.ads-pro-floating-panels > .ads-workflow-panel { width: 360px; flex-basis: 360px; border-color: #514b79; }
-.ads-pro-floating-panels .ads-panel-heading { border-bottom: 1px solid #2c405d; margin-bottom: 10px; }
-.ads-pro-floating-panels :is(.ads-panel-heading h2, .ads-function-group-heading, .ads-function-row, .ads-function-item-icon, .ads-workflow-step-label, .ads-runner-pill input) { color: #e2ebf8; }
-.ads-pro-floating-panels :is(.ads-function-group-heading span, .ads-function-group-heading > svg:first-child) { color: #76d9f4; }
+.ads-pro-floating-panels > .ads-workflow-panel { width: 360px; flex-basis: 360px; border-color: #4B7964; }
+.ads-pro-floating-panels .ads-panel-heading { border-bottom: 1px solid #2C5D47; margin-bottom: 10px; }
+.ads-pro-floating-panels :is(.ads-panel-heading h2, .ads-function-group-heading, .ads-function-row, .ads-function-item-icon, .ads-workflow-step-label, .ads-runner-pill input) { color: #E2F8EE; }
+.ads-pro-floating-panels :is(.ads-function-group-heading span, .ads-function-group-heading > svg:first-child) { color: #85E5BA; }
 .ads-pro-floating-panels .ads-workflow-heading h2 span { color: #c4b5fd; }
-.ads-pro-floating-panels :is(.ads-function-group, .ads-template-panel) { border: 1px solid #345977; border-radius: 14px; background: #172a42; color: #e2ebf8; }
-.ads-pro-floating-panels .ads-function-row { border-color: #2b405a; }
-.ads-pro-floating-panels .ads-function-group:not(.is-remove-hidden-admin) .ads-function-group-heading stop { stop-color: #67d8f5; }
-.ads-pro-floating-panels .ads-function-group:not(.is-remove-hidden-admin) .ads-function-group-heading stop:last-child { stop-color: #4098dc; }
-.ads-pro-floating-panels :is(.ads-function-search, .ads-function-pin-filter, .ads-function-workflow-mode-trigger, .ads-runner-pill) { background: #223750; color: #c6d9ed; box-shadow: none; }
-.ads-pro-floating-panels .ads-function-search input { color: #eef6ff; }
-.ads-pro-floating-panels .ads-function-pin-filter:disabled { color: #8396b0; }
-.ads-pro-floating-panels .ads-function-pin-filter.is-active { background: linear-gradient(135deg, #237bb6, #2854ac); color: #fff; }
-.ads-pro-floating-panels .ads-panel-heading > button:hover { background: #304565; color: #a5e9ff; }
-.ads-pro-floating-panels .ads-workflow-template { background: #2b2c50 !important; color: #ddd3ff !important; }
-.ads-pro-floating-panels :is(.ads-function-groups, .ads-workflow-canvas, .ads-template-list) { scrollbar-color: #45617e transparent; }
-.ads-pro-floating-panels :is(.ads-function-groups, .ads-workflow-canvas)::-webkit-scrollbar-thumb { background: #45617e; }
-.ads-pro-floating-panels .ads-workflow-canvas { background: transparent; border-color: #344e70; }
-.ads-pro-floating-panels .ads-workflow-empty > span { background: #292d4f; color: #c4b5fd; }
-.ads-pro-floating-panels :is(.ads-workflow-empty, .ads-workflow-step-no-config, .ads-workflow-step-field-hint, .ads-function-empty, .ads-runner-pill-label) { color: #a9b9cd; }
-.ads-pro-floating-panels .ads-workflow-step-notch-bg path { fill: #1b2d47; stroke: #476792; }
-.ads-pro-floating-panels .ads-workflow-step.is-dragging .ads-workflow-step-notch-bg path { fill: #253e5b; }
-.ads-pro-floating-panels .ads-workflow-step-pill { background: #2a395a; color: #d0dcff; }
-.ads-pro-floating-panels .ads-workflow-step.is-expanded .ads-workflow-step-pill { background: linear-gradient(135deg, #5850a4, #385b9d); color: #fff; }
-.ads-pro-floating-panels .ads-workflow-step-remove { background: #2b3b56; color: #b6c9e0; }
+.ads-pro-floating-panels :is(.ads-function-group, .ads-template-panel) { border: 1px solid #347759; border-radius: 14px; background: #17422F; color: #E2F8EE; }
+.ads-pro-floating-panels .ads-function-row { border-color: #2B5A45; }
+.ads-pro-floating-panels .ads-function-group:not(.is-remove-hidden-admin) .ads-function-group-heading stop { stop-color: #79E3B3; }
+.ads-pro-floating-panels .ads-function-group:not(.is-remove-hidden-admin) .ads-function-group-heading stop:last-child { stop-color: #45D795; }
+.ads-pro-floating-panels :is(.ads-function-search, .ads-function-pin-filter, .ads-function-workflow-mode-trigger, .ads-runner-pill) { background: #22503B; color: #C6EDDB; box-shadow: none; }
+.ads-pro-floating-panels .ads-function-search input { color: #F1FCF7; }
+.ads-pro-floating-panels .ads-function-pin-filter:disabled { color: #83B09C; }
+.ads-pro-floating-panels .ads-function-pin-filter.is-active { background: linear-gradient(135deg, #26B374, #28AC71); color: #fff; }
+.ads-pro-floating-panels .ads-panel-heading > button:hover { background: #30654D; color: #B5EFD5; }
+.ads-pro-floating-panels .ads-workflow-template { background: #2B503F !important; color: #ddd3ff !important; }
+.ads-pro-floating-panels :is(.ads-function-groups, .ads-workflow-canvas, .ads-template-list) { scrollbar-color: #457E64 transparent; }
+.ads-pro-floating-panels :is(.ads-function-groups, .ads-workflow-canvas)::-webkit-scrollbar-thumb { background: #457E64; }
+.ads-pro-floating-panels .ads-workflow-canvas { background: transparent; border-color: #347055; }
+.ads-pro-floating-panels .ads-workflow-empty > span { background: #294F3E; color: #c4b5fd; }
+.ads-pro-floating-panels :is(.ads-workflow-empty, .ads-workflow-step-no-config, .ads-workflow-step-field-hint, .ads-function-empty, .ads-runner-pill-label) { color: #A9CDBD; }
+.ads-pro-floating-panels .ads-workflow-step-notch-bg path { fill: #1B4733; stroke: #479270; }
+.ads-pro-floating-panels .ads-workflow-step.is-dragging .ads-workflow-step-notch-bg path { fill: #255B43; }
+.ads-pro-floating-panels .ads-workflow-step-pill { background: #2A5A44; color: #D8F7E9; }
+.ads-pro-floating-panels .ads-workflow-step.is-expanded .ads-workflow-step-pill { background: linear-gradient(135deg, #50A47E, #389D70); color: #fff; }
+.ads-pro-floating-panels .ads-workflow-step-remove { background: #2B5643; color: #B6E0CD; }
 .ads-pro-floating-panels .ads-workflow-step-remove:hover { background: #50293e; color: #ff98a8; }
-.ads-pro-floating-panels .ads-workflow-step.is-expanded .ads-workflow-step-title-row { border-color: #344762; }
-.ads-pro-floating-panels .ads-workflow-step-field-label { color: #cfdaeb; }
-.ads-pro-floating-panels .ads-workflow-step-field :is(input, select, textarea) { background: #132339; border-color: #3d587a; color: #e2ebf8; }
+.ads-pro-floating-panels .ads-workflow-step.is-expanded .ads-workflow-step-title-row { border-color: #34624D; }
+.ads-pro-floating-panels .ads-workflow-step-field-label { color: #CFEBDE; }
+.ads-pro-floating-panels .ads-workflow-step-field :is(input, select, textarea) { background: #133928; border-color: #3D7A5F; color: #E2F8EE; }
 .ads-pro-floating-panels .ads-workflow-step-field [aria-invalid="true"] { border-color: #ef7185; }
-.ads-pro-floating-panels .ads-workflow-footer { border-color: #30435f; }
-.ads-pro-floating-panels .ads-runner-pill-stepper button { color: #9ab9db; }
-.ads-pro-floating-panels .ads-workflow-actions button { background: #293657; color: #d9ddff; border: 1px solid #44577e; }
-.ads-pro-floating-panels .ads-workflow-actions button.is-primary { background: linear-gradient(135deg, #326cda, #6651c7); color: #fff; border-color: #7289e6; }
-.ads-pro-floating-panels .ads-workflow-actions button:disabled { background: #26334a; color: #8293ac; border-color: #34455e; box-shadow: none; }
+.ads-pro-floating-panels .ads-workflow-footer { border-color: #305F4A; }
+.ads-pro-floating-panels .ads-runner-pill-stepper button { color: #9ADBBE; }
+.ads-pro-floating-panels .ads-workflow-actions button { background: #295742; color: #E0F8ED; border: 1px solid #447E64; }
+.ads-pro-floating-panels .ads-workflow-actions button.is-primary { background: linear-gradient(135deg, #37D58E, #6651c7); color: #fff; border-color: #76E2B1; }
+.ads-pro-floating-panels .ads-workflow-actions button:disabled { background: #264A3A; color: #82AC99; border-color: #345E4B; box-shadow: none; }
 .ads-pro-floating-panels .ads-template-panel { max-height: 45%; overflow: auto; flex-shrink: 1; }
-.ads-pro-floating-panels .ads-template-panel :is(input, select) { background: #132339; color: #e2ebf8; border-color: #3d587a; }
-.ads-pro-floating-panels :is(.ads-template-empty, .ads-template-panel-close) { background: #223750; color: #a9b9cd; }
-.ads-pro-floating-panels :is(.ads-template-row-load, .ads-template-name-field, .ads-template-rename-field, .ads-template-name-actions .is-secondary, .ads-template-row.is-renaming > button, .ads-template-row-confirm-actions button:last-child) { background: #223750; color: #d5e2f5; }
-.ads-pro-floating-panels :is(.ads-template-create-new, .ads-template-row-confirm-text, .ads-template-row-load span) { color: #a9b9cd; }
-.ads-pro-floating-panels .ads-template-name-actions .is-primary { background: #425bb8; }
+.ads-pro-floating-panels .ads-template-panel :is(input, select) { background: #133928; color: #E2F8EE; border-color: #3D7A5F; }
+.ads-pro-floating-panels :is(.ads-template-empty, .ads-template-panel-close) { background: #22503B; color: #A9CDBD; }
+.ads-pro-floating-panels :is(.ads-template-row-load, .ads-template-name-field, .ads-template-rename-field, .ads-template-name-actions .is-secondary, .ads-template-row.is-renaming > button, .ads-template-row-confirm-actions button:last-child) { background: #22503B; color: #D5F5E7; }
+.ads-pro-floating-panels :is(.ads-template-create-new, .ads-template-row-confirm-text, .ads-template-row-load span) { color: #A9CDBD; }
+.ads-pro-floating-panels .ads-template-name-actions .is-primary { background: #42B883; }
 .ads-pro-floating-panels .ads-pro-local-dialog-layer { pointer-events: auto; }
 
 /* Container fallback: both remain accessible without covering each other. */

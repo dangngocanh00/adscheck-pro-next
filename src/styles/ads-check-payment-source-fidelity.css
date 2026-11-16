@@ -1,7 +1,7 @@
 /* Source-fidelity layer for the light mint payment surfaces used by Ads Check V8. */
 .ads-payment-page {
-  --payment-green: var(--cv-brand-primary, #2563EB);
-  --payment-green-strong: var(--cv-brand-primary-hover, #1D4ED8);
+  --payment-green: var(--cv-brand-primary, #287151);
+  --payment-green-strong: var(--cv-brand-primary-hover, #1C5A3E);
   --payment-muted: #68736a;
   --payment-border: #d8e5da;
   --payment-panel: #fff;

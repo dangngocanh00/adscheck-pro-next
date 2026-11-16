@@ -53,7 +53,7 @@
   background: #fff;
   cursor: pointer;
 }
-.ads-save-add-config-card:hover { background: var(--cv-brand-soft, #EFF6FF); }
+.ads-save-add-config-card:hover { background: var(--cv-brand-soft, #F1FFDC); }
 .ads-save-add-config-card .ads-save-empty-illustration { margin-bottom: 10px; }
 .ads-save-add-config-cta { display: inline-flex; align-items: center; gap: 6px; color: var(--cv-brand-primary-hover, #0a7a34); font-size: 14.5px; font-weight: 700; }
 .ads-save-add-config-card p { max-width: 300px; margin: 6px 0 0; color: #5c6b60; font-size: 12.5px; line-height: 1.55; }
@@ -85,7 +85,7 @@
 
 .ads-save-config-menu { position: relative; }
 .ads-save-config-menu-trigger { width: 26px; height: 26px; display: grid; place-items: center; border: 0; border-radius: 50%; background: transparent; color: #5c6b60; cursor: pointer; }
-.ads-save-config-menu-trigger:hover { background: var(--cv-brand-soft, #EFF6FF); }
+.ads-save-config-menu-trigger:hover { background: var(--cv-brand-soft, #F1FFDC); }
 .ads-save-config-menu-dropdown {
   position: absolute;
   z-index: 5;
@@ -125,7 +125,7 @@
 /* Fixed icon box (independent of each lucide icon's own glyph shape) so
    every row's label starts at the exact same X position. */
 .ads-save-config-menu-dropdown button svg { flex: none; width: 15px; height: 15px; color: #5c6b60; }
-.ads-save-config-menu-dropdown button:hover { background: var(--cv-brand-soft, #EFF6FF); }
+.ads-save-config-menu-dropdown button:hover { background: var(--cv-brand-soft, #F1FFDC); }
 .ads-save-config-menu-dropdown button.is-danger { color: #17281b; }
 .ads-save-config-menu-dropdown button.is-danger svg { color: #5c6b60; }
 
@@ -139,7 +139,7 @@
 
 .ads-save-config-card-footer { margin-top: auto; display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 12px; }
 .ads-save-config-card-footer > span { color: #7c8a7f; }
-.ads-save-config-history-link { border: 0; background: none; padding: 0; color: #2f6fed; font-size: 12px; font-weight: 600; cursor: pointer; }
+.ads-save-config-history-link { border: 0; background: none; padding: 0; color: #45D795; font-size: 12px; font-weight: 600; cursor: pointer; }
 .ads-save-config-history-link:hover { text-decoration: underline; }
 
 @media (max-width: 720px) {

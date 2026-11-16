@@ -11,7 +11,7 @@ import {
   type ExtendedPaymentSurface,
 } from './ads-check-extended-payment-data'
 import { buildAccountQualityUrl, buildAdsManagerCampaignsUrl, buildBillingHubUrl } from './ads-check-pro-tkqc-format'
-import { AdsCheckBrandMark } from './ads-check-brand-mark'
+import { AdsCheckBrandMark, ToolmetaWordmark } from './ads-check-brand-mark'
 
 // Extended Payment Round 2 Part #8/#12 — ONE shared Bubble implementation
 // consumed by both the Extended Payment configuration preview
@@ -121,8 +121,7 @@ export const ExtendedPaymentBubble: FC<ExtendedPaymentBubbleProps> = ({
   return (
     <div className={`ads-extended-preview-shell is-${surface}${bubbleEnabled ? '' : ' is-disabled'}`}>
       <div className="ads-extended-preview-brand">
-        <AdsCheckBrandMark className="ads-extended-preview-logo" />
-        <span><strong>{t("ui.0a099528df")}</strong><small>{t("ui.44a1737be5")}</small></span>
+        <ToolmetaWordmark />
         {tx(surface === 'action-bar' && bubbleEnabled && <div className="ads-extended-brand-controls">
           <div className="ads-extended-share-menu" ref={shareRef}>
             <button type="button" className="ads-extended-brand-button ads-extended-share-trigger" aria-haspopup="menu" aria-expanded={shareOpen} onClick={() => setShareOpen((current) => !current)}><Share2 size={15} /><ChevronDown size={9} /></button>

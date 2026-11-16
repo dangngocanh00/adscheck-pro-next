@@ -1,14 +1,5 @@
 import { useAppLanguage, m, tx, t } from '@/i18n'
-import type { CSSProperties } from 'react'
-import loadingBackground from '../../../assets/new-background.png'
-
-type LoadingCanvasStyle = CSSProperties & {
-  '--ads-v8-loading-bg': string
-}
-
-const canvasStyle: LoadingCanvasStyle = {
-  '--ads-v8-loading-bg': `url(${loadingBackground})`,
-}
+import { ToolmetaWordmark } from './ads-check-brand-mark'
 
 type Props = {
   // 'splash' (default) — the full-shell route-entry splash, unchanged.
@@ -26,8 +17,9 @@ export function AdsCheckV8LoadingScreen({ variant = 'splash' }: Props = {}) {
   return <div className={`ads-v8-loading-shell is-${variant}`} role="status" aria-live="polite">
     <span className="sr-only">{tx(isData ? m("ui.1ceaaced27") : m("ui.39a9f2518b"))}</span>
     {!isData && <div className="ads-v8-loading-rail" aria-hidden="true" />}
-    <div className="ads-v8-loading-canvas" style={canvasStyle}>
+    <div className="ads-v8-loading-canvas">
       <div className="ads-v8-loading-center">
+        <ToolmetaWordmark className="toolmeta-loading-wordmark" />
         {tx(isData && <span className="ads-v8-loading-text" aria-hidden="true">{t("ui.de68491680")}</span>)}
         <span className="ads-v8-loading-progress" aria-hidden="true"><i /></span>
       </div>

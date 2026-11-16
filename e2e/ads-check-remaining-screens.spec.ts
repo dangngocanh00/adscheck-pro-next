@@ -93,7 +93,7 @@ test('keeps the simulated extension session across Ads Check routes', async ({ p
 })
 
 test('keeps shell version and language choices across routes', async ({ page, isMobile }) => {
-  await page.goto('/app/home')
+  await page.goto('/app/notification')
   await expect(page.locator('#ads-product-main')).toBeFocused()
   if (isMobile) {
     await page.getByRole('button', { name: 'Mở menu' }).click()
@@ -114,29 +114,6 @@ test('keeps shell version and language choices across routes', async ({ page, is
   await expect(shellStatus).toContainText('English')
   await page.goto('/app/account')
   await expect(page.locator('.ads-account-information dd').filter({ hasText: 'English' })).toBeVisible()
-})
-
-test('recreates the two-step V8 dashboard story', async ({ page, isMobile }) => {
-  await page.goto('/app/home')
-  await expect(page.getByRole('heading', { name: 'Một cách vận hành quảng cáo hoàn toàn mới.' })).toBeVisible()
-  await expect(page.getByText('1/2', { exact: true })).toBeVisible()
-  await page.getByRole('button', { name: 'Bắt đầu khám phá' }).click()
-  await expect(page.getByText('2/2', { exact: true })).toBeVisible()
-  await expect(page.getByRole('heading', { name: 'Bảy thay đổi chính khi chuyển từ V6 sang phiên bản mới.' })).toBeVisible()
-  await expect(page.getByRole('button', { name: /Đổi tên gói Ads Check Pro/ })).toBeVisible()
-  if (!isMobile) {
-    await page.setViewportSize({ width: 1024, height: 900 })
-    await expect.poll(() => page.locator('.ads-product-main').evaluate((element) => element.scrollWidth <= element.clientWidth)).toBe(true)
-  }
-  await page.getByRole('button', { name: 'Quay lại' }).click()
-  await expect(page.getByText('1/2', { exact: true })).toBeVisible()
-  if (isMobile) {
-    await page.getByRole('button', { name: 'Mở menu' }).click()
-    await page.getByRole('dialog', { name: 'Menu di động' }).getByRole('button', { name: 'Control Hub' }).click()
-  } else {
-    await page.getByRole('button', { name: 'Khám phá Control Hub' }).click()
-  }
-  await expect(page.getByRole('dialog', { name: /Control Hub/ })).toBeVisible()
 })
 
 test('supports Extended Payment settings and preview controls', async ({ page, isMobile }) => {

@@ -2,29 +2,29 @@
 .ads-extended-payment-page .ads-extended-restore { margin-left: auto; }
 .ads-extended-payment-page :is(.ads-extended-restore, .ads-extended-board-actions > button) {
   min-height: 36px; padding: 7px 14px; display: inline-flex; align-items: center; justify-content: center; gap: 7px;
-  border: 1px solid rgba(59,130,246,.24); border-radius: 12px; background: rgba(255,255,255,.7); color: #2563EB;
+  border: 1px solid rgba(40, 113, 81, .24); border-radius: 12px; background: rgba(255,255,255,.7); color: #287151;
   font: inherit; font-size: 12px; font-weight: 600; line-height: 1.4; cursor: pointer;
   transition: background .18s ease-out, border-color .18s ease-out, box-shadow .18s ease-out, transform .18s ease-out;
 }
-.ads-extended-payment-page :is(.ads-extended-restore, .ads-extended-board-actions > button):hover { background: #EFF6FF; border-color: #3B82F673; box-shadow: 0 4px 12px #2563EB1A; transform: translateY(-1px); }
+.ads-extended-payment-page :is(.ads-extended-restore, .ads-extended-board-actions > button):hover { background: #F1FFDC; border-color: #28715173; box-shadow: 0 4px 12px #2871511A; transform: translateY(-1px); }
 .ads-extended-payment-page :is(.ads-extended-restore, .ads-extended-board-actions > button) svg { flex: none; }
 .ads-extended-payment-page .ads-extended-board-heading { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px 20px; margin-bottom: 20px; }
 .ads-extended-payment-page .ads-extended-board-heading h2 { margin: 0; }
 .ads-extended-payment-page .ads-extended-board-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
-.ads-extended-payment-page .ads-extended-board-actions > .is-neutral { color: #62748B; border-color: #DCE6F3; }
-.ads-extended-payment-page .ads-extended-field-search { width: 240px; max-width: 100%; display: flex; align-items: center; gap: 8px; min-height: 36px; padding: 0 12px; border: 1px solid #D8E5F5; border-radius: 12px; background: #F7FAFF; color: #6A85A8; }
-.ads-extended-payment-page .ads-extended-field-search input { width: 100%; min-width: 0; height: 34px; border: 0; background: transparent; color: #243C59; font: inherit; font-size: 12px; }
-.ads-extended-payment-page .ads-extended-field-search:focus-within { border-color: #72A8F6; box-shadow: 0 0 0 3px #3B82F612; }
-.ads-extended-payment-page .ads-extended-board-empty { padding: 24px; color: #62748B; text-align: center; }
+.ads-extended-payment-page .ads-extended-board-actions > .is-neutral { color: #628B79; border-color: #DCF3E9; }
+.ads-extended-payment-page .ads-extended-field-search { width: 240px; max-width: 100%; display: flex; align-items: center; gap: 8px; min-height: 36px; padding: 0 12px; border: 1px solid #D8F5E8; border-radius: 12px; background: #F8FEFB; color: #6AA88C; }
+.ads-extended-payment-page .ads-extended-field-search input { width: 100%; min-width: 0; height: 34px; border: 0; background: transparent; color: #245941; font: inherit; font-size: 12px; }
+.ads-extended-payment-page .ads-extended-field-search:focus-within { border-color: #83E5B9; box-shadow: 0 0 0 3px #28715112; }
+.ads-extended-payment-page .ads-extended-board-empty { padding: 24px; color: #628B79; text-align: center; }
 .ads-extended-payment-page {
   --extended-preview-width: 320px;
   --extended-general-card-width: 250px;
   --extended-data-tile-width: 230px;
   --extended-card-gap: 12px;
   --extended-column-gap: 20px;
-  padding: 24px; background: #EEF4FB; color: #10233F;
-  --extended-green: #3B82FF; --extended-soft: #F0F6FF;
-  --extended-line: #D9E5F5; --extended-muted: #62748B;
+  padding: 24px; background: #EEFBF5; color: #103F2A;
+  --extended-green: #287151; --extended-soft: #F3FCF8;
+  --extended-line: #D9F5E8; --extended-muted: #628B79;
 }
 .ads-extended-payment-page .ads-extended-layout { gap: var(--extended-column-gap); grid-template-columns: minmax(0, 1fr) var(--extended-preview-width); }
 .ads-extended-payment-page .ads-extended-settings-panel {
@@ -33,70 +33,82 @@
 }
 .ads-extended-payment-page .ads-extended-page-heading {
   flex: none; height: auto; min-height: 64px; padding: 14px 20px;
-  border: 1px solid #D8E6FA; border-radius: 20px;
-  background: linear-gradient(115deg, #FFFFFF, #F2F8FF);
-  box-shadow: 0 3px 12px rgba(29, 63, 110, .04), inset 0 1px 0 #FFF;
+  border: 1px solid #DBF7EA; border-radius: 20px;
+  background: linear-gradient(115deg, #FFFFFF, #F4FDF9);
+  box-shadow: 0 3px 12px rgba(29, 110, 74, .04), inset 0 1px 0 #FFF;
 }
-.ads-extended-payment-page .ads-extended-page-heading h1 { color: #10233F; font-size: 19px; font-weight: 700; }
-.ads-extended-payment-page .ads-extended-heading-icon { width: 36px; height: 36px; border-radius: 12px; color: #2874ED; background: #E7F1FF; }
-.ads-extended-payment-page .ads-extended-settings-scroll { height: auto; min-height: 0; flex: 1; grid-auto-rows: max-content; padding: 2px 4px 6px 0; gap: 18px; scrollbar-color: #C0D2E8 transparent; }
-.ads-extended-payment-page .ads-extended-card { padding: 20px; border: 1px solid #DCE6F3; border-radius: 22px; box-shadow: 0 4px 14px rgba(27, 58, 99, .035); }
-.ads-extended-payment-page .ads-extended-card h2 { gap: 10px; margin-bottom: 18px; color: #10233F; font-size: 15px; font-weight: 650; line-height: 1.5; }
-.ads-extended-payment-page .ads-extended-card h2 > svg { flex: none; color: #347CE9; }
-.ads-extended-payment-page .ads-extended-general-grid { grid-template-columns: repeat(auto-fill, var(--extended-general-card-width)); gap: var(--extended-card-gap); align-items: stretch; justify-content: start; }
-.ads-extended-payment-page .ads-extended-control-group { padding: 14px; grid-template-rows: minmax(36px, auto) auto; align-content: start; gap: 10px; border: 1px solid #E1EAF6; border-radius: 16px; background: #F6FAFF; color: #4B607A; }
+.ads-extended-payment-page .ads-extended-page-heading h1 { color: #103F2A; font-size: 19px; font-weight: 700; }
+.ads-extended-payment-page .ads-extended-heading-icon { width: 36px; height: 36px; border-radius: 12px; color: #3FD692; background: #EBFBF4; }
+.ads-extended-payment-page .ads-extended-settings-scroll { height: auto; min-height: 0; flex: 1; grid-auto-rows: max-content; padding: 2px 4px 6px 0; gap: 18px; scrollbar-color: #C0E8D6 transparent; }
+.ads-extended-payment-page .ads-extended-card { padding: 20px; border: 1px solid #DCF3E9; border-radius: 22px; box-shadow: 0 4px 14px rgba(27, 99, 67, .035); }
+.ads-extended-payment-page .ads-extended-card h2 { gap: 10px; margin-bottom: 18px; color: #103F2A; font-size: 15px; font-weight: 650; line-height: 1.5; }
+.ads-extended-payment-page .ads-extended-card h2 > svg { flex: none; color: #45D896; }
+.ads-extended-payment-page .ads-extended-general-grid { grid-template-columns: repeat(auto-fit, minmax(min(100%, 190px), 1fr)); gap: var(--extended-card-gap); align-items: stretch; justify-content: start; }
+.ads-extended-payment-page .ads-extended-control-group { padding: 14px; grid-template-rows: minmax(36px, auto) auto; align-content: start; gap: 10px; border: 1px solid #E1F6ED; border-radius: 16px; background: #F8FDFB; color: #4B7A65; }
 .ads-extended-payment-page .ads-extended-control-group > span:first-child { white-space: normal; overflow: visible; font-size: 12px; font-weight: 550; line-height: 1.5; }
-.ads-extended-payment-page :is(.ads-extended-switch-row, .ads-extended-segment, .ads-extended-select) { min-height: 42px; background: #EAF1FA; border: 1px solid #DCE6F3; border-radius: 15px; }
+.ads-extended-payment-page :is(.ads-extended-switch-row, .ads-extended-segment, .ads-extended-select) { min-height: 42px; background: #EAFAF3; border: 1px solid #DCF3E9; border-radius: 15px; }
 .ads-extended-payment-page .ads-extended-switch-row { gap: 8px; padding-inline: 10px; }
-.ads-extended-payment-page .ads-extended-switch-row b { color: #245BAB; }
-.ads-extended-payment-page .ads-extended-switch-row i { flex: none; width: 38px; height: 24px; background: #B8C7DA; }
-.ads-extended-payment-page .ads-extended-switch-row i span { width: 20px; height: 20px; box-shadow: 0 2px 4px #1E407126; }
-.ads-extended-payment-page .ads-extended-switch-row input:checked + i { background: #3B82FF; box-shadow: 0 0 0 3px #3B82FF12; }
+.ads-extended-payment-page .ads-extended-switch-row b { color: #287151; }
+.ads-extended-payment-page .ads-extended-switch-row i { flex: none; width: 38px; height: 24px; background: #B8DACB; }
+.ads-extended-payment-page .ads-extended-switch-row i span { width: 20px; height: 20px; box-shadow: 0 2px 4px #1E714C26; }
+.ads-extended-payment-page .ads-extended-switch-row input:checked + i { background: #287151; box-shadow: 0 0 0 3px #28715112; }
 .ads-extended-payment-page .ads-extended-segment { gap: 2px; padding: 3px; }
-.ads-extended-payment-page .ads-extended-segment button { padding: 6px; border-radius: 12px; line-height: 1.4; color: #52667F; overflow-wrap: anywhere; }
-.ads-extended-payment-page .ads-extended-segment button.is-selected { color: #195CC2; background: linear-gradient(180deg, #FFF, #F4F8FF); box-shadow: inset 0 0 0 1px #91B9F3, 0 2px 5px #3B82FF12; font-weight: 650; }
-.ads-extended-payment-page .ads-extended-dropdown-trigger { color: #23405F; padding: 0 12px; }
-.ads-extended-payment-page .ads-extended-dropdown-menu { border-color: #B4CDF2; box-shadow: 0 10px 25px #143A6D14; }
-.ads-extended-payment-page .ads-extended-dropdown-menu button.is-selected { color: #195CC2; }
-.ads-extended-payment-page .ads-extended-fields { min-height: 0; border-color: #C5D9F5; background: linear-gradient(155deg, #FFFFFF, #F7FAFF); box-shadow: 0 5px 18px #2356A008; }
-.ads-extended-payment-page .ads-extended-fields-grid { grid-template-columns: repeat(auto-fill, var(--extended-data-tile-width)); gap: var(--extended-card-gap); justify-content: start; }
+.ads-extended-payment-page .ads-extended-segment button { padding: 6px; border-radius: 12px; line-height: 1.4; color: #527F6B; overflow-wrap: anywhere; }
+.ads-extended-payment-page .ads-extended-segment button.is-selected { color: #287151; background: linear-gradient(180deg, #FFF, #F6FDFA); box-shadow: inset 0 0 0 1px #9AEAC6, 0 2px 5px #28715112; font-weight: 650; }
+.ads-extended-payment-page .ads-extended-dropdown-trigger { color: #235F44; padding: 0 12px; }
+.ads-extended-payment-page .ads-extended-dropdown-menu { border-color: #B6F0D6; box-shadow: 0 10px 25px #176A4514; }
+.ads-extended-payment-page .ads-extended-dropdown-menu button.is-selected { color: #287151; }
+.ads-extended-payment-page .ads-extended-fields { min-height: 0; border-color: #C7F3DF; background: linear-gradient(155deg, #FFFFFF, #F8FEFB); box-shadow: 0 5px 18px #23A06808; }
+.ads-extended-payment-page .ads-extended-fields-grid { grid-template-columns: repeat(auto-fill, minmax(min(100%, 180px), 1fr)); gap: var(--extended-card-gap); justify-content: start; }
 .ads-extended-payment-page .ads-extended-field-option {
   min-height: 80px; padding: 14px 16px; gap: 10px; border-radius: 17px;
-  border: 1px solid #D7E4F6; background: #FFFFFF; color: #334C6E;
+  border: 1px solid #D7F6E8; background: #FFFFFF; color: #336E53;
   transition: transform .18s ease, border-color .18s ease, background .18s ease, box-shadow .18s ease;
 }
-.ads-extended-payment-page .ads-extended-field-option > span { width: 36px; height: 36px; color: #3978CA; background: #EFF5FE; border-radius: 11px; }
+.ads-extended-payment-page .ads-extended-field-option > span { width: 36px; height: 36px; color: #39CA89; background: #F1FCF7; border-radius: 11px; }
 .ads-extended-payment-page .ads-extended-field-option b { white-space: normal; overflow: visible; overflow-wrap: anywhere; font-size: 12px; font-weight: 600; line-height: 1.45; }
-.ads-extended-payment-page .ads-extended-field-option.is-selected { border-color: #8EB6F2; color: #15488C; background: #EDF5FF; box-shadow: inset 0 1px 0 #FFF, 0 2px 5px #2459AC06; }
-.ads-extended-payment-page .ads-extended-field-option.is-selected > span { color: #2563EB; background: #DAEAFE; }
-.ads-extended-payment-page .ads-extended-field-check { opacity: 1; color: #2970DB; top: 7px; right: 7px; }
-.ads-extended-payment-page .ads-extended-field-option:hover { transform: translateY(-2px); border-color: #5897EE; box-shadow: 0 5px 12px #2563EB12; }
-.ads-extended-payment-page .ads-extended-field-option:hover > span { color: #155BD1; }
+.ads-extended-payment-page .ads-extended-field-option.is-selected { border-color: #97E9C4; color: #1C8556; background: #F0FCF7; box-shadow: inset 0 1px 0 #FFF, 0 2px 5px #24AC6F06; }
+.ads-extended-payment-page .ads-extended-field-option.is-selected > span { color: #287151; background: #E0F8ED; }
+.ads-extended-payment-page .ads-extended-field-check { opacity: 1; color: #31D38A; top: 7px; right: 7px; }
+.ads-extended-payment-page .ads-extended-field-option:hover { transform: translateY(-2px); border-color: #67DFA9; box-shadow: 0 5px 12px #28715112; }
+.ads-extended-payment-page .ads-extended-field-option:hover > span { color: #28BE7A; }
 .ads-extended-payment-page .ads-extended-section-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 16px; }
 .ads-extended-payment-page .ads-extended-section-heading h2 { margin: 0; }
-.ads-extended-payment-page .ads-extended-save-button { flex: none; display: inline-flex; align-items: center; justify-content: center; gap: 7px; min-height: 36px; padding: 0 16px; border: 1px solid #2D70DD; border-radius: 12px; background: #347DF1; color: #FFF; font-size: 12px; font-weight: 600; cursor: pointer; box-shadow: 0 3px 7px #2563EB17; }
-.ads-extended-payment-page .ads-extended-save-button:hover { background: #2567DA; }
+.ads-extended-payment-page .ads-extended-save-button { flex: none; display: inline-flex; align-items: center; justify-content: center; gap: 7px; min-height: 36px; padding: 0 16px; border: 1px solid #36D48D; border-radius: 12px; background: #4CD99A; color: #FFF; font-size: 12px; font-weight: 600; cursor: pointer; box-shadow: 0 3px 7px #28715117; }
+.ads-extended-payment-page .ads-extended-save-button:hover { background: #2DD288; }
 .ads-extended-payment-page .ads-extended-save-button:disabled { opacity: .48; cursor: not-allowed; }
-.ads-extended-payment-page .ads-extended-editor { border: 1px solid #DCE6F3; border-radius: 18px; background: #FFF; }
-.ads-extended-payment-page .ads-extended-editor-toolbar { padding: 6px 10px; gap: 4px; border-bottom: 1px solid #E3ECF7; border-radius: 18px 18px 0 0; background: #F6FAFF; flex-wrap: wrap; }
-.ads-extended-payment-page .ads-extended-editor-toolbar button { color: #4C6481; border-radius: 10px; transition: background .18s ease, color .18s ease; }
-.ads-extended-payment-page .ads-extended-editor-toolbar button:is(:hover, [aria-expanded='true'], [aria-pressed='true']) { color: #2169CD; background: #E2EEFF; }
-.ads-extended-payment-page .ads-extended-editor-surface { min-height: 140px; padding: 18px; border-radius: 0 0 18px 18px; color: #243C59; }
-.ads-extended-payment-page .ads-extended-save-status { color: #637893; white-space: normal; line-height: 1.4; }
-.ads-extended-payment-page :is(button, input, [contenteditable]):focus-visible { outline: 2px solid #72A8F6; outline-offset: 3px; }
-.ads-extended-payment-page .ads-extended-switch-row input:focus-visible + i { outline: 2px solid #72A8F6; outline-offset: 3px; }
-.ads-extended-payment-page .ads-extended-editor:focus-within { border-color: #91B9F3; box-shadow: 0 0 0 3px #3B82FF0A; }
-.ads-extended-payment-page .ads-extended-preview-panel { width: var(--extended-preview-width); min-width: var(--extended-preview-width); max-width: var(--extended-preview-width); justify-self: end; border: 1px solid #D6E3F4; border-radius: 22px; background: #F6FAFF; }
-.ads-extended-payment-page .ads-extended-preview-heading { border-bottom-color: #DCE6F3; }
-.ads-extended-payment-page .ads-extended-preview-heading h2 { color: #334C6E; font-size: 14px; }
-.ads-extended-payment-page .ads-extended-preview-heading > span { color: #347CE9; }
+.ads-extended-payment-page .ads-extended-editor { border: 1px solid #DCF3E9; border-radius: 18px; background: #FFF; }
+.ads-extended-payment-page .ads-extended-editor-toolbar { padding: 6px 10px; gap: 4px; border-bottom: 1px solid #E3F7EE; border-radius: 18px 18px 0 0; background: #F8FDFB; flex-wrap: wrap; }
+.ads-extended-payment-page .ads-extended-editor-toolbar button { color: #4C8169; border-radius: 10px; transition: background .18s ease, color .18s ease; }
+.ads-extended-payment-page .ads-extended-editor-toolbar button:is(:hover, [aria-expanded='true'], [aria-pressed='true']) { color: #2AC47F; background: #E7FAF1; }
+.ads-extended-payment-page .ads-extended-editor-surface { min-height: 140px; padding: 18px; border-radius: 0 0 18px 18px; color: #245941; }
+.ads-extended-payment-page .ads-extended-save-status { color: #63937D; white-space: normal; line-height: 1.4; }
+.ads-extended-payment-page :is(button, input, [contenteditable]):focus-visible { outline: 2px solid #83E5B9; outline-offset: 3px; }
+.ads-extended-payment-page .ads-extended-switch-row input:focus-visible + i { outline: 2px solid #83E5B9; outline-offset: 3px; }
+.ads-extended-payment-page .ads-extended-editor:focus-within { border-color: #9AEAC6; box-shadow: 0 0 0 3px #2871510A; }
+.ads-extended-payment-page .ads-extended-preview-panel { width: var(--extended-preview-width); min-width: var(--extended-preview-width); max-width: var(--extended-preview-width); justify-self: end; border: 1px solid #D6F4E6; border-radius: 22px; background: #F8FDFB; }
+.ads-extended-payment-page .ads-extended-preview-heading { border-bottom-color: #DCF3E9; }
+.ads-extended-payment-page .ads-extended-preview-heading h2 { color: #336E53; font-size: 14px; }
+.ads-extended-payment-page .ads-extended-preview-heading > span { color: #45D896; }
 
 
 
-@media (max-width: 1000px) {
+@media (min-width: 768px) {
+  .ads-extended-payment-page { height: 100%; overflow: hidden; }
+  .ads-extended-payment-page .ads-extended-layout { height: 100%; }
+  .ads-extended-payment-page .ads-extended-settings-panel { overflow: hidden; }
+  .ads-extended-payment-page .ads-extended-settings-scroll { overflow: auto; overscroll-behavior: contain; }
+  .ads-extended-payment-page .ads-extended-preview-panel { min-height: 0; overflow: hidden; }
+  .ads-extended-payment-page .ads-extended-page-heading { flex-wrap: wrap; gap: 10px; }
+}
+@media (min-width: 768px) and (max-width: 1100px) {
+  .ads-extended-payment-page { --extended-preview-width: 300px; --extended-column-gap: 16px; padding: 16px; }
+}
+@media (max-width: 767px) {
   .ads-extended-payment-page { height: auto; padding: 16px; }
   .ads-extended-payment-page .ads-extended-layout { grid-template-columns: 1fr; }
   .ads-extended-payment-page .ads-extended-settings-scroll { overflow: visible; }
+  .ads-extended-payment-page .ads-extended-preview-panel { width: 100%; min-width: 0; max-width: 100%; }
 }
 @container extended-settings (max-width: 520px) {
   .ads-extended-payment-page .ads-extended-card { padding: 16px; }
@@ -107,16 +119,16 @@
 }
 
 /* Selection badge has its own reserved text lane; its dimensions never change. */
-.ads-extended-payment-page .ads-extended-field-option { min-height: 70px; padding: 14px 46px 14px 16px; border-color: rgba(59,130,246,.16); background: linear-gradient(180deg,#FFF,#F8FBFF); box-shadow: 0 3px 10px rgba(32,74,135,.05); }
-.ads-extended-payment-page .ads-extended-field-option.is-selected { background: linear-gradient(145deg,#F3F8FF,#E7F1FF); border-color: rgba(59,130,246,.52); box-shadow: 0 5px 14px rgba(37,99,235,.09),inset 0 1px 0 rgba(255,255,255,.75); }
-.ads-extended-payment-page .ads-extended-field-option > .ads-extended-selection-badge { position: absolute; top: 10px; right: 10px; width: 22px; height: 22px; border-radius: 7px; border: 1px solid rgba(100,140,190,.3); background: rgba(255,255,255,.65); color: #FFF; transition: background .16s ease-out,border-color .16s ease-out,box-shadow .16s ease-out; }
+.ads-extended-payment-page .ads-extended-field-option { min-height: 70px; padding: 14px 46px 14px 16px; border-color: rgba(40, 113, 81, .16); background: linear-gradient(180deg,#FFF,#F9FEFC); box-shadow: 0 3px 10px rgba(32, 135, 89, .05); }
+.ads-extended-payment-page .ads-extended-field-option.is-selected { background: linear-gradient(145deg,#F5FDF9,#EBFBF4); border-color: rgba(40, 113, 81, .52); box-shadow: 0 5px 14px rgba(40, 113, 81, .09),inset 0 1px 0 rgba(255,255,255,.75); }
+.ads-extended-payment-page .ads-extended-field-option > .ads-extended-selection-badge { position: absolute; top: 10px; right: 10px; width: 22px; height: 22px; border-radius: 7px; border: 1px solid rgba(100, 190, 150, .3); background: rgba(255,255,255,.65); color: #FFF; transition: background .16s ease-out,border-color .16s ease-out,box-shadow .16s ease-out; }
 .ads-extended-payment-page .ads-extended-selection-badge svg { opacity: 0; transform: scale(.85); transition: opacity .16s ease-out,transform .16s ease-out; }
-.ads-extended-payment-page .ads-extended-field-option.is-selected > .ads-extended-selection-badge { background: linear-gradient(145deg,#60A5FA,#3B82F6 45%,#2563EB); border-color: rgba(255,255,255,.55); color: #FFF; box-shadow: 0 3px 8px rgba(37,99,235,.24),inset 0 1px 0 rgba(255,255,255,.3); }
+.ads-extended-payment-page .ads-extended-field-option.is-selected > .ads-extended-selection-badge { background: linear-gradient(145deg,#67C780,#287151 45%,#287151); border-color: rgba(255,255,255,.55); color: #FFF; box-shadow: 0 3px 8px rgba(40, 113, 81, .24),inset 0 1px 0 rgba(255,255,255,.3); }
 .ads-extended-payment-page .is-selected > .ads-extended-selection-badge svg { opacity: 1; transform: scale(1); }
 .ads-extended-payment-page .ads-extended-field-option:not(.is-selected):hover { transform: translateY(-1px); }
-.ads-extended-payment-page .ads-extended-field-option:not(.is-selected):hover > .ads-extended-selection-badge { border-color: #3B82F6; background: #EFF6FF; }
-.ads-extended-payment-page .ads-extended-field-option.is-selected:hover { transform: none; filter: brightness(1.015); box-shadow: 0 5px 14px rgba(37,99,235,.09),inset 0 1px 0 rgba(255,255,255,.75); }
-.ads-extended-payment-page .ads-extended-field-option:focus-visible { outline: 2px solid #83B1F5; outline-offset: 2px; box-shadow: 0 0 0 4px rgba(59,130,246,.08); }
+.ads-extended-payment-page .ads-extended-field-option:not(.is-selected):hover > .ads-extended-selection-badge { border-color: #287151; background: #F1FFDC; }
+.ads-extended-payment-page .ads-extended-field-option.is-selected:hover { transform: none; filter: brightness(1.015); box-shadow: 0 5px 14px rgba(40, 113, 81, .09),inset 0 1px 0 rgba(255,255,255,.75); }
+.ads-extended-payment-page .ads-extended-field-option:focus-visible { outline: 2px solid #90E8C0; outline-offset: 2px; box-shadow: 0 0 0 4px rgba(40, 113, 81, .08); }
 @media(max-width:600px) {
   .ads-extended-payment-page .ads-extended-page-heading { flex-wrap: wrap; }
   .ads-extended-payment-page .ads-extended-restore { max-width: 100%; }

@@ -64,7 +64,7 @@
   font: 11px/1.5 ui-monospace, monospace;
   white-space: pre;
 }
-.ads-download-copy-hint { margin: 0; color: #1d6ce0; font-size: 11.5px; }
+.ads-download-copy-hint { margin: 0; color: #2CD187; font-size: 11.5px; }
 
 .ads-download-filename { display: grid; gap: 6px; }
 .ads-download-filename > span:first-child { color: #5a6b60; font-size: 11.5px; }
@@ -99,7 +99,7 @@
   font-weight: 600;
   cursor: pointer;
 }
-.ads-download-cta:hover { background: var(--cv-brand-primary-hover, #1D4ED8); }
+.ads-download-cta:hover { background: var(--cv-brand-primary-hover, #1C5A3E); }
 
 /* ---------- Column Settings modal (Part C) — centered, dim/blur backdrop,
    reuses the SAME .ads-advanced-filter-backdrop from Correction Batch 2. */
@@ -242,7 +242,7 @@
   text-align: left;
   cursor: pointer;
 }
-.ads-ui-settings-row:hover { background: var(--cv-brand-soft, #EFF6FF); }
+.ads-ui-settings-row:hover { background: var(--cv-brand-soft, #F1FFDC); }
 .ads-ui-settings-row.is-selected { background: var(--cv-brand-icon-badge-bg, #e3f3e7); color: var(--cv-brand-primary, #0d9f39); font-weight: 500; }
 .ads-ui-settings-row svg { flex: none; color: var(--cv-brand-primary, #0d9f39); }
 

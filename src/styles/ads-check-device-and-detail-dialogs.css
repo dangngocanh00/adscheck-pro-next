@@ -6,7 +6,7 @@
   padding: 16px;
   display: grid;
   place-items: center;
-  background: rgba(4, 10, 20, .68);
+  background: rgba(4, 20, 13, .68);
   backdrop-filter: blur(9px);
 }
 
@@ -14,9 +14,9 @@
   width: min(460px, calc(100vw - 28px));
   position: relative;
   padding: 30px;
-  border: 1px solid rgba(96, 165, 250, .3);
+  border: 1px solid rgba(103, 199, 128, .3);
   border-radius: 24px;
-  background: radial-gradient(circle at 100% 0, rgba(59, 130, 246, .2), transparent 36%), linear-gradient(145deg, #071426, #0B1F3A 75%);
+  background: radial-gradient(circle at 100% 0, rgba(40, 113, 81, .2), transparent 36%), linear-gradient(145deg, #071F18, #092E22 75%);
   color: #fff;
   box-shadow: 0 30px 85px rgba(0, 0, 0, .48);
 }
@@ -43,9 +43,9 @@
   display: grid;
   place-items: center;
   border-radius: 15px;
-  background: linear-gradient(135deg, #3B82F6, #93C5FD);
-  color: #0B1F3A;
-  box-shadow: 0 10px 30px rgba(37, 99, 235, .22);
+  background: linear-gradient(135deg, #287151, #A5E4B6);
+  color: #092E22;
+  box-shadow: 0 10px 30px rgba(40, 113, 81, .22);
 }
 
 .ads-device-login-dialog header {
@@ -53,7 +53,7 @@
 }
 
 .ads-device-login-dialog header > span {
-  color: #60A5FA;
+  color: #67C780;
   font-size: 10px;
   font-weight: 750;
   letter-spacing: .11em;
@@ -99,7 +99,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  border: 1px solid rgba(59, 130, 246, .2);
+  border: 1px solid rgba(40, 113, 81, .2);
   border-radius: 13px;
   background: rgba(255, 255, 255, .08);
   color: #fff;
@@ -110,11 +110,11 @@
 
 .ads-device-login-actions button:first-child {
   border-color: transparent;
-  background: linear-gradient(90deg, #1D4ED8, #3B82F6);
+  background: linear-gradient(90deg, #1C5A3E, #287151);
 }
 
 .ads-device-login-actions button:hover {
-  border-color: rgba(96, 165, 250, .55);
+  border-color: rgba(103, 199, 128, .55);
   transform: translateY(-1px);
 }
 
@@ -150,11 +150,11 @@
   border-radius: 22px;
   background: #F8FAFC;
   color: #0F172A;
-  box-shadow: 0 28px 80px rgba(11, 31, 58, .35);
+  box-shadow: 0 28px 80px rgba(9, 46, 34, .35);
 }
 
 .ads-account-detail-close {
-  background: #EFF6FF;
+  background: #F1FFDC;
   color: #334155;
 }
 
@@ -165,8 +165,8 @@
   display: grid;
   place-items: center;
   border-radius: 14px;
-  background: #DBEAFE;
-  color: #1D4ED8;
+  background: #E9F9EF;
+  color: #1C5A3E;
 }
 
 .ads-account-detail-dialog h2 {
@@ -176,7 +176,7 @@
 
 .ads-account-detail-dialog h3 {
   margin: 7px 0 18px;
-  color: #1D4ED8;
+  color: #1C5A3E;
   font-size: 14px;
   font-weight: 650;
 }
@@ -219,7 +219,7 @@
   margin-top: 14px;
   border: 0;
   border-radius: 999px;
-  background: linear-gradient(90deg, #1D4ED8, #3B82F6);
+  background: linear-gradient(90deg, #1C5A3E, #287151);
   color: #fff;
   font-weight: 650;
   cursor: pointer;

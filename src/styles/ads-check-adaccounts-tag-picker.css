@@ -78,7 +78,7 @@
   white-space: nowrap;
 }
 
-.ads-tag-picker-create-trigger:hover { background: #DBEAFE; }
+.ads-tag-picker-create-trigger:hover { background: #E9F9EF; }
 
 .ads-tag-picker-empty { margin: 10px 0; color: #8ba393; text-align: center; }
 
@@ -115,7 +115,7 @@
   text-align: left;
 }
 
-.ads-tag-picker-item:hover { background: var(--cv-brand-soft, #EFF6FF); }
+.ads-tag-picker-item:hover { background: var(--cv-brand-soft, #F1FFDC); }
 .ads-tag-picker-item.is-assigned { background: var(--cv-brand-icon-badge-bg, #e3f3e7); color: var(--cv-brand-primary, #0d9f39); }
 .ads-tag-picker-item span { min-width: 0; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 

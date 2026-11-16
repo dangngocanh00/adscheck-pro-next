@@ -22,7 +22,7 @@ export type TagDefinition = { id: string; name: string; colorHex: string }
 // markup) — not invented/random.
 export const TAG_COLOR_PALETTE: string[] = [
   '#F0524A', '#F5883C', '#E5E200', '#A3D63F', '#35B94B',
-  '#33C7D4', '#5B8DEF', '#9B7BE8', '#E27AE0', '#D5DAE0',
+  '#33C7D4', '#6BE0AB', '#9B7BE8', '#E27AE0', '#D5E0DB',
 ]
 
 const TAGS_STORAGE_KEY = 'adaccounts.tags.v1'

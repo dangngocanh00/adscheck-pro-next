@@ -1,10 +1,11 @@
 import { m, useAppLanguage, t, tx } from '@/i18n'
 import type { FC } from 'react'
 import { PackageOpen, ReceiptText, ShoppingCart, TicketPercent } from 'lucide-react'
-import { formatUsd } from './ads-check-billing-data'
+import { formatUsd, type BillingTier } from './ads-check-billing-data'
 import { PaymentVerificationStatus, type PaymentCheckResult, type PaymentCheckState } from './ads-check-billing-payment-verification'
 
 type BillingOrderSummaryProps = {
+  tier: BillingTier
   step: 'selection' | 'bank' | 'payment'
   selectedCount: number
   monthlyPrice: number
@@ -33,6 +34,7 @@ const durationOptions = [
 ]
 
 export const BillingOrderSummary: FC<BillingOrderSummaryProps> = ({
+  tier,
   step,
   selectedCount,
   monthlyPrice,
@@ -57,17 +59,19 @@ export const BillingOrderSummary: FC<BillingOrderSummaryProps> = ({
     <header><ReceiptText size={18} /><h2 id="billing-summary-title">{t("ui.2b0e4e4634")}</h2></header>
 
     <section className="ads-purchase-summary-card">
+      <span className="purchase-summary-badge">{t('purchase.' + tier + '.name')}</span>
       <div className="ads-purchase-summary-count">
         <span><strong>{selectedCount} {" "}{t("ui.c8afce04f5")}</strong><small>{t("ui.c34c242453")}</small></span>
         <span><strong>{tx(formatUsd(monthlyPrice))} <i>{t("ui.03be1e7c75")}</i></strong><small>{months} {" "}{t("ui.4a0c7ac7c8")}</small></span>
       </div>
       <div className="ads-purchase-summary-product">
         <ShoppingCart size={21} />
-        <span><strong>{tx(selectedCount > 0 ? m("ui.1f16d9a109", { 0: selectedCount }) : m("ui.9f3f3cb184"))}</strong><small>{tx(selectedCount > 0 ? m("ui.8e7d195ec0") : m("ui.0ab1acd527"))}</small></span>
+        <span><strong>{tier === 'priority' ? t('purchase.included') : tx(selectedCount > 0 ? m("ui.1f16d9a109", { 0: selectedCount }) : m("ui.9f3f3cb184"))}</strong><small>{tx(selectedCount > 0 ? m("ui.8e7d195ec0") : m("ui.0ab1acd527"))}</small></span>
       </div>
     </section>
 
     <section className="ads-purchase-summary-section">
+      <p className="purchase-savings-note">{t('purchase.savings')}</p>
       <div className="ads-purchase-duration" role="group" aria-label={t("ui.10c7a0ca3e")}>
         {tx(durationOptions.map((option) => (
           <button key={option.months} type="button" className={months === option.months ? 'is-selected' : ''} aria-label={tx(option.label)} aria-pressed={months === option.months} onClick={() => onMonthsChange(option.months)}>{tx(option.label)}</button>

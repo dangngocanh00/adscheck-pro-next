@@ -43,7 +43,7 @@
   cursor: pointer;
   text-align: left;
 }
-.ads-column-menu button[role="menuitem"]:hover:not(:disabled) { background: var(--cv-brand-soft, #EFF6FF); }
+.ads-column-menu button[role="menuitem"]:hover:not(:disabled) { background: var(--cv-brand-soft, #F1FFDC); }
 .ads-column-menu button[role="menuitem"].is-active { background: var(--cv-brand-icon-badge-bg, #e3f3e7); color: var(--cv-brand-primary, #0d9f39); }
 .ads-column-menu button[role="menuitem"]:disabled { color: #b7c4b9; cursor: not-allowed; }
 

@@ -59,7 +59,7 @@
 
 .ads-tkqc-payment-methods { display: inline-flex; align-items: center; gap: 4px; }
 .ads-tkqc-payment-badge { flex: none; padding: 2px 8px; border-radius: 999px; background: #f1f6f2; color: #445048; font-size: 10.5px; font-weight: 600; }
-.ads-tkqc-payment-badge.is-visa { background: #dbeafe; color: #1d4ed8; }
+.ads-tkqc-payment-badge.is-visa { background: #E9F9EF; color: #1C5A3E; }
 .ads-tkqc-payment-badge.is-mastercard { background: #fef1cf; color: #a97a12; }
 .ads-tkqc-payment-badge.is-jcb { background: #fdeceb; color: #d63b34; }
 .ads-tkqc-payment-more { flex: none; padding: 1px 6px; border-radius: 999px; background: #f1f6f2; color: #5a6b60; font-size: 10.5px; }

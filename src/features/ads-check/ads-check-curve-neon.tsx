@@ -17,7 +17,7 @@ type CurveNeonProps = {
 const timing = { ...CORNER_TIMING, a: [3.4, 0], b: [3.7, -.4], d: [3.9, -1.2] } as const
 
 /** Shared visual layers only. The caller owns the exact runtime contour. */
-export function AdsCheckCurveNeon({ path, curve, inner = false, reverse = false, duration, delay, runnerLength = 12, coreWidth = 1.3, runnerWidth = 2.8, color = '#22d3ee' }: CurveNeonProps) {
+export function AdsCheckCurveNeon({ path, curve, inner = false, reverse = false, duration, delay, runnerLength = 12, coreWidth = 1.3, runnerWidth = 2.8, color = '#B9FF39' }: CurveNeonProps) {
   const id = useId()
   const gradientId = id + '-color'
   const fadeId = id + '-fade'
@@ -37,8 +37,8 @@ export function AdsCheckCurveNeon({ path, curve, inner = false, reverse = false,
     <defs>
       <linearGradient id={gradientId} x1={descendingGradient ? '1' : '0'} y1="0" x2={vertical || descendingGradient ? '0' : '1'} y2={vertical || corner ? '1' : '0'}>
         <stop stopColor={color} />
-        <stop offset=".5" stopColor="#0ea5e9" />
-        <stop offset="1" stopColor="#2563eb" />
+        <stop offset=".5" stopColor="#67C780" />
+        <stop offset="1" stopColor="#287151" />
       </linearGradient>
       <linearGradient id={fadeId} x1={descendingGradient ? '1' : '0'} y1="0" x2={vertical || descendingGradient ? '0' : '1'} y2={vertical || corner ? '1' : '0'}>
         <stop stopColor="white" stopOpacity="0" />
@@ -60,7 +60,7 @@ export function AdsCheckCurveNeon({ path, curve, inner = false, reverse = false,
           const inset = index * length / 24
           const dash = length - inset * 2
           return <path key={index} d={path} pathLength={100} className="ads-curve-neon-runner"
-            stroke={inner ? (index < 4 ? '#38BDF8' : '#E0F7FF') : (index < 4 ? '#67e8f9' : '#f0fdff')}
+            stroke={inner ? (index < 4 ? '#B9FF39' : '#E5FAF1') : (index < 4 ? '#CAFF4D' : '#F3FCF8')}
             strokeDasharray={String(dash) + ' ' + String(100 + length - dash)}
             style={{ '--runner-start': length - inset, '--runner-end': -100 - inset } as CSSProperties} />
         })}

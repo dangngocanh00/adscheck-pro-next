@@ -39,7 +39,7 @@ const STATUS_META: Record<TransactionStatus, { label: string; color: string; bac
   pending: { label: m("ui.f25fe5b23d"), color: '#8a5a06', background: '#fff6e8' },
   cancelled: { label: m("ui.fe90dc3bca"), color: '#b3261e', background: '#fdf2f1' },
   expired: { label: m("ui.2fec540596"), color: '#4b5563', background: '#f1f2f4' },
-  overpaid: { label: m("ui.3bf028c6eb"), color: '#1d4ed8', background: '#e8f0fe' },
+  overpaid: { label: m("ui.3bf028c6eb"), color: '#1C5A3E', background: '#EBFBF4' },
   underpaid: { label: m("ui.b6e629f252"), color: '#b3261e', background: '#fdf2f1' },
 }
 
