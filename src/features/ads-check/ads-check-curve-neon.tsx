@@ -25,7 +25,7 @@ export function AdsCheckCurveNeon({ path, curve, inner = false, reverse = false,
   const vertical = curve === 'a'
   const corner = curve.includes('-')
   const descendingGradient = curve === 'bottom-right' || curve === 'top-left'
-  const length = Math.min(20, Math.max(8, runnerLength))
+  const length = Math.min(20, Math.max(4, runnerLength))
   const style = {
     '--neon-duration': String(duration ?? timing[curve][0]) + 's',
     '--neon-delay': String(delay ?? timing[curve][1]) + 's',

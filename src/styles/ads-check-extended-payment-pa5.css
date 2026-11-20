@@ -39,7 +39,7 @@
 }
 .ads-extended-payment-page .ads-extended-page-heading h1 { color: #103F2A; font-size: 19px; font-weight: 700; }
 .ads-extended-payment-page .ads-extended-heading-icon { width: 36px; height: 36px; border-radius: 12px; color: #3FD692; background: #EBFBF4; }
-.ads-extended-payment-page .ads-extended-settings-scroll { height: auto; min-height: 0; flex: 1; grid-auto-rows: max-content; padding: 2px 4px 6px 0; gap: 18px; scrollbar-color: #C0E8D6 transparent; }
+.ads-extended-payment-page .ads-extended-settings-scroll { height: auto; min-height: 0; flex: 1; grid-auto-rows: max-content; padding: 2px 4px 6px 0; gap: 18px; }
 .ads-extended-payment-page .ads-extended-card { padding: 20px; border: 1px solid #DCF3E9; border-radius: 22px; box-shadow: 0 4px 14px rgba(27, 99, 67, .035); }
 .ads-extended-payment-page .ads-extended-card h2 { gap: 10px; margin-bottom: 18px; color: #103F2A; font-size: 15px; font-weight: 650; line-height: 1.5; }
 .ads-extended-payment-page .ads-extended-card h2 > svg { flex: none; color: #45D896; }

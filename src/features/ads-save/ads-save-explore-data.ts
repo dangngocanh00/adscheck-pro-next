@@ -68,8 +68,8 @@ export const exploreCategories: ExploreCategory[] = [
     ], 'WkFO8mQbdys'),
   },
   {
-    id: 'ads-check-pro', label: 'Ads Check Pro', kind: 'tutorials',
-    tutorials: makeTutorials('ads-check-pro', 'Ads Check Pro', [
+    id: 'ads-check-pro', label: 'Toolmeta Pro', kind: 'tutorials',
+    tutorials: makeTutorials('ads-check-pro', 'Toolmeta Pro', [
       m("ui.22586f625c"), m("ui.8f54b5fac4"), m("ui.acf5a22562"), m("ui.08a0727d1d"), m("ui.5737f1312e"), m("ui.7aa687ee01"),
       m("ui.63d6b51cfb"), m("ui.beb7cb84ca"), m("ui.22003a919c"), m("ui.7f41fd83e8"),
       m("ui.41ef6e203e"), m("ui.058604d991"), m("ui.e1f8de1304"), m("ui.ae43ceca7e"),

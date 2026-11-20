@@ -24,6 +24,7 @@ import { AdsCheckBrandMark, ToolmetaWordmark } from './ads-check-brand-mark'
 export type ExtendedPaymentBubbleAsset = { id: string; businessId?: string | null }
 
 type ExtendedPaymentBubbleProps = {
+  showDemoValues?: boolean
   bubbleEnabled: boolean
   surface: ExtendedPaymentSurface
   language: string
@@ -70,6 +71,7 @@ const SHARE_DESTINATIONS = [
 ] as const
 
 export const ExtendedPaymentBubble: FC<ExtendedPaymentBubbleProps> = ({
+  showDemoValues = true,
   bubbleEnabled,
   surface,
   language,
@@ -153,13 +155,13 @@ export const ExtendedPaymentBubble: FC<ExtendedPaymentBubbleProps> = ({
           {visibleFields.map((field) => {
             const Icon = field.icon
             const localizedLabel = tx(field.label, previewLanguage)
-            const localizedValue = localizeFieldValue(field.id, field.previewValue, previewLanguage, currencyMode, displayCurrency, customRates)
+            const localizedValue = showDemoValues ? localizeFieldValue(field.id, field.previewValue, previewLanguage, currencyMode, displayCurrency, customRates) : '—'
             return (
               <div key={field.id} data-testid={`extended-preview-${field.id}`}>
                 <GripVertical size={13} aria-hidden="true" />
                 <Icon size={17} aria-hidden="true" />
                 <dt>{localizedLabel}</dt>
-                <dd className={field.id === 'account-status' ? 'is-success' : ''}>{localizedValue}</dd>
+                <dd className={showDemoValues && field.id === 'account-status' ? 'is-success' : ''}>{localizedValue}</dd>
               </div>
             )
           })}

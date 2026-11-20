@@ -147,7 +147,7 @@ export function AdsCheckProFolderPanel({ asset, folders, counts, selected, open,
         const isSystemFolder = folder === allFolder
         return <div key={folder} className="ads-pro-folder-row">
           <button type="button" className={`ads-pro-folder-select${isSelected ? ' is-active' : ''}`} aria-pressed={isSelected} onClick={() => onSelect(folder)}>
-            <FolderOpen size={14} /><span>{tx(folder)}</span>{!isSystemFolder && <small>{counts[folder] ?? 0}</small>}
+            <FolderOpen size={14} /><span title={tx(folder)}>{tx(folder)}</span>{!isSystemFolder && <small>{counts[folder] ?? 0}</small>}
           </button>
           {isSelected && !isSystemFolder && <div className="ads-pro-folder-actions">
             <button type="button" className="ads-pro-folder-more" aria-label={t("ui.c5f0e8a201")} aria-expanded={menuFolder === folder} onClick={(event) => { event.stopPropagation(); setMenuFolder(menuFolder === folder ? null : folder) }}><MoreHorizontal size={17} /></button>

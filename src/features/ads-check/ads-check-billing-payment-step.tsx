@@ -16,7 +16,7 @@ type BillingPaymentStepProps = {
 // explicitly local/demo recipient values (never presented as a real
 // transaction; see the disclaimer rendered next to them), not fetched
 // from or written to any backend.
-const demoRecipient = { accountName: 'ADSCHECK DEMO ACCOUNT', accountNumber: '0000000000' }
+const demoRecipient = { accountName: 'Toolmeta DEMO ACCOUNT', accountNumber: '0000000000' }
 
 // Same clipboard pattern already used locally in ads-check-account-page.tsx
 // (no shared clipboard hook exists in the project to import instead).

@@ -12,7 +12,7 @@ export default function AdsCheckLinkedDestinationPage({ title }: AdsCheckLinkedD
   const mainRef = useRef<HTMLElement>(null)
   useEffect(() => {
     const previousTitle = document.title
-    document.title = `${title} | Ads Check`
+    document.title = `${title} | Toolmeta`
     const focusFrame = window.requestAnimationFrame(() => mainRef.current?.focus())
     return () => { window.cancelAnimationFrame(focusFrame); document.title = previousTitle }
   }, [title])

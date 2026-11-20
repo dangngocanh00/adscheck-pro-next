@@ -16,7 +16,8 @@ import { AdsCheckBillingConsentModal } from '@/features/ads-check/ads-check-bill
 import { AdsCheckBillingFilterMenu, type BillingFilterSource, type BillingFilterUsageStatus } from '@/features/ads-check/ads-check-billing-filter-menu'
 import { featureAccent } from '@/features/ads-check/ads-check-billing-feature-accent'
 import { AdsCheckBillingGiftcodeModal } from '@/features/ads-check/ads-check-billing-giftcode-modal'
-import { AdsCheckBillingHistoryPanel, AdsCheckBillingHistoryToolbar, type BillingTransaction } from '@/features/ads-check/ads-check-billing-history-panel'
+import { AdsCheckBillingHistoryPanel, AdsCheckBillingHistoryToolbar, demoTransactions, type BillingTransaction } from '@/features/ads-check/ads-check-billing-history-panel'
+import { useToolmetaSession } from '@/features/ads-check/toolmeta-session'
 import { AdsCheckBillingPurchasePanel } from '@/features/ads-check/ads-check-billing-purchase-panel'
 import {
   assetManagementFeatures,
@@ -150,7 +151,7 @@ const CheckoutConfirmationPanel = forwardRef<HTMLHeadingElement, { draft: Billin
       <p>{t("ui.a764899918")}</p>
       {tx(draft ? (
         <div className="ads-billing-checkout-summary">
-          <span><strong>{t("ui.0aba562fe0")}</strong><small>{draft.tier === 'pro' ? 'Ads Check Pro' : 'Priority'} · {draft.months} {" "}{t("ui.6c26ac1223")}{" "}{draft.selectedFeatures} {" "}{t("ui.c8afce04f5")}</small></span>
+          <span><strong>{t("ui.0aba562fe0")}</strong><small>{draft.tier === 'pro' ? 'Toolmeta Pro' : 'Priority'} · {draft.months} {" "}{t("ui.6c26ac1223")}{" "}{draft.selectedFeatures} {" "}{t("ui.c8afce04f5")}</small></span>
           <span><strong>{t("ui.e3dbec7ba0")}</strong><small>{draft.paymentMethod}</small></span>
           <span><strong>{t("ui.77cf068a58")}</strong><small>{tx(formatUsd(draft.subtotal))}</small></span>
           <span><strong>{t("ui.664253168e")}</strong><small>{t("ui.c34c242453")}{" "}{Math.round(draft.durationDiscount * 100)}{t("ui.abf1a7fd37")}{" "}{Math.round(draft.couponDiscount * 100)}%</small></span>
@@ -179,6 +180,7 @@ type PlanManagementPanelProps = {
 
 const PlanManagementPanel: FC<PlanManagementPanelProps> = ({ visibleFeatures, planMessage, setPlanMessage, onUpgradeContinue }) => {
   useAppLanguage();
+  const { email } = useToolmetaSession()
   const [revokedSessions, setRevokedSessions] = useState<string[]>([])
   // "Nâng cấp" reuses the SAME consent modal as Mua gói (AdsCheckBillingConsentModal) —
   // no duplicate modal. selectedUpgradeFeature is kept only so a future task can
@@ -210,12 +212,13 @@ const PlanManagementPanel: FC<PlanManagementPanelProps> = ({ visibleFeatures, pl
   }
 
   const visibleSessions = useMemo(() => {
+    if (!email) return []
     const query = sessionQuery.trim().toLowerCase()
     if (!query) return demoSessions
     return demoSessions.filter((session) => session.browser.toLowerCase().includes(query) || session.id.toLowerCase().includes(query) || session.ip.includes(query))
-  }, [sessionQuery])
+  }, [email, sessionQuery])
 
-  const selectableSessionIds = useMemo(() => demoSessions.filter((session) => !session.active && !revokedSessions.includes(session.id)).map((session) => session.id), [revokedSessions])
+  const selectableSessionIds = useMemo(() => email ? demoSessions.filter((session) => !session.active && !revokedSessions.includes(session.id)).map((session) => session.id) : [], [email, revokedSessions])
   const allSelected = selectableSessionIds.length > 0 && selectableSessionIds.every((id) => selectedSessionIds.includes(id))
 
   const toggleSessionSelected = (id: string) => {
@@ -266,11 +269,11 @@ const PlanManagementPanel: FC<PlanManagementPanelProps> = ({ visibleFeatures, pl
               </div>
             </div>
             <div className="ads-billing-session-summary">
-              <div className="ads-billing-session-summary-top"><span>{t("ui.de94eef999")}</span><strong>{demoSessions.length}/{demoSessionStats.limit} {" "}{t("ui.1d7b419f66")}</strong></div>
-              <div className="ads-billing-session-summary-ip"><span>{t("ui.f555c34c2a")}</span><strong>{demoSessionStats.currentIp}</strong></div>
+              <div className="ads-billing-session-summary-top"><span>{t("ui.de94eef999")}</span><strong>{email ? `${demoSessions.length}/${demoSessionStats.limit}` : '—'} {" "}{t("ui.1d7b419f66")}</strong></div>
+              <div className="ads-billing-session-summary-ip"><span>{t("ui.f555c34c2a")}</span><strong>{email ? demoSessionStats.currentIp : '—'}</strong></div>
               <div className="ads-billing-session-summary-foot">
-                <div><span>{t("ui.19ce3eeba0")}</span><strong>{demoSessionStats.purchasedExtra} {" "}{t("ui.8f0fe24897")}</strong></div>
-                <div><span>{t("ui.dac73a26d3")}</span><strong>{demoSessionStats.daysRemaining} {" "}{t("ui.8ccdd04078")}</strong></div>
+                <div><span>{t("ui.19ce3eeba0")}</span><strong>{email ? demoSessionStats.purchasedExtra : '—'} {" "}{t("ui.8f0fe24897")}</strong></div>
+                <div><span>{t("ui.dac73a26d3")}</span><strong>{email ? demoSessionStats.daysRemaining : '—'} {" "}{t("ui.8ccdd04078")}</strong></div>
               </div>
             </div>
             <small className="ads-billing-session-stats-note">{t("ui.36d8843730")}</small>
@@ -303,7 +306,10 @@ const PlanManagementPanel: FC<PlanManagementPanelProps> = ({ visibleFeatures, pl
   )
 }
 
+const noTransactions: BillingTransaction[] = []
+
 export const AdsCheckBillingPage: FC = () => {
+  const { email, openAuth } = useToolmetaSession()
   const surfaceId = useId()
   useAppLanguage();
   const [activeTab, setActiveTab] = useState<BillingTab>('purchase')
@@ -330,6 +336,7 @@ export const AdsCheckBillingPage: FC = () => {
   const [source, setSource] = useState<BillingFilterSource>('all')
 
   const visiblePlanFeatures = useMemo(() => {
+    if (!email) return []
     const query = featureQuery.trim().toLowerCase()
     return managedFeatures.filter((feature) => {
       if (query && !feature.title.toLowerCase().includes(query)) return false
@@ -337,11 +344,11 @@ export const AdsCheckBillingPage: FC = () => {
       const isActive = (demoFeatureExpiry[feature.id] ?? 0) > 0
       return usageStatus === 'active' ? isActive : !isActive
     })
-  }, [featureQuery, usageStatus])
+  }, [email, featureQuery, usageStatus])
 
   const planToolbar = (
     <div className="ads-billing-plan-toolbar">
-      <button type="button" className="ads-billing-giftcode-trigger" onClick={() => setGiftcodeModalOpen(true)}>
+      <button type="button" className="ads-billing-giftcode-trigger" onClick={() => email ? setGiftcodeModalOpen(true) : openAuth()}>
         <Gift size={13} />{t("ui.51676257d0")}{" "}</button>
       <label className="ads-billing-plan-search">
         <Search size={13} />
@@ -358,7 +365,7 @@ export const AdsCheckBillingPage: FC = () => {
   // setter), since the toolbar (tabs row) and the table (content area
   // below Curve D) are two separate DOM subtrees.
   const [historyRows, setHistoryRows] = useState<BillingTransaction[]>([])
-  const historyToolbar = <AdsCheckBillingHistoryToolbar onFilteredChange={setHistoryRows} />
+  const historyToolbar = <AdsCheckBillingHistoryToolbar transactions={email ? demoTransactions : noTransactions} onFilteredChange={setHistoryRows} />
 
   // Curve D — production-verified fallback (Mua gói/first-tab shape at a
   // plausible default size) shown only until the first live measurement.
@@ -439,6 +446,7 @@ export const AdsCheckBillingPage: FC = () => {
   }
 
   const openCheckout = (draft?: BillingOrderDraft) => {
+    if (!email) { openAuth(); return }
     checkoutTriggerRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null
     if (draft) setOrderDraft(draft)
     setActiveTab('purchase')
@@ -497,7 +505,7 @@ export const AdsCheckBillingPage: FC = () => {
           {SHOW_CURVE_D && <svg className="ads-billing-curve-neon" aria-hidden="true" focusable="false"
             viewBox={'0 0 ' + workspaceSurface.width + ' ' + workspaceSurface.height}
             preserveAspectRatio="none" style={{ width: workspaceSurface.width, height: workspaceSurface.height }}>
-            <AdsCheckCurveNeon path={workspaceSurface.path.replace(/^M0 [^ ]+ V([^ ]+) /, 'M0 $1 ').split(' V')[0]} curve="d" />
+            <AdsCheckCurveNeon path={workspaceSurface.path.replace(/^M0 [^ ]+ V([^ ]+) /, 'M0 $1 ').split(' V')[0]} curve="d" runnerLength={4} runnerWidth={1.5} />
           </svg>}
           <BillingTabs active={activeTab} onChange={moveToTab} trailing={activeTab === 'plans' ? planToolbar : activeTab === 'history' ? historyToolbar : undefined} />
           <div id="billing-purchase-panel" className="ads-billing-workspace-content" role="tabpanel" aria-labelledby="billing-purchase-tab" hidden={activeTab !== 'purchase'}>

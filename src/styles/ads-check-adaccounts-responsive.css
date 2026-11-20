@@ -20,12 +20,14 @@
    open at once — the table's own existing horizontal scroll absorbs the
    squeeze, nothing new to build). */
 
-@media (max-width: 900px) {
-  .ads-pro-search { min-width: 150px; width: min(210px, 32vw); }
+@media (768px <= width <= 1100px) {
+  .ads-pro-header-row { flex-direction: column; align-items: stretch; gap: 0; }
+  .ads-pro-toolbar-region { flex: none; background: #f2f8f3; }
 }
 
 @media (max-width: 767px) {
   .ads-pro-workspace { position: relative; }
+  .ads-pro-header-row .ads-asset-tabs { flex: 1 1 auto; }
   .ads-pro-mobile-panel-buttons { display: flex; gap: 5px; margin-right: auto; }
   .ads-pro-mobile-panel-buttons button { display: grid; }
   .ads-function-library,

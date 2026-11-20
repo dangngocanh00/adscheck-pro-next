@@ -219,30 +219,9 @@
 .ads-pro-table-empty-row td,
 td.ads-pro-table-empty-row { padding: 24px 8px; color: #8ba393; }
 
-/* Summary Above Pagination — the bottom block is now a FIXED overlay
-   pinned to the bottom of `.ads-pro-table-shell` (already position:
-   relative; overflow:hidden — see the top of ads-check-adaccounts-
-   table.css), not a normal flex sibling below `.ads-pro-table-scroll`.
-   This is what keeps Summary AND Pagination visible during vertical
-   scroll: the shell itself never scrolls, only `.ads-pro-table-scroll`
-   does, so an absolutely-positioned child of the shell simply always
-   renders in place regardless of the scroll container's internal
-   scrollTop. Each table's own `.ads-pro-table-scroll` reserves matching
-   bottom padding (SUMMARY_ROW_HEIGHT + PAGINATION_ROW_HEIGHT, inline
-   style) so the last real row can still scroll fully into view above
-   this block instead of hiding behind it. Order inside is Summary FIRST,
-   Pagination SECOND (top-to-bottom = document order), touching with zero
-   gap. The summary row's own horizontal geometry/scroll-sync is
-   unchanged from the previous round (useTableScrollSync +
-   AdsProTableSummaryRow) — still the same column keys/order/widths/
-   frozen-state/sticky-offsets as header/body, via the SAME
-   useColumnConfig instance. */
+/* Keep summary and pagination below the table viewport and its scrollbar. */
 .ads-pro-table-footer.is-tkqc-full {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 5;
+  flex: none;
   flex-direction: column;
   align-items: stretch;
   height: auto;

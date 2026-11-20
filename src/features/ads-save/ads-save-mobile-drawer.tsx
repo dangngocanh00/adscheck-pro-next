@@ -1,4 +1,4 @@
-import { appLanguageOptions, m, useAppLanguage, t, tx } from '@/i18n'
+import { appLanguageOptions, useAppLanguage, t, tx } from '@/i18n'
 import { useRef, useState, type ComponentType } from 'react'
 import { Bell, Grid2X2, Headphones, Languages, UserRound, X } from 'lucide-react'
 import { Link } from 'react-router-dom'
@@ -9,7 +9,7 @@ type DrawerItem = { label: string; icon: ComponentType<{ size?: number }>; activ
 type MobileDrawerProps = {
   open: boolean
   navigation: DrawerItem[]
-  standardEditionLabel?: string
+  accountLabel: string
   language: string
   languageLabel: string
   onClose: () => void
@@ -45,7 +45,7 @@ export function AdsSaveMobileDrawer(props: MobileDrawerProps) {
         {tx(languagesOpen && <div id="ads-mobile-languages" className="ads-mobile-languages">{appLanguageOptions.map((item) => <button key={item.code} type="button" aria-pressed={props.language === item.code} onClick={() => { props.onLanguage(item.code); setLanguagesOpen(false); languageTriggerRef.current?.focus() }}>{item.label}</button>)}</div>)}
         <a href="https://www.facebook.com/adscheck.official/" target="_blank" rel="noreferrer" onClick={props.onClose}><Headphones size={18} />{t("ui.ed2a55ae3b")}</a>
         <Link to="/app/notification" onClick={props.onClose}><Bell size={18} />{t("ui.5d6af377c2")}</Link>
-        <button type="button" onClick={() => run(props.onAccount)}><UserRound size={18} />{tx(props.standardEditionLabel === 'Pro' ? m("ui.4a60abe525") : m("ui.0f366f2fcc"))}</button>
+        <button type="button" onClick={() => run(props.onAccount)}><UserRound size={18} />{props.accountLabel}</button>
       </div>
     </section>
   </div>

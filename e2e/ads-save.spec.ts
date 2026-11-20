@@ -1,9 +1,9 @@
-import { expect, test, type Page } from '@playwright/test'
+import { expect, test, type Page } from './toolmeta-session.fixture'
 
 const adsSavePath = '/app/ads-save'
 
 async function dismissVersionPrompt(page: Page) {
-  const dialog = page.getByRole('dialog', { name: 'Ads Check đã có phiên bản mới' })
+  const dialog = page.getByRole('dialog', { name: 'Toolmeta đã có phiên bản mới' })
   await expect(dialog).toBeVisible()
   await dialog.getByRole('radio', { name: /Phiên bản mới/ }).click()
   await dialog.getByRole('button', { name: 'Xác nhận' }).click()
@@ -16,7 +16,7 @@ test.beforeEach(async ({ page }) => {
 })
 
 test('renders the complete Ads Save installation controls', async ({ page, isMobile }) => {
-  await expect(page.getByRole('heading', { name: 'Tải & cài đặt tiện ích để sử dụng Ads Check' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Tải & cài đặt tiện ích để sử dụng Toolmeta' })).toBeVisible()
   if (isMobile) {
     await page.getByRole('button', { name: 'Menu' }).click()
     const drawer = page.getByRole('dialog', { name: 'Menu di động' })
@@ -34,7 +34,7 @@ test('renders the complete Ads Save installation controls', async ({ page, isMob
 
 test('opens Overview 1/2 and renders every V6 to current-version comparison on 2/2', async ({ page }) => {
   await page.getByRole('button', { name: 'Khám phá bản mới' }).click()
-  const dialog = page.getByRole('dialog', { name: 'Khám phá Ads Check!' })
+  const dialog = page.getByRole('dialog', { name: 'Khám phá Toolmeta!' })
 
   await expect(dialog.getByText('1/2', { exact: true })).toBeVisible()
   await expect(dialog.getByRole('button', { name: 'Bắt đầu khám phá' })).toBeVisible()
@@ -53,7 +53,7 @@ test('opens Overview 1/2 and renders every V6 to current-version comparison on 2
 
 test('moves from Explore to the real local Control Hub dialog', async ({ page }) => {
   await page.getByRole('button', { name: 'Khám phá bản mới' }).click()
-  const exploreDialog = page.getByRole('dialog', { name: 'Khám phá Ads Check!' })
+  const exploreDialog = page.getByRole('dialog', { name: 'Khám phá Toolmeta!' })
   await exploreDialog.getByRole('button', { name: 'Control Hub', exact: true }).click()
   await exploreDialog.getByRole('button', { name: 'Khám phá ngay' }).click()
 

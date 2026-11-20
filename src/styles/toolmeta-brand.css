@@ -1,11 +1,13 @@
 /* Supplied Toolmeta artwork; shared across every product destination. */
 .toolmeta-wordmark { display: block; width: 132px; height: 42px; flex: none; object-fit: contain; object-position: left center; }
-.ads-save-app .ads-topbar .ads-buy-button { color: #163b2c; font-weight: 700; background: linear-gradient(115deg, #caff4d, #b0fb30); }
+.ads-save-app .ads-topbar :is(.ads-buy-button, .ads-profile) { font-size: var(--font-size-control); }
+.ads-save-app .ads-topbar .ads-buy-button { color: var(--toolmeta-lime-ink); font-weight: 700; background: var(--toolmeta-lime-gradient); }
 .ads-save-app .ads-buy-button svg { color: inherit; }
-.ads-save-app .ads-rail-button.is-active::before { background: linear-gradient(115deg, #caff4d, #b0fb30); }
-.ads-save-app .ads-rail-button.is-active { color: #163b2c; }
+.ads-save-app .ads-rail-button.is-active::before { background: var(--toolmeta-lime-gradient); }
+.ads-save-app .ads-rail-button.is-active { color: var(--toolmeta-lime-ink); }
 .ads-v8-loading-center .toolmeta-loading-wordmark { width: 220px; height: 82px; object-position: center; }
 .ads-extended-preview-brand > .toolmeta-wordmark { width: 128px; height: 46px; }
+
 @media (max-width: 767px) {
   .ads-brand > .toolmeta-wordmark { width: 112px; height: 40px; }
   .ads-save-app.is-ads-check-pro .ads-asset-tabs button[aria-selected='false'] { color: #163b2c; background: #e9f9ef; border-color: #cce5ce; }

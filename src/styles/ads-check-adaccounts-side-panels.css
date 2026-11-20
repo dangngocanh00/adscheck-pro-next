@@ -104,10 +104,7 @@
   line-height: 1;
 }
 .ads-function-pin-filter.is-active .ads-function-pin-count-badge { background: #fff; color: #1C5A3E; }
-.ads-function-groups { min-height: 0; padding: 0 10px 14px; overflow-y: auto; scrollbar-width: thin; scrollbar-color: #b7c4b9 transparent; }
-.ads-function-groups::-webkit-scrollbar { width: 8px; }
-.ads-function-groups::-webkit-scrollbar-track { background: transparent; }
-.ads-function-groups::-webkit-scrollbar-thumb { border-radius: 999px; background: #b7c4b9; }
+.ads-function-groups { min-height: 0; padding: 0 10px 14px; overflow-y: auto; }
 .ads-function-group { margin-bottom: 10px; overflow: hidden; border: 1.5px solid #21bd45; border-radius: 20px; background: #fff; }
 .ads-function-group-heading { width: 100%; min-height: 45px; padding: 0 11px; display: flex; align-items: center; gap: 7px; border: 0; background: transparent; color: #171e18; text-align: left; cursor: pointer; }
 .ads-function-group-heading > svg:first-child { color: #43c95b; }
@@ -352,10 +349,7 @@
 }
 .ads-template-name-actions .is-primary:disabled { opacity: .5; cursor: not-allowed; }
 
-.ads-workflow-canvas { min-height: 0; margin: 0 10px; flex: 1; overflow-y: auto; border: 1px solid #dce8de; border-radius: 24px; background: #fff; scrollbar-width: thin; scrollbar-color: #b7c4b9 transparent; }
-.ads-workflow-canvas::-webkit-scrollbar { width: 8px; }
-.ads-workflow-canvas::-webkit-scrollbar-track { background: transparent; }
-.ads-workflow-canvas::-webkit-scrollbar-thumb { border-radius: 999px; background: #b7c4b9; }
+.ads-workflow-canvas { min-height: 0; margin: 0 10px; flex: 1; overflow-y: auto; border: 1px solid #dce8de; border-radius: 24px; background: #fff; }
 .ads-workflow-empty { min-height: 100%; padding: 30px; display: grid; place-content: center; justify-items: center; gap: 12px; color: #78827a; text-align: center; }
 .ads-workflow-empty > span { width: 54px; height: 54px; display: grid; place-items: center; border-radius: 18px; background: #ebf8ed; color: #55bd62; }
 .ads-workflow-empty p { max-width: 220px; margin: 0; font-size: 12px; line-height: 1.5; }

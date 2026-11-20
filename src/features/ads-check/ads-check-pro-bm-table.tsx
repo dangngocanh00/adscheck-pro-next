@@ -2,7 +2,7 @@ import { useAppLanguage, tx, m, t } from '@/i18n'
 import { useMemo, useRef, useState, type ReactNode } from 'react'
 import { Check, ChevronLeft, ChevronRight, Lock, Pencil, SearchX, X } from 'lucide-react'
 import { AdsProColumnMenu, ColumnResizeHandle, evaluateAdvancedFilter, type ColumnFilterValue, type ColumnMenuState } from './ads-check-pro-column-menu'
-import { CHECKBOX_COLUMN_WIDTH, PAGINATION_ROW_HEIGHT, SUMMARY_ROW_HEIGHT, useColumnConfig, useTableScrollSync } from './ads-check-pro-column-config'
+import { CHECKBOX_COLUMN_WIDTH, useColumnConfig, useTableScrollSync } from './ads-check-pro-column-config'
 import { AdsProColumnSettingsModal } from './ads-check-pro-column-settings-modal'
 import { AdsProTableSummaryRow } from './ads-check-pro-table-summary-row'
 import { BM_COLUMNS, type BmColumnDataType, type BmColumnKey, type BmRow } from './ads-check-pro-bm-data'
@@ -259,7 +259,7 @@ export function AdsCheckProBmTable({ rows, totalCount, selectedIds, uiSettings, 
   const frozenStyle = (key: BmColumnKey) => frozenOffsets.has(key) ? { left: frozenOffsets.get(key) } : undefined
 
   return <div className="ads-pro-table-shell" {...uiSettingsDataAttrs(uiSettings)}>
-    <div className="ads-pro-table-scroll" ref={scrollRef} onScroll={handleTableScroll} style={{ paddingBottom: SUMMARY_ROW_HEIGHT + PAGINATION_ROW_HEIGHT }}>
+    <div className="ads-pro-table-scroll" ref={scrollRef} onScroll={handleTableScroll}>
       {/* Shared Summary Alignment — pinned to `totalWidth` from
           useColumnConfig (the ONE resolved-geometry source, shared with
           TKQC/Page/Pixel's own tables and this footer's own summary track
@@ -288,10 +288,6 @@ export function AdsCheckProBmTable({ rows, totalCount, selectedIds, uiSettings, 
     </div>
 
     <footer className="ads-pro-table-footer is-tkqc-full">
-      {/* Summary Above Pagination — this whole block is now a fixed
-          overlay pinned to the bottom of the shell (see the CSS's own
-          header comment), Summary FIRST then Pagination, so both stay
-          visible during vertical scroll and touch with zero gap. */}
       <AdsProTableSummaryRow
         assetLabel="BM"
         orderedColumns={orderedColumns}

@@ -44,8 +44,7 @@
   .ads-save-app .ads-module-island-surface { height: 316px; }
   .ads-save-app .ads-topbar .ads-top-actions { gap: 6px; }
   .ads-save-app .ads-topbar .ads-top-actions > .ads-header-utility { width: 44px; height: 44px; }
-  .ads-save-app .ads-topbar :is(.ads-buy-button, .ads-profile) { min-height: 44px; }
-  .ads-save-app .ads-curve-neon { opacity: .48; }
+  .ads-save-app .ads-topbar :is(.ads-buy-button, .ads-profile) { height: 32px; }
   .ads-save-app .ads-curve-neon-glow { opacity: .12; }
 }
 
@@ -75,7 +74,7 @@
     width: 100%; min-width: 0; min-height: 44px; padding: 10px 14px;
     display: flex; align-items: center; gap: 12px; border: 0; border-radius: 12px;
     background: transparent; color: #1E293B; text-align: left; text-decoration: none;
-    font: inherit; font-size: 14px; line-height: 1.4; overflow-wrap: anywhere;
+    font: inherit; font-size: var(--font-size-body); line-height: 1.4; overflow-wrap: anywhere;
   }
   .ads-save-app .ads-mobile-drawer svg { flex: none; }
   .ads-save-app .ads-mobile-drawer :is(nav, .ads-drawer-tools) > .is-active { background: #E9F9EF; color: #1C5A3E; }
@@ -109,9 +108,8 @@
   .ads-save-app .ads-workspace:has(.ads-pro-workspace-shape) > :is(.ads-product-main, .ads-main-panel) {
     inset: var(--shell-padding-y) var(--mobile-page-padding);
     min-width: 0; max-width: 100%; min-height: 0;
-    overflow: auto; overscroll-behavior-y: contain; scrollbar-width: thin;
+    overflow: auto; overscroll-behavior-y: contain;
   }
-  .ads-save-app .ads-main-panel::-webkit-scrollbar { display: block; width: 4px; height: 4px; }
   .ads-shell-bottom-nav {
     flex: none; height: calc(var(--bottom-nav-height) + var(--safe-area-bottom));
     padding: 6px max(4px, env(safe-area-inset-left, 0px)) calc(6px + var(--safe-area-bottom)) max(4px, env(safe-area-inset-right, 0px));
@@ -125,19 +123,17 @@
     color: #BCEDD7; background: transparent; text-decoration: none; font: inherit; cursor: pointer;
   }
   .ads-shell-bottom-nav svg { flex: none; }
-  .ads-shell-bottom-nav span { max-width: 100%; font-size: 10px; line-height: 1.25; text-align: center; }
-  .ads-shell-bottom-nav > :is([aria-current='page'], .is-current, [aria-expanded='true']) { background: linear-gradient(135deg, #2CD086, #1C8556); border-color: #B9FF3970; color: #FFF; box-shadow: inset 0 1px 0 #FFFFFF20; }
+  .ads-shell-bottom-nav span { max-width: 100%; font-size: var(--font-size-caption); line-height: 1.25; text-align: center; }
+  .ads-shell-bottom-nav > :is([aria-current='page'], .is-current, [aria-expanded='true']) { background: var(--toolmeta-lime-gradient); border-color: var(--cv-buy-button-start); color: var(--toolmeta-lime-ink); box-shadow: inset 0 1px 0 #FFFFFF20; }
   .ads-shell-bottom-nav > :is(a, button):focus-visible { outline: 2px solid #B9FF39; outline-offset: -2px; }
   .ads-save-app .ads-pro-workspace-shape { filter: none; }
-  .ads-save-app .ads-curve-neon { opacity: .35; }
-  .ads-save-app .ads-curve-neon-glow { display: none; }
+  .ads-save-app .ads-curve-neon-glow { opacity: .12; }
   .ads-save-app .ads-curve-neon-pulse { filter: none; }
-  .ads-save-app .ads-curve-neon:is(.is-top-left, .is-bottom-right) { display: none; }
   .ads-save-app .ads-toast { bottom: calc(var(--bottom-nav-height) + var(--safe-area-bottom) + 12px); }
   .ads-save-app .ads-control-hub-help-fab { bottom: calc(var(--bottom-nav-height) + var(--safe-area-bottom) + 12px); }
 }
 @container ads-bottom-navigation (max-width: 380px) {
-  .ads-shell-bottom-nav span { font-size: 10px; overflow-wrap: anywhere; }
+  .ads-shell-bottom-nav span { overflow-wrap: anywhere; }
 }
 @container ads-navigation (max-width: 56px) {
   .ads-rail-primary { --island-item-gap: 9px; }

@@ -2,6 +2,7 @@ import { m, useAppLanguage, t, tx } from '@/i18n'
 import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState, type KeyboardEvent as ReactKeyboardEvent } from 'react'
 import { Layers3, Workflow } from 'lucide-react'
 import { AdsCheckCurveNeon } from './ads-check-curve-neon'
+import { useToolmetaSession } from './toolmeta-session'
 import { AdsCheckV8LoadingScreen } from './ads-check-v8-loading-screen'
 import { AdsProDownloadPanel } from './ads-check-pro-download-panel'
 import type { ExportColumn } from './ads-check-pro-export'
@@ -114,24 +115,25 @@ const defaultStepConfigValues: Record<AdsAssetKey, Record<string, Record<string,
 const defaultLoadedTemplateIds: Record<AdsAssetKey, string | null> = { via: null, 'ad-account': null, business: null, page: null, pixel: null }
 
 export function AdsCheckAdAccountsWorkspace({ onAnnounce }: WorkspaceProps) {
+  const { email, openAuth } = useToolmetaSession()
   const surfaceId = useId()
   useAppLanguage();
   const isDrawer = useAdsProDrawerViewport()
   const [activeAsset, setActiveAsset] = useState<AdsAssetKey>('via')
   const [queries, setQueries] = useState<Record<AdsAssetKey, string>>({ via: '', 'ad-account': '', business: '', page: '', pixel: '' })
-  const [viaRows, setViaRows] = useState(initialViaConnections)
-  const [tkqcRows, setTkqcRows] = useState(tkqcRowFixtures)
+  const [viaRows, setViaRows] = useState(() => email ? initialViaConnections : [])
+  const [tkqcRows, setTkqcRows] = useState(() => email ? tkqcRowFixtures : [])
   const [tkqcNoteRow, setTkqcNoteRow] = useState<TkqcRow | null>(null)
-  const [bmRows, setBmRows] = useState(bmRowFixtures)
+  const [bmRows, setBmRows] = useState(() => email ? bmRowFixtures : [])
   const [bmNoteRow, setBmNoteRow] = useState<BmRow | null>(null)
-  const [pageRows, setPageRows] = useState(pageRowFixtures)
-  const [pixelRows, setPixelRows] = useState(pixelRowFixtures)
+  const [pageRows, setPageRows] = useState(() => email ? pageRowFixtures : [])
+  const [pixelRows, setPixelRows] = useState(() => email ? pixelRowFixtures : [])
   const [genericNoteTarget, setGenericNoteTarget] = useState<{ asset: 'page' | 'pixel'; rowId: string; name: string; note: string } | null>(null)
   const [bmResourcePanel, setBmResourcePanel] = useState<{ rowId: string; kind: BmResourceKind } | null>(null)
   const [tkqcSpendLimitRowId, setTkqcSpendLimitRowId] = useState<string | null>(null)
   const [tkqcAdminPanelRowId, setTkqcAdminPanelRowId] = useState<string | null>(null)
   const [selections, setSelections] = useState(defaultSelections)
-  const [folders, setFolders] = useState(defaultFolders)
+  const [folders, setFolders] = useState(() => email ? defaultFolders : { ...defaultFolders, 'ad-account': defaultFolders.via })
   const [selectedFolder, setSelectedFolder] = useState<string>(m("ui.f7a578dcbd"))
   const [folderDeleteTarget, setFolderDeleteTarget] = useState<string | null>(null)
   const [workflows, setWorkflows] = useState(defaultWorkflows)
@@ -407,7 +409,7 @@ export function AdsCheckAdAccountsWorkspace({ onAnnounce }: WorkspaceProps) {
       window.removeEventListener('resize', updateAnchor)
     }
   }, [controlHubDialogActive])
-  const liveAssetTabs = assetTabs.map((tab) => tab.key === 'via' ? { ...tab, count: viaRows.length } : tab)
+  const liveAssetTabs = assetTabs.map((tab) => ({ ...tab, count: !email ? 0 : tab.key === 'via' ? viaRows.length : tab.count }))
   const activeTab = liveAssetTabs.find((tab) => tab.key === activeAsset) ?? liveAssetTabs[0]
   const query = queries[activeAsset]
   const selectedIds = selections[activeAsset]
@@ -533,18 +535,18 @@ export function AdsCheckAdAccountsWorkspace({ onAnnounce }: WorkspaceProps) {
   }, [activeAsset, availableOnly, query, selectedFolder, tkqcRows, tkqcCurrency])
   const filteredRestrictedAdAccounts = useMemo(() => {
     const normalized = query.trim().toLocaleLowerCase('vi')
-    if (activeAsset !== 'ad-account' || availableOnly) return []
+    if (!email || activeAsset !== 'ad-account' || availableOnly) return []
     return tkqcRestrictedRowFixtures.filter((row) => {
       const matchesFolder = selectedFolder === m("ui.f7a578dcbd") || row.folder === selectedFolder
       const matchesQuery = !normalized || `${row.name} ${row.sourceName}`.toLocaleLowerCase('vi').includes(normalized)
       const matchesCurrency = tkqcCurrency === 'mix' || row.currency === tkqcCurrency
       return matchesFolder && matchesQuery && matchesCurrency
     })
-  }, [activeAsset, availableOnly, query, selectedFolder, tkqcCurrency])
+  }, [activeAsset, availableOnly, email, query, selectedFolder, tkqcCurrency])
   // Options built from currencies actually present in the LOADED dataset
   // (all authorized + unauthorized rows), not an invented static ISO list
   // — matches traced production's own data-driven CurrencyMenu.
-  const tkqcCurrencyOptions = useMemo(() => buildCurrencyOptions([...new Set([...tkqcRows, ...tkqcRestrictedRowFixtures].map((row) => row.currency))]), [tkqcRows])
+  const tkqcCurrencyOptions = useMemo(() => buildCurrencyOptions([...new Set([...tkqcRows, ...(email ? tkqcRestrictedRowFixtures : [])].map((row) => row.currency))]), [email, tkqcRows])
   const filteredBmRows = useMemo(() => {
     const normalized = query.trim().toLocaleLowerCase('vi')
     if (activeAsset !== 'business') return bmRows
@@ -834,6 +836,7 @@ export function AdsCheckAdAccountsWorkspace({ onAnnounce }: WorkspaceProps) {
   const toggleSelected = (id: string) => updateSelection((current) => current.includes(id) ? current.filter((item) => item !== id) : [...current, id])
   const toggleAll = (ids: string[]) => updateSelection((current) => ids.length > 0 && ids.every((id) => current.includes(id)) ? current.filter((id) => !ids.includes(id)) : [...new Set([...current, ...ids])])
   const addFolder = () => {
+    if (!email) { openAuth(); return }
     const nextFolder = m("ui.d81a268fd7", { 0: folders[activeAsset].length })
     setFolders((current) => ({ ...current, [activeAsset]: [...current[activeAsset], nextFolder] }))
     setSelectedFolder(nextFolder)
@@ -877,6 +880,7 @@ export function AdsCheckAdAccountsWorkspace({ onAnnounce }: WorkspaceProps) {
   // check (`t.loading||e("refresh")`), i.e. a second click while already
   // refreshing is simply IGNORED rather than restarting the timer.
   const refresh = () => {
+    if (!email) { openAuth(); return }
     if (refreshing) return
     setRefreshing(true)
     refreshTimer.current = window.setTimeout(() => {
@@ -885,7 +889,10 @@ export function AdsCheckAdAccountsWorkspace({ onAnnounce }: WorkspaceProps) {
       onAnnounce(m("ui.e698f06252", { 0: activeTab.label }), 'success')
     }, 420)
   }
-  const openDownloadPanel = (rect: DOMRect) => setDownloadPanel({ rect })
+  const openDownloadPanel = (rect: DOMRect) => {
+    if (email) setDownloadPanel({ rect })
+    else openAuth()
+  }
   const openTagPickerForSelection = (anchorEl: HTMLElement) => {
     if (selectedIds.length === 0) { onAnnounce(m("ui.1bc3f4c83d")); return }
     setTagPickerTarget({ asset: activeAsset, rowIds: selectedIds, anchorEl, placement: 'top' })
@@ -1027,6 +1034,7 @@ export function AdsCheckAdAccountsWorkspace({ onAnnounce }: WorkspaceProps) {
     window.requestAnimationFrame(() => functionLauncherRef.current?.focus())
   }
   const openFunctions = () => {
+    if (!email) { openAuth(); return }
     // Opening Function only ever opens Function — no prerequisite the other
     // way, and no side effect on workflowOpen (state 01 stays valid; this
     // can legally take 01 -> 11).
@@ -1035,11 +1043,13 @@ export function AdsCheckAdAccountsWorkspace({ onAnnounce }: WorkspaceProps) {
     window.requestAnimationFrame(() => document.querySelector<HTMLInputElement>('#ads-pro-function-library input')?.focus())
   }
   const openWorkflow = () => {
+    if (!email) { openAuth(); return }
     workflowOpenedFromRail.current = false
     if (isDrawer) setFoldersOpen(false)
     setWorkflowOpen(true)
   }
   const openWorkflowFromRail = () => {
+    if (!email) { openAuth(); return }
     workflowOpenedFromRail.current = true
     setWorkflowOpen(true)
   }
@@ -1091,15 +1101,22 @@ export function AdsCheckAdAccountsWorkspace({ onAnnounce }: WorkspaceProps) {
   const activeLoadState = isBmActive ? bmLoadState : isPageActive ? pageLoadState : isPixelActive ? pixelLoadState : tkqcLoadState
   const activeLastLoadedAt = isBmActive ? bmLastLoadedAt : isPageActive ? pageLastLoadedAt : isPixelActive ? pixelLastLoadedAt : tkqcLastLoadedAt
   const activeIdMasked = isBmActive ? bmIdMasked : isPageActive ? pageIdMasked : isPixelActive ? pixelIdMasked : tkqcIdMasked
-  const openActiveLoadConfig = () => { if (isBmActive) setBmLoadConfigOpen(true); else if (isPageActive) setPageLoadConfigOpen(true); else if (isPixelActive) setPixelLoadConfigOpen(true); else setTkqcLoadConfigOpen(true) }
+  const openActiveLoadConfig = () => {
+    if (!email) { openAuth(); return }
+    if (isBmActive) setBmLoadConfigOpen(true)
+    else if (isPageActive) setPageLoadConfigOpen(true)
+    else if (isPixelActive) setPixelLoadConfigOpen(true)
+    else setTkqcLoadConfigOpen(true)
+  }
   const toggleActiveIdMask = () => { if (isBmActive) setBmIdMasked((value) => !value); else if (isPageActive) setPageIdMasked((value) => !value); else if (isPixelActive) setPixelIdMasked((value) => !value); else setTkqcIdMasked((value) => !value) }
   const toolbar = <AdsCheckProToolbar tab={activeTab} query={query} refreshing={refreshing} availableOnly={availableOnly} foldersOpen={foldersOpen} functionsOpen={functionOpen} workflowOpen={workflowOpen} onQuery={(value) => setQueries((current) => ({ ...current, [activeAsset]: value }))} onRefresh={refresh} onDownload={openDownloadPanel} onOpenColumnSettings={() => setColumnSettingsOpen(true)} onOpenUiSettings={(rect) => setUiSettingsPanelRect(rect)} onToggleAvailability={toggleAvailability} onOpenFolders={openFolders} onOpenFunctions={openFunctions} onOpenWorkflow={openWorkflow} onAnnounce={onAnnounce}
-    onOpenTkqcLoadConfig={openActiveLoadConfig} tkqcLoadState={activeLoadState} tkqcLastLoadedAt={activeLastLoadedAt}
+    onOpenTkqcLoadConfig={openActiveLoadConfig} tkqcLoadState={activeLoadState} tkqcLastLoadedAt={email ? activeLastLoadedAt : null}
     tkqcDateRange={tkqcDateRange} onOpenTkqcDateRange={(rect) => setTkqcDateRangePanelRect(rect)}
     tkqcIdMasked={activeIdMasked} onToggleTkqcIdMask={toggleActiveIdMask}
     tkqcCurrency={tkqcCurrency} onOpenTkqcCurrencyFilter={(rect) => setTkqcCurrencyPanelRect(rect)}
-    onOpenHistory={() => setHistoryModalOpen(true)}
+    onOpenHistory={() => email ? setHistoryModalOpen(true) : openAuth()}
     onOpenControlHubSetup={() => {
+      if (!email) { openAuth(); return }
       // Once security setup has (demo) succeeded, "Cài đặt Control Hub"
       // opens the post-setup settings modal instead of restarting the
       // onboarding/Tôn chỉ/Cơ chế bảo mật flow from scratch.
@@ -1137,9 +1154,9 @@ export function AdsCheckAdAccountsWorkspace({ onAnnounce }: WorkspaceProps) {
       <path d={workspaceSurface.path} fill="rgba(255, 255, 255, 0.95)" />
       <path d={workspaceSurface.path} fill={`url(#${surfaceId}-wash)`} />
     </svg>
-    {/* Reuse the runtime surface contour, excluding its closing side/bottom edges. */}
+    {/* Follow the top contour without its closing sides or bottom edge. */}
     <svg className="ads-pro-curve-b-neon" aria-hidden="true" focusable="false" viewBox={workspaceSurface.viewBox}>
-      <AdsCheckCurveNeon path={workspaceSurface.path.replace(/^M0 [^ ]+ V([^ ]+) /, 'M0 $1 ').split(' V')[0]} curve="b" />
+      <AdsCheckCurveNeon path={workspaceSurface.path.replace(/^M0 [^ ]+ V([^ ]+) /, 'M0 $1 ').split(' V')[0]} curve="b" runnerLength={4} runnerWidth={1.5} />
     </svg>
     <h1 className="sr-only" id="ads-pro-workspace-title">{t("ui.6949c5370b")}</h1>
     <div className="ads-pro-header-row">

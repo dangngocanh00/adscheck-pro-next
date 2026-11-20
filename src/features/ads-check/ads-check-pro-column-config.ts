@@ -34,13 +34,6 @@ export type PersistedColumnEntry = { field: string; width: number; frozen: boole
 // is needed (colgroup, useColumnConfig's leadingWidth, the summary's own
 // checkbox span) removes the duplication that let that drift happen.
 export const CHECKBOX_COLUMN_WIDTH = 44
-// Summary Above Pagination — both rows share this one already-approved
-// control height (matches the pagination row's own existing height), so
-// Summary's sticky `bottom` offset and the scroll container's reserved
-// bottom padding both derive from the SAME two constants instead of a
-// separately guessed number.
-export const PAGINATION_ROW_HEIGHT = 38
-export const SUMMARY_ROW_HEIGHT = 38
 const STORAGE_KEY = 'config_column'
 const DEFAULT_MIN_WIDTH = 60
 // Traced production: no upper bound exists for a non-frozen column's

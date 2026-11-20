@@ -145,8 +145,6 @@
 .ads-pro-floating-panels .ads-function-pin-filter.is-active { background: linear-gradient(135deg, #26B374, #28AC71); color: #fff; }
 .ads-pro-floating-panels .ads-panel-heading > button:hover { background: #30654D; color: #B5EFD5; }
 .ads-pro-floating-panels .ads-workflow-template { background: #2B503F !important; color: #ddd3ff !important; }
-.ads-pro-floating-panels :is(.ads-function-groups, .ads-workflow-canvas, .ads-template-list) { scrollbar-color: #457E64 transparent; }
-.ads-pro-floating-panels :is(.ads-function-groups, .ads-workflow-canvas)::-webkit-scrollbar-thumb { background: #457E64; }
 .ads-pro-floating-panels .ads-workflow-canvas { background: transparent; border-color: #347055; }
 .ads-pro-floating-panels .ads-workflow-empty > span { background: #294F3E; color: #c4b5fd; }
 .ads-pro-floating-panels :is(.ads-workflow-empty, .ads-workflow-step-no-config, .ads-workflow-step-field-hint, .ads-function-empty, .ads-runner-pill-label) { color: #A9CDBD; }

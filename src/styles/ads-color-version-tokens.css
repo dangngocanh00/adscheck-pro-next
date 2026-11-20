@@ -144,6 +144,8 @@
   /* Shell CTA buttons (2 distinct existing gradients, kept distinct) */
   --cv-buy-button-start: #CAFF4D;
   --cv-buy-button-end: #B0FB30;
+  --toolmeta-lime-gradient: linear-gradient(115deg, var(--cv-buy-button-start), var(--cv-buy-button-end));
+  --toolmeta-lime-ink: #163B2C;
   --cv-cta-button-start: #287151;
   --cv-cta-button-end: #163B2C;
   --cv-outline-border: #CCE5CE;

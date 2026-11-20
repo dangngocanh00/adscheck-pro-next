@@ -2,6 +2,7 @@ import { appLanguageOptions, m, useAppLanguage, t, tx } from '@/i18n'
 import { useCallback, useEffect, useRef, useState, type KeyboardEvent } from 'react'
 import { Check, Copy, KeyRound, Laptop, Monitor, ShieldCheck, WalletCards } from 'lucide-react'
 import { AdsCheckProductShell } from '@/features/ads-check/ads-check-product-shell'
+import { toolmetaDemoAccount, useToolmetaSession } from '@/features/ads-check/toolmeta-session'
 import {
   readAdsCheckLanguage,
   readAdsCheckLoginSession,
@@ -13,7 +14,7 @@ import {
 type AccountTab = 'overview' | 'security'
 type CopyStatus = 'idle' | 'success' | 'failure'
 
-const accountId = 'ADSCHECK-DEMO'
+const accountId = toolmetaDemoAccount.id
 const accountTabs: AccountTab[] = ['overview', 'security']
 const languageLabels: Record<AdsCheckLanguage, string> = Object.fromEntries(
   appLanguageOptions.map((item) => [item.code, item.label]),
@@ -34,6 +35,7 @@ function copyWithLegacyFallback(value: string) {
 
 export default function AdsCheckAccountPage() {
   useAppLanguage();
+  const { email, signOut } = useToolmetaSession()
   const [tab, setTab] = useState<AccountTab>('overview')
   const [copyStatus, setCopyStatus] = useState<CopyStatus>('idle')
   const [language, setLanguage] = useState(readAdsCheckLanguage)
@@ -98,12 +100,15 @@ export default function AdsCheckAccountPage() {
     <section className="ads-account-page" aria-labelledby="ads-account-title">
       <header className="ads-account-hero">
         <div className="ads-account-avatar" aria-hidden="true">{t("ui.6dcd4ce23d")}</div>
-        <div><span className="ads-section-eyebrow">{t("ui.e54ecac76d")}</span><h1 id="ads-account-title">{t("ui.939401cab4")}</h1><p>{t("ui.8624d8837a")}</p></div>
-        <span className="ads-account-plan"><ShieldCheck size={15} /> {tx(effectiveSession === 'pro' ? 'Pro' : m("ui.a1e9637858"))}</span>
+        <div><span className="ads-section-eyebrow">{t("ui.e54ecac76d")}</span><h1 id="ads-account-title">{t("ui.939401cab4")}</h1><p className="toolmeta-account-email">{email ?? '—'}</p></div>
+        {email && <div className="toolmeta-account-tools">
+          <span className="ads-account-plan"><ShieldCheck size={15} /> {tx(effectiveSession === 'pro' ? 'Pro' : m("ui.a1e9637858"))}</span>
+          <button className="toolmeta-sign-out" type="button" onClick={signOut}>{t("ui.d513aac0be")}</button>
+        </div>}
       </header>
 
       <div className="ads-account-balance">
-        <span><WalletCards size={18} /> {" "}{t("ui.6c17bb89b4")}</span><strong>{t("ui.4ccb02fc39")}</strong><small>{t("ui.3ea3676ec5")}</small>
+        <span><WalletCards size={18} /> {" "}{t("ui.6c17bb89b4")}</span><strong>{email ? t("ui.4ccb02fc39") : '—'}</strong><small>{t("ui.3ea3676ec5")}</small>
       </div>
 
       <div className="ads-account-tabs" role="tablist" aria-label={t("ui.c3c4a622df")}>
@@ -113,15 +118,20 @@ export default function AdsCheckAccountPage() {
 
       {tx(tab === 'overview' ? <div id="ads-account-overview" className="ads-account-tab-panel" role="tabpanel" aria-labelledby="ads-account-overview-tab">
         <article className="ads-account-information">
-          <header><div><span className="ads-section-eyebrow">{t("ui.22508e5da7")}</span><h2>{t("ui.022547201a")}</h2></div><span className="ads-status-dot"><i /> {" "}{t("ui.9a616fcdad")}</span></header>
-          <dl><div><dt>{t("ui.84add5b295")}</dt><dd>{t("ui.57f6ff5a6b")}</dd></div><div><dt>{t("ui.6f35cfbf96")}</dt><dd>{t("ui.750af8815e")}{" "}<button type="button" aria-label={t("ui.189d36a759")} title={tx(copyStatus === 'success' ? m("ui.40e825dba7") : copyStatus === 'failure' ? m("ui.3e2f232da9") : m("ui.189d36a759"))} onClick={copyAccountId}>{tx(copyStatus === 'success' ? <Check size={15} /> : <Copy size={15} />)}</button></dd></div><div><dt>{t("ui.3c4ed56c40")}</dt><dd>{t("ui.0c2f43cf3c")}</dd></div><div><dt>{t("ui.65074a8565")}</dt><dd>{languageLabels[language]}</dd></div></dl>
+          <header><div><span className="ads-section-eyebrow">{t("ui.22508e5da7")}</span><h2>{t("ui.022547201a")}</h2></div>{email && <span className="ads-status-dot"><i /> {" "}{t("ui.9a616fcdad")}</span>}</header>
+          <dl>
+            <div><dt>{t("ui.84add5b295")}</dt><dd>{email ? t("ui.57f6ff5a6b") : '—'}</dd></div>
+            <div><dt>{t("ui.6f35cfbf96")}</dt><dd>{email ? <>{t("ui.750af8815e")}{" "}<button type="button" aria-label={t("ui.189d36a759")} title={tx(copyStatus === 'success' ? m("ui.40e825dba7") : copyStatus === 'failure' ? m("ui.3e2f232da9") : m("ui.189d36a759"))} onClick={copyAccountId}>{copyStatus === 'success' ? <Check size={15} /> : <Copy size={15} />}</button></> : '—'}</dd></div>
+            <div><dt>{t("ui.3c4ed56c40")}</dt><dd>{email ? t("ui.0c2f43cf3c") : '—'}</dd></div>
+            <div><dt>{t("ui.65074a8565")}</dt><dd>{languageLabels[language]}</dd></div>
+          </dl>
         </article>
         <aside className="ads-account-summary"><span className="ads-summary-icon"><KeyRound size={22} /></span><h2>{t("ui.fa4bb68df7")}</h2><p>{t("ui.18a3063a97")}</p><button type="button" onClick={() => selectTab('security', true)}>{t("ui.de2c8df44d")}</button></aside>
       </div> : <div id="ads-account-security" className="ads-account-tab-panel is-security" role="tabpanel" aria-labelledby="ads-account-security-tab">
         <article className="ads-session-card">
-          <header><div><span className="ads-section-eyebrow">{t("ui.6e9379b397")}</span><h2>{tx(sessionLabel)}</h2><p>{t("ui.29b3984c59")}</p></div><span className="ads-session-count">1 / {sessionLimit} {" "}{t("ui.8f0fe24897")}</span></header>
-          <div className="ads-session-progress" role="progressbar" aria-label={tx(m("ui.33e7de3636", { 0: sessionLabel }))} aria-valuemin={0} aria-valuemax={sessionLimit} aria-valuenow={1}><i style={{ width: effectiveSession === 'pro' ? '1%' : '100%' }} /></div>
-          <div className="ads-current-session"><span className="ads-device-icon"><Laptop size={21} /></span><div><strong>{t("ui.82fa5f31dc")}</strong><span><i /> {" "}{t("ui.6e11d26140")}</span></div><span className="ads-current-badge"><Monitor size={14} /> {" "}{t("ui.626c8756be")}</span></div>
+          <header><div><span className="ads-section-eyebrow">{t("ui.6e9379b397")}</span><h2>{email ? tx(sessionLabel) : '—'}</h2><p>{t("ui.29b3984c59")}</p></div><span className="ads-session-count">{email ? `1 / ${sessionLimit}` : '0'} {" "}{t("ui.8f0fe24897")}</span></header>
+          <div className="ads-session-progress" role="progressbar" aria-label={tx(m("ui.33e7de3636", { 0: sessionLabel }))} aria-valuemin={0} aria-valuemax={sessionLimit} aria-valuenow={email ? 1 : 0}><i style={{ width: !email ? '0%' : effectiveSession === 'pro' ? '1%' : '100%' }} /></div>
+          {email && <div className="ads-current-session"><span className="ads-device-icon"><Laptop size={21} /></span><div><strong>{t("ui.82fa5f31dc")}</strong><span><i /> {" "}{t("ui.6e11d26140")}</span></div><span className="ads-current-badge"><Monitor size={14} /> {" "}{t("ui.626c8756be")}</span></div>}
         </article>
         <aside className="ads-security-note"><ShieldCheck size={23} /><div><h2>{t("ui.03b7dba044")}</h2><p>{t("ui.016b7c1b7f")}</p></div></aside>
       </div>)}

@@ -1,16 +1,16 @@
-import { expect, test } from '@playwright/test'
+import { expect, test } from './toolmeta-session.fixture'
 
 const workspacePath = '/app/adscheck-pro/adaccounts'
 
-test('root opens AdsCheck Pro directly on a fresh browser', async ({ page }) => {
+test('root opens Toolmeta Pro directly with a signed-in session', async ({ page }) => {
   await page.goto('/')
   await expect(page).toHaveURL(new RegExp(`${workspacePath}$`))
   await expect(page.getByRole('tab', { name: /^VIA/ })).toBeVisible()
   await expect(page.getByRole('dialog')).toHaveCount(0)
-  await expect(page).toHaveTitle(/Ads Check/)
+  await expect(page).toHaveTitle(/Toolmeta/)
 })
 
-test('removed destinations and unknown URLs return to AdsCheck Pro', async ({ page }) => {
+test('removed destinations and unknown URLs return to Toolmeta Pro', async ({ page }) => {
   test.setTimeout(90_000)
   for (const route of ['/login', '/product', '/hr-center', '/work-inbox', '/documents', '/org-chart', '/employees', '/employees/new', '/employees/emp-001', '/departments', '/approvals', '/attendance', '/payroll', '/settings', '/styleguide', '/404', '/unknown-destination']) {
     await page.goto(route)
@@ -43,7 +43,7 @@ test('old preferences do not block workspace entry, asset switching or refresh',
   await expect(page.getByRole('dialog')).toHaveCount(0)
 })
 
-test('all AdsCheck destinations render without missing imports or runtime errors', async ({ page }, testInfo) => {
+test('all Toolmeta destinations render without missing imports or runtime errors', async ({ page }, testInfo) => {
   test.setTimeout(90_000)
   const errors: string[] = []
   page.on('pageerror', error => errors.push(error.message))
@@ -53,7 +53,7 @@ test('all AdsCheck destinations render without missing imports or runtime errors
   for (const route of [workspacePath, '/app/home', '/app/ads-save', '/ads-save', '/app/extended-payment', '/app/billing/payment', '/app/notification', '/app/account']) {
     await page.goto(route)
     await expect(page.locator('main')).toBeVisible()
-    await expect(page).toHaveTitle(/Ads Check/)
+    await expect(page).toHaveTitle(/Toolmeta/)
     await expect(page.getByRole('dialog')).toHaveCount(0)
     const brand = page.locator('.ads-brand img:visible')
     await expect(brand).toBeVisible()
@@ -68,7 +68,7 @@ test('switching modules through navigation never prompts for a version', async (
   test.setTimeout(90_000)
   await page.goto(workspacePath)
   await expect(page.getByRole('tab', { name: /^VIA/ })).toBeVisible()
-  for (const module of ['Ads Save', 'Dashboard', 'Ads Check Pro', 'Ads Save']) {
+  for (const module of ['Ads Save', 'Dashboard', 'Toolmeta Pro', 'Ads Save']) {
     await page.getByRole('link', { name: module, exact: true }).filter({ visible: true }).first().click()
     await expect(page.locator('main')).toBeVisible()
     await expect(page.getByRole('dialog')).toHaveCount(0)

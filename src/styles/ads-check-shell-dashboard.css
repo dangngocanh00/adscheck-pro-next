@@ -13,7 +13,7 @@
 
 .ads-product-shell .ads-buy-button {
   color: #fff;
-  font-size: 12px;
+  font-size: var(--font-size-control);
   font-weight: 600;
 }
 
@@ -34,7 +34,6 @@
   background: radial-gradient(circle at 75% 8%, var(--cv-product-workspace-ambient, rgba(112, 239, 136, .11)), transparent 34%), var(--cv-product-workspace-surface, #f0f8f2);
   color: var(--ads-shell-ink);
   overflow: auto;
-  scrollbar-color: #b8ccbc transparent;
 }
 
 .ads-product-main:focus { outline: 0; }

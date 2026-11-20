@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test'
+import { expect, test } from './toolmeta-session.fixture'
 
 test('keeps settings and Bubble preview side by side while settings scroll', async ({ page }, testInfo) => {
   test.setTimeout(90_000)

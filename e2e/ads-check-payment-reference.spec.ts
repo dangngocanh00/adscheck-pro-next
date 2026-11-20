@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test'
+import { expect, test } from './toolmeta-session.fixture'
 
 test.beforeEach(async ({ page }) => {
   await page.addInitScript(() => {
@@ -18,7 +18,7 @@ test('matches the Extended Payment reference structure and interactions', async 
   await expect(page.getByRole('heading', { name: 'Chữ ký cá nhân' })).toBeVisible()
   await expect(page.getByRole('heading', { name: 'Xem trước Bubble' })).toBeVisible()
   await expect(page.locator('.ads-extended-field-option')).toHaveCount(17)
-  const promoClose = page.getByRole('button', { name: 'Đóng giới thiệu Ads Check V8' })
+  const promoClose = page.getByRole('button', { name: 'Đóng giới thiệu Toolmeta V8' })
   if (!isMobile && await promoClose.isVisible()) await promoClose.click()
 
   const accountName = page.getByRole('button', { name: 'Tên tài khoản' })
@@ -54,10 +54,10 @@ test('matches the Extended Payment reference structure and interactions', async 
     expect(settings && preview && settings.width / preview.width).toBeGreaterThan(1.85)
     await page.setViewportSize({ width: 1440, height: 900 })
     await page.reload()
-    await expect(page.getByRole('button', { name: 'Đóng giới thiệu Ads Check V8' })).toBeVisible()
+    await expect(page.getByRole('button', { name: 'Đóng giới thiệu Toolmeta V8' })).toBeVisible()
     await page.getByRole('button', { name: 'In đậm' }).focus()
     await expect(page.getByRole('button', { name: 'In đậm' })).toBeFocused()
-    await expect(page.getByRole('button', { name: 'Đóng giới thiệu Ads Check V8' })).toBeHidden()
+    await expect(page.getByRole('button', { name: 'Đóng giới thiệu Toolmeta V8' })).toBeHidden()
   }
   await expect.poll(() => page.locator('#ads-product-main').evaluate((element) => element.scrollWidth <= element.clientWidth)).toBe(true)
 })
@@ -70,7 +70,7 @@ test('matches the package builder reference and keeps every visible control func
   await expect(page.getByRole('button', { name: 'Priority Khách hàng Priority' })).toBeVisible()
   await expect(page.getByRole('heading', { name: 'Gói của bạn' })).toBeVisible()
   await expect(page.getByText('0 tính năng', { exact: true })).toBeVisible()
-  const promoClose = page.getByRole('button', { name: 'Đóng giới thiệu Ads Check V8' })
+  const promoClose = page.getByRole('button', { name: 'Đóng giới thiệu Toolmeta V8' })
   if (!isMobile && await promoClose.isVisible()) await promoClose.click()
 
   const checkout = page.getByRole('button', { name: 'Thanh toán bản demo' })
@@ -119,10 +119,10 @@ test('matches the package builder reference and keeps every visible control func
   await expect(page.locator('.ads-purchase-summary-count strong').first()).not.toHaveText('0 tính năng')
   await page.getByRole('checkbox', { name: 'Chọn Ads Account Management' }).uncheck()
   await expect(page.getByRole('button', { name: 'Pro Tự chọn tính năng' })).toHaveAttribute('aria-pressed', 'true')
-  await page.getByRole('checkbox', { name: 'Chọn trọn bộ tính năng Ads Check' }).check()
-  await expect(page.locator('.ads-purchase-builder-status')).toContainText('Đã chọn trọn bộ tính năng Ads Check.')
+  await page.getByRole('checkbox', { name: 'Chọn trọn bộ tính năng Toolmeta' }).check()
+  await expect(page.locator('.ads-purchase-builder-status')).toContainText('Đã chọn trọn bộ tính năng Toolmeta.')
   await page.getByRole('checkbox', { name: 'Chọn Ads Account Management' }).uncheck()
-  await expect(page.locator('.ads-purchase-builder-status')).not.toContainText('Đã chọn trọn bộ tính năng Ads Check.')
+  await expect(page.locator('.ads-purchase-builder-status')).not.toContainText('Đã chọn trọn bộ tính năng Toolmeta.')
 
   if (isMobile) {
     await expect.poll(() => page.locator('#ads-product-main').evaluate((element) => element.scrollWidth <= element.clientWidth)).toBe(true)

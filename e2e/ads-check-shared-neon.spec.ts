@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test'
+import { expect, test } from './toolmeta-session.fixture'
 
 const modules = [
   ['/app/adscheck-pro/adaccounts', ['top-right', 'bottom-right', 'bottom-left', 'b']],

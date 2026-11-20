@@ -2,6 +2,8 @@ import { useAppLanguage, t } from '@/i18n'
 import { lazy, Suspense } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { AdsCheckV8LoadingScreen } from '@/features/ads-check/ads-check-v8-loading-screen'
+import { ToolmetaSessionProvider } from '@/features/ads-check/toolmeta-session-provider'
+import { useToolmetaSession } from '@/features/ads-check/toolmeta-session'
 
 const AdsSave = lazy(() => import('@/pages/ads-save-page'))
 const AdsCheckProAdAccounts = lazy(() => import('@/pages/ads-check-pro-adaccounts-page'))
@@ -16,13 +18,15 @@ function RouteSkeleton() {
   return <div className="route-skeleton" role="status"><span className="sr-only">{t("ui.f774f2161e")}</span><i aria-hidden="true" /><i aria-hidden="true" /><i aria-hidden="true" /></div>
 }
 
-export default function App() {
+function ToolmetaRoutes() {
   useAppLanguage();
+  const { email } = useToolmetaSession()
+
   return <Suspense fallback={<RouteSkeleton />}>
-    <Routes>
+    <Routes key={email ?? 'guest'}>
       <Route path="/ads-save" element={<AdsSave />} />
       <Route path="/app/ads-save" element={<AdsSave />} />
-      <Route path="/app/adscheck-pro/adaccounts" element={<Suspense fallback={<AdsCheckV8LoadingScreen />}><AdsCheckProAdAccounts /></Suspense>} />
+      <Route path="/app/adscheck-pro/adaccounts" element={email ? <Suspense fallback={<AdsCheckV8LoadingScreen />}><AdsCheckProAdAccounts /></Suspense> : <AdsSave variant="ads-check-pro" />} />
       <Route path="/app/home" element={<AdsCheckDashboard />} />
       <Route path="/app/extended-payment" element={<AdsCheckExtendedPayment />} />
       <Route path="/app/billing/payment" element={<AdsCheckBilling />} />
@@ -32,4 +36,8 @@ export default function App() {
       <Route path="*" element={<Navigate to="/app/adscheck-pro/adaccounts" replace />} />
     </Routes>
   </Suspense>
+}
+
+export default function App() {
+  return <ToolmetaSessionProvider><ToolmetaRoutes /></ToolmetaSessionProvider>
 }

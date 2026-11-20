@@ -1,4 +1,4 @@
-import { expect, test, type Locator } from '@playwright/test'
+import { expect, test, type Locator } from './toolmeta-session.fixture'
 
 test('floating panels keep table width, independent toggles, gaps and per-asset state', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'desktop-chrome', 'Desktop matrix includes its own narrow-container fallback check.')

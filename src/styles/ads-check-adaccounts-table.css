@@ -8,10 +8,7 @@
   background: #fff;
 }
 
-.ads-pro-table-scroll { min-height: 0; flex: 1; overflow: auto; scrollbar-color: #cbd5cd transparent; }
-.ads-pro-table-scroll::-webkit-scrollbar { width: 8px; height: 8px; }
-.ads-pro-table-scroll::-webkit-scrollbar-track { background: transparent; }
-.ads-pro-table-scroll::-webkit-scrollbar-thumb { border-radius: 999px; background: #d1d9d3; }
+.ads-pro-table-scroll { min-height: 0; flex: 1; overflow: auto; }
 .ads-pro-table { width: 100%; min-width: 700px; border-collapse: collapse; table-layout: fixed; color: #121713; font-size: 12px; }
 .ads-pro-table.is-via { min-width: 1080px; }
 .ads-pro-table.is-empty { max-width: none; }

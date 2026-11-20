@@ -5,6 +5,7 @@ import type { ExtendedPaymentCurrencyMode, ExtendedPaymentSurface } from './ads-
 import { ExtendedPaymentBubble } from './ads-check-extended-payment-bubble'
 
 type ExtendedPaymentPreviewProps = {
+  showDemoValues?: boolean
   bubbleEnabled: boolean
   surface: ExtendedPaymentSurface
   language: string

@@ -22,6 +22,7 @@ import { AdsSaveConfiguredWorkspace } from '@/features/ads-save/ads-save-configu
 import { AdsSaveCreateConfigModal } from '@/features/ads-save/ads-save-create-config-modal'
 import { createStoredConfiguration, triggerLocalCsvDownload, type AdsSaveStoredConfiguration } from '@/features/ads-save/ads-save-configuration-store'
 import { AdsCheckShellCurve } from '@/features/ads-check/ads-check-shell-curve'
+import { useToolmetaSession } from '@/features/ads-check/toolmeta-session'
 import {
   readAdsCheckDefaultV6,
   readAdsCheckLanguage,
@@ -53,12 +54,12 @@ function RailButton({ label, active, selected, expanded, controls, href, externa
 
 export default function AdsSavePage({ variant = 'ads-save' }: { variant?: AdsWorkspaceVariant }) {
   useAppLanguage();
+  const { email, openAuth, signOut } = useToolmetaSession()
   const navigate = useNavigate()
   const isAdsCheckPro = variant === 'ads-check-pro'
-  const standardEditionLabel = isAdsCheckPro ? 'Pro' : 'Basic'
   const navigation = navigationItems.map((item) => ({
     ...item,
-    active: item.label === (isAdsCheckPro ? 'Ads Check Pro' : 'Ads Save'),
+    active: item.key === (isAdsCheckPro ? 'adscheck-pro' : 'ads-save'),
   }))
   const initialVersion = useRef(readAdsCheckVersion()).current
   const initialDefaultV6 = useRef(readAdsCheckDefaultV6()).current
@@ -85,7 +86,7 @@ export default function AdsSavePage({ variant = 'ads-save' }: { variant?: AdsWor
 
   useEffect(() => {
     const previousTitle = document.title
-    document.title = isAdsCheckPro ? m("ui.f5d32037f2") : 'Ads Save · Ads Check'
+    document.title = isAdsCheckPro ? m("ui.f5d32037f2") : 'Ads Save · Toolmeta'
     return () => { document.title = previousTitle }
   }, [isAdsCheckPro])
   useEffect(() => {
@@ -102,7 +103,20 @@ export default function AdsSavePage({ variant = 'ads-save' }: { variant?: AdsWor
   }), [])
 
   const announce = (message: string, tone: 'success' | 'info' = 'info') => setNotice({ message, tone })
-  const openDialog = (next: Exclude<DialogName, null>) => { setAccountOpen(false); setActiveMenu(null); setMobileOpen(false); setDialog(next) }
+  const openDialog = (next: Exclude<DialogName, null>) => {
+    setAccountOpen(false)
+    setActiveMenu(null)
+    setMobileOpen(false)
+    if (email || next === 'control') setDialog(next)
+    else openAuth()
+  }
+  const openAccount = () => {
+    setActiveMenu(null)
+    setDialog(null)
+    setMobileOpen(false)
+    if (email) setAccountOpen((value) => !value)
+    else openAuth()
+  }
   const toggleMenu = (next: Exclude<AdsRailMenu, null>) => { setAccountOpen(false); setDialog(null); setActiveMenu((current) => current === next ? null : next) }
   const navigatePreview = (label: string, active?: boolean) => {
     setMobileOpen(false)
@@ -129,9 +143,13 @@ export default function AdsSavePage({ variant = 'ads-save' }: { variant?: AdsWor
     setVersion(value)
     setActiveMenu(null)
     writeAdsCheckVersion(value)
-    announce(m("ui.0bff507373", { 0: value === 'v6' ? 'Ads Check V6' : 'Ads Check' }), 'success')
+    announce(m("ui.0bff507373", { 0: value === 'v6' ? 'Toolmeta V6' : 'Toolmeta' }), 'success')
   }
-  const handleOpenCreateConfig = () => { setEditingConfigId(null); setCreateConfigOpen(true) }
+  const handleOpenCreateConfig = () => {
+    if (!email) { openAuth(); return }
+    setEditingConfigId(null)
+    setCreateConfigOpen(true)
+  }
   const handleOpenEditConfig = (id: string) => { setEditingConfigId(id); setCreateConfigOpen(true) }
   // "Tải ngay" — no real Meta insights API exists in this clone, so this
   // triggers the HONEST local CSV export (see triggerLocalCsvDownload's
@@ -148,10 +166,10 @@ export default function AdsSavePage({ variant = 'ads-save' }: { variant?: AdsWor
     <a className="ads-skip-link" href="#ads-save-main">{t("ui.9af88ffc6d")}</a>
     <header className="ads-topbar">
       <button className="ads-mobile-menu" type="button" aria-label={t("ui.23e29182f4")} aria-expanded={mobileOpen} aria-controls="ads-mobile-drawer" onClick={() => setMobileOpen(true)}><Menu size={17} /></button>
-      <Link className="ads-brand" to={isAdsCheckPro ? '/app/adscheck-pro/adaccounts' : '/app/ads-save'} aria-label="Ads Check home"><ToolmetaWordmark /></Link>
+      <Link className="ads-brand" to={isAdsCheckPro ? '/app/adscheck-pro/adaccounts' : '/app/ads-save'} aria-label="Toolmeta home"><ToolmetaWordmark /></Link>
       <div className="ads-top-actions">
         <button className="ads-buy-button" type="button" aria-label={t("ui.b90857eb2c")} onClick={() => navigate('/app/billing/payment')}><ShoppingCart size={15} /><span>{t("ui.b90857eb2c")}</span></button>
-        <button className="ads-profile" type="button" aria-haspopup="dialog" aria-expanded={accountOpen} onClick={() => { setActiveMenu(null); setDialog(null); setAccountOpen((value) => !value) }}>{tx(isAdsCheckPro ? m("ui.4f4d141887") : m("ui.0f366f2fcc"))}</button>
+        <button className={`ads-profile toolmeta-account-action${email ? '' : ' toolmeta-guest-action'}`} type="button" aria-haspopup="dialog" aria-expanded={email ? accountOpen : undefined} onClick={openAccount}>{email ? t("ui.4f4d141887") : t('auth.entry')}</button>
         <button className={`ads-header-utility${activeMenu === 'language' ? ' is-selected' : ''}`} type="button" aria-label={t("ui.65074a8565")} aria-haspopup="menu" aria-expanded={activeMenu === 'language'} aria-controls="ads-language-menu" data-ads-menu-trigger="language" onClick={() => toggleMenu('language')}><Languages size={16} /></button>
         <a className="ads-header-utility" aria-label={t("ui.ed2a55ae3b")} title={t("ui.ed2a55ae3b")} href="https://www.facebook.com/adscheck.official/" target="_blank" rel="noreferrer"><Headphones size={16} /></a>
         <Link className="ads-header-utility ads-header-utility--notification" aria-label={t("ui.5d6af377c2")} title={t("ui.5d6af377c2")} to="/app/notification"><Bell size={16} /></Link>
@@ -184,8 +202,8 @@ export default function AdsSavePage({ variant = 'ads-save' }: { variant?: AdsWor
 
     <AdsCheckShellBottomNav open={mobileOpen} drawerId="ads-mobile-drawer" onMore={() => setMobileOpen(true)} />
     <RailMenus active={activeMenu} language={language} version={version} defaultV6={defaultV6} onClose={() => setActiveMenu(null)} onLanguage={(value) => { setLanguage(value); writeAdsCheckLanguage(value); setActiveMenu(null); announce(m("ui.1e074cd52d", { 0: languageLabels[value] }), 'success') }} onVersion={selectVersion} onDefaultV6={updateDefaultV6} />
-    <AccountPanel open={accountOpen} authenticated={isAdsCheckPro} onClose={() => setAccountOpen(false)} onExplore={() => openDialog('explore')} onManageAccount={() => navigate('/app/account')} onAction={announce} />
-    {tx(mobileOpen && <AdsSaveMobileDrawer open navigation={navigation} standardEditionLabel={standardEditionLabel} language={language} languageLabel={languageLabels[language]} onClose={() => setMobileOpen(false)} onNavigate={navigatePreview} onControlHub={() => openDialog('control')} onAccount={() => { setMobileOpen(false); setAccountOpen(true) }} onLanguage={(value) => { const next = value as AdsLanguage; setLanguage(next); writeAdsCheckLanguage(next); announce(m("ui.1e074cd52d", { 0: languageLabels[next] }), 'success') }} />)}
+    {email && <AccountPanel open={accountOpen} email={email} onSignOut={signOut} onClose={() => setAccountOpen(false)} onExplore={() => openDialog('explore')} onManageAccount={() => navigate('/app/account')} onAction={announce} />}
+    {tx(mobileOpen && <AdsSaveMobileDrawer open navigation={navigation} accountLabel={email ? t("ui.4f4d141887") : t('auth.entry')} language={language} languageLabel={languageLabels[language]} onClose={() => setMobileOpen(false)} onNavigate={navigatePreview} onControlHub={() => openDialog('control')} onAccount={openAccount} onLanguage={(value) => { const next = value as AdsLanguage; setLanguage(next); writeAdsCheckLanguage(next); announce(m("ui.1e074cd52d", { 0: languageLabels[next] }), 'success') }} />)}
     {dialog === 'control' && <ControlHubModal open onClose={() => setDialog(null)} onAction={announce} onRequestUpgrade={() => navigate('/app/billing/payment')} />}
     {tx(dialog === 'explore' && <ExploreV8Modal open onClose={() => setDialog(null)} onAction={announce} onOpenControlHub={() => setDialog('control')} onChooseV8={() => activateV8(m("ui.d36d533285"))} onExperienceV8={() => activateV8(m("ui.61ee591bad"))} />)}
     {tx(createConfigOpen && <AdsSaveCreateConfigModal

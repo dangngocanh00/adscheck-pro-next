@@ -2,6 +2,7 @@ import { appLanguageOptions, m, useAppLanguage, t, tx, type AppLanguage } from '
 import { useEffect, useRef, useState } from 'react'
 import { ExternalLink, Headset, LogOut, Minus, UserRound, WalletCards } from 'lucide-react'
 import { useOverlayFocus } from '@/components/ui/use-overlay-focus'
+import { ToolmetaAccountSettings } from './toolmeta-account-settings'
 
 export type AdsLanguage = AppLanguage
 export type AdsRailMenu = 'version' | 'language' | null
@@ -10,22 +11,20 @@ const languages = appLanguageOptions
 
 type AccountPanelProps = {
   open: boolean
-  authenticated?: boolean
+  email: string
+  onSignOut: () => void
   onClose: () => void
-  onExplore: () => void
+  onExplore?: () => void
   onManageAccount?: () => void
   onAction: (message: string) => void
 }
 
-export function AccountPanel({ open, authenticated = false, onClose, onExplore, onManageAccount, onAction }: AccountPanelProps) {
+export function AccountPanel({ open, email, onSignOut, onClose, onExplore, onManageAccount, onAction }: AccountPanelProps) {
   useAppLanguage();
   const panelRef = useRef<HTMLElement>(null)
-  const signedOutManageRef = useRef<HTMLButtonElement>(null)
   const [facebookConnected, setFacebookConnected] = useState(false)
-  const [smitConnected, setSmitConnected] = useState(authenticated)
   const [supportPin, setSupportPin] = useState<string | null>(null)
   useOverlayFocus(open, panelRef, onClose)
-  useEffect(() => setSmitConnected(authenticated), [authenticated])
   if (!open) return null
 
   return <div className="ads-account-layer" onMouseDown={(event) => {
@@ -35,15 +34,16 @@ export function AccountPanel({ open, authenticated = false, onClose, onExplore, 
       <header><UserRound size={18} /><strong>{t("ui.82fa5f31dc")}</strong><button type="button" aria-label={t("ui.a2b1f3c584")} data-autofocus onClick={onClose}><Minus size={18} /></button></header>
       <div className="ads-account-body">
         <article><span>{tx(facebookConnected ? m("ui.cab8b25c8f") : m("ui.4c5024eb44"))}</span><button type="button" onClick={() => { setFacebookConnected((value) => !value); onAction(facebookConnected ? m("ui.8c25813644") : m("ui.4e513d9ea6")) }}>{tx(facebookConnected ? m("ui.ef495639b6") : m("ui.1c7a576979"))}</button></article>
-        {tx(smitConnected ? <article className="ads-smit-account-card">
-          <div><strong>{t("ui.939401cab4")}</strong><span>{t("ui.8624d8837a")}</span><small><WalletCards size={13} /> {" "}{t("ui.5106b020c3")}</small>{supportPin && <small>{t("ui.389fb6e1bc")}{" "}{supportPin}</small>}</div>
+        <article className="ads-smit-account-card">
+          <div><strong>{t("ui.939401cab4")}</strong><span className="toolmeta-account-email">{email}</span><small><WalletCards size={13} /> {" "}{t("ui.5106b020c3")}</small>{supportPin && <small>{t("ui.389fb6e1bc")}{" "}{supportPin}</small>}</div>
           <div className="ads-account-icon-actions">
             <button type="button" aria-label={t("ui.36deb79c09")} title={t("ui.36deb79c09")} onClick={() => { setSupportPin('248 731'); onAction(m("ui.5b806e5497")) }}><Headset size={15} /></button>
             <button type="button" aria-label={t("ui.a719f74187")} title={t("ui.a719f74187")} onClick={() => { onClose(); onManageAccount?.() }}><ExternalLink size={15} /></button>
-            <button type="button" aria-label={t("ui.d513aac0be")} title={t("ui.d513aac0be")} onClick={() => { setSmitConnected(false); setSupportPin(null); window.requestAnimationFrame(() => signedOutManageRef.current?.focus()); onAction(m("ui.dc37282784")) }}><LogOut size={15} /></button>
+            <button type="button" aria-label={t("ui.d513aac0be")} title={t("ui.d513aac0be")} onClick={onSignOut}><LogOut size={15} /></button>
           </div>
-        </article> : <article><span>{t("ui.8984ee7c4b")}</span><button ref={signedOutManageRef} type="button" onClick={() => { onClose(); onManageAccount?.() }}>{t("ui.a719f74187")}{" "}<ExternalLink size={13} /></button></article>)}
-        <button className="ads-account-explore" type="button" onClick={onExplore}>{t("ui.ddbdf98143")}{" "}<ExternalLink size={14} /></button>
+        </article>
+        <ToolmetaAccountSettings key={email} email={email} />
+        {onExplore && <button className="ads-account-explore" type="button" onClick={onExplore}>{t("ui.ddbdf98143")}{" "}<ExternalLink size={14} /></button>}
       </div>
     </section>
   </div>

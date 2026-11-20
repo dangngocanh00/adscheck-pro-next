@@ -77,6 +77,9 @@
   gap: 8px;
 }
 
+.ads-pro-toolbar-region { flex: 1 1 0; min-width: 0; }
+.ads-pro-toolbar-region:empty { display: none; }
+
 .ads-asset-tabs {
   height: 44px;
   flex: none;
@@ -186,7 +189,7 @@
    .ads-pro-workspace's has-function-panel/has-workflow-panel rules) — not an
    internal grid concern of main-region itself. Folder is now ALWAYS a real
    grid column (never fully removed) — 84px when collapsed (production's own
-   .folder-panel--collapsed exact width), 180px when expanded
+   .folder-panel--collapsed exact width), 148–180px when expanded
    (.has-folder-panel below) — so the table/Curve B track reclaims exactly
    the pixel difference for free via the grid, no folder-specific JS math. */
 .ads-pro-main-region {
@@ -198,16 +201,14 @@
   overflow: hidden;
 }
 
-.ads-pro-workspace.has-folder-panel .ads-pro-main-region { grid-template-columns: 180px minmax(0, 1fr); }
+.ads-pro-workspace.has-folder-panel .ads-pro-main-region { grid-template-columns: clamp(148px, 12.5vw, 180px) minmax(0, 1fr); }
 
 .ads-pro-panel-rail { display: none; }
 
 /* Always a real, visible grid column on desktop — collapsed is a persistent
    mini rail (production's own .folder-panel--collapsed, 84px), never
    display:none, so the table only ever expands up to its right edge, never
-   underneath it. The @media(max-width:1180px) block further down still
-   fully hides this behind display:none unless .is-open there — the mobile
-   drawer overlay is untouched, out of this round's scope. */
+   underneath it. Mobile uses a drawer for the expanded panel. */
 .ads-pro-folders {
   position: relative;
   min-width: 0;
@@ -283,8 +284,6 @@
   flex-direction: column;
   gap: 4px;
   overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: #b7c4b9 transparent;
 }
 
 .ads-pro-folders.is-collapsed .ads-pro-folders-mini-row {
@@ -340,12 +339,13 @@
   cursor: pointer;
 }
 
-.ads-pro-folders nav { display: grid; gap: 2px; }
-.ads-pro-folder-row { position: relative; min-height: 40px; display: flex; align-items: center; }
+.ads-pro-folders nav { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2px; }
+.ads-pro-folder-row { position: relative; min-width: 0; min-height: 40px; display: flex; align-items: center; }
 .ads-pro-folders nav .ads-pro-folder-select {
   width: 100%;
+  min-width: 0;
   min-height: 40px;
-  padding: 0 12px;
+  padding: 0 8px;
   display: flex;
   align-items: center;
   gap: 6px;
@@ -359,10 +359,11 @@
   cursor: pointer;
 }
 
-.ads-pro-folders nav .ads-pro-folder-select span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ads-pro-folder-select > :is(svg, small) { flex: none; }
+.ads-pro-folders nav .ads-pro-folder-select span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .ads-pro-folders nav .ads-pro-folder-select small {
   margin-left: auto;
-  padding: 2px 6px;
+  padding: 2px 4px;
   border-radius: 999px;
   background: rgba(255, 255, 255, .6);
   color: var(--cv-brand-solid-2, #00a32e);
@@ -375,7 +376,7 @@
   color: var(--cv-brand-solid-2, #00a32e);
   font-weight: 600;
 }
-.ads-pro-folders nav .ads-pro-folder-select.is-active small { margin-right: 30px; }
+.ads-pro-folder-row:has(.ads-pro-folder-actions) .ads-pro-folder-select { padding-inline-end: 37px; }
 
 .ads-pro-folder-actions { position: absolute; right: 5px; display: flex; align-items: center; }
 .ads-pro-folder-more {
@@ -451,6 +452,13 @@
   cursor: pointer;
 }
 
+.ads-save-app .ads-pro-folders .ads-folder-add:not(.ads-folder-add-mini) {
+  padding-inline: 6px;
+  font-size: 12px;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
 .ads-folder-add:hover { color: var(--cv-folder-add-hover, #10c12e); border-color: var(--cv-folder-add-hover, #10c12e); }
 
 .ads-pro-asset-panel { min-width: 0; min-height: 0; position: relative; display: flex; flex-direction: column; background: #fff; border-radius: var(--pro-surface-radius); overflow: hidden; }
@@ -486,7 +494,6 @@
      to "edge-clipped within the toolbar", never bleeding into a sibling. */
   overflow: hidden;
 }
-.ads-pro-header-row > .ads-pro-toolbar { flex: 1 1 auto; }
 
 .ads-pro-toolbar button,
 .ads-pro-toolbar select,
@@ -745,7 +752,6 @@
 }
 
 @media (min-width: 1181px) and (max-width: 1450px) {
-  .ads-pro-workspace.has-folder-panel .ads-pro-main-region { grid-template-columns: 142px minmax(0, 1fr); }
   .ads-pro-workspace.has-function-panel:not(.has-workflow-panel) { grid-template-columns: minmax(0, 1fr) 274px; }
   .ads-pro-workspace.has-function-panel.has-workflow-panel { grid-template-columns: minmax(0, 1fr) 254px 284px; }
   .ads-pro-workspace.has-workflow-panel:not(.has-function-panel) { grid-template-columns: minmax(0, 1fr) 284px; }

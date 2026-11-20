@@ -79,10 +79,11 @@ function formatShortDate(iso: string): string {
 // filtered row set up via onFilteredChange so the table (rendered
 // separately, below Curve D) can stay a plain presentational component.
 type HistoryToolbarProps = {
+  transactions: BillingTransaction[]
   onFilteredChange: (rows: BillingTransaction[]) => void
 }
 
-export const AdsCheckBillingHistoryToolbar: FC<HistoryToolbarProps> = ({ onFilteredChange }) => {
+export const AdsCheckBillingHistoryToolbar: FC<HistoryToolbarProps> = ({ transactions, onFilteredChange }) => {
   useAppLanguage();
   const [dateRange, setDateRange] = useState<BillingDateRange>(DEFAULT_BILLING_DATE_RANGE)
   const [datePickerRect, setDatePickerRect] = useState<DOMRect | null>(null)
@@ -99,14 +100,14 @@ export const AdsCheckBillingHistoryToolbar: FC<HistoryToolbarProps> = ({ onFilte
 
   const filtered = useMemo(() => {
     const query = searchQuery.trim().toLowerCase()
-    return demoTransactions.filter((transaction) => {
+    return transactions.filter((transaction) => {
       if (dateRange.start && transaction.date < dateRange.start) return false
       if (dateRange.end && transaction.date > dateRange.end) return false
       if (statusFilter.size > 0 && !statusFilter.has(transaction.status)) return false
       if (query && !transaction.features.some((feature) => feature.title.toLowerCase().includes(query))) return false
       return true
     })
-  }, [dateRange, statusFilter, searchQuery])
+  }, [dateRange, statusFilter, searchQuery, transactions])
 
   useEffect(() => { onFilteredChange(filtered) }, [filtered, onFilteredChange])
 

@@ -16,7 +16,7 @@
 .ads-curve-neon-pulse { filter: drop-shadow(0 0 3px #B9FF39); }
 .ads-curve-neon-runner {
   stroke-width: var(--neon-runner-width);
-  opacity: .22;
+  opacity: .36;
   animation: ads-curve-neon-travel var(--neon-duration) linear infinite;
   animation-delay: calc(var(--neon-delay) + var(--runner-inner-delay, 0s));
 }
@@ -25,6 +25,7 @@
 .ads-curve-neon.is-inner .ads-curve-neon-glow { stroke-width: 2px; opacity: .18; filter: blur(.6px); }
 .ads-curve-neon.is-inner .ads-curve-neon-pulse { filter: drop-shadow(0 0 1px rgba(103, 199, 128, .22)); }
 .ads-curve-neon.is-inner .ads-curve-neon-runner { animation-fill-mode: backwards; }
+.ads-curve-neon:is(.is-b, .is-d) .ads-curve-neon-runner { stroke: #b9ff39; opacity: .65; }
 /* The canonical shell traverses A bottom-to-top; reverse only the light. */
 .ads-curve-neon.is-reversed .ads-curve-neon-runner { animation-direction: reverse; }
 @keyframes ads-curve-neon-travel {

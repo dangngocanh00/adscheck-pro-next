@@ -20,7 +20,7 @@ type ExploreContentProps = {
 }
 
 const v8Changes = [
-  { title: m("ui.a000e112e9"), description: m("ui.3e4a7fa6c6"), before: 'Ads Check Pro', after: 'Advance Toolkit' },
+  { title: m("ui.a000e112e9"), description: m("ui.3e4a7fa6c6"), before: 'Toolmeta Pro', after: 'Advance Toolkit' },
   { title: m("ui.a363b86333"), description: m("ui.b6cc273863"), before: m("ui.ced8079d8e"), after: m("ui.19d75f2489") },
   { title: m("ui.1dde6a47a8"), description: m("ui.499745852c"), before: m("ui.14aa6d0b14"), after: m("ui.79beaecf85") },
   { title: m("ui.389bdedb9f"), description: m("ui.52791ed178"), before: 'Ads Save · Super Target', after: 'Ads Save · Super Target' },
@@ -55,7 +55,7 @@ function TutorialPreview({ category, tutorial, playing, onPlay }: Pick<ExploreCo
             <span className="ads-library-video-avatar"><AdsCheckBrandMark className="ads-library-video-avatar-img" /></span>
             <span><strong>{t("ui.86c982594b")}</strong><small>{t("ui.84b93937aa")}</small></span>
           </div>
-          <div className="ads-library-video-title"><b>{tx(tutorial ? tutorial.label : isOverview ? 'ADS CHECK' : 'ADSCHECK CONNECT')}</b><span>{tx(tutorial ? m("ui.ce1a3f3ad4", { 0: tutorial.asset }) : isOverview ? m("ui.0bfa09e539") : 'Ads Check')}</span></div>
+          <div className="ads-library-video-title"><b>{tx(tutorial ? tutorial.label : isOverview ? 'Toolmeta' : 'Toolmeta CONNECT')}</b><span>{tx(tutorial ? m("ui.ce1a3f3ad4", { 0: tutorial.asset }) : isOverview ? m("ui.0bfa09e539") : 'Toolmeta')}</span></div>
           {tx(videoId
             ? <button className="ads-library-video-play" type="button" aria-label={tx(isOverview ? m("ui.e11229f60f") : m("ui.0b37162a48"))} onClick={onPlay}><Play size={30} fill="currentColor" /></button>
             : <a className="ads-library-video-play" href={youtubeUrl} target="_blank" rel="noopener noreferrer" aria-label={t("ui.b338a8bd91")}><Play size={30} fill="currentColor" /></a>)}

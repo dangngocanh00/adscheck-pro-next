@@ -1,7 +1,7 @@
-import { expect, test, type Page } from '@playwright/test'
+import { expect, test, type Page } from './toolmeta-session.fixture'
 
 async function dismissVersionPrompt(page: Page) {
-  const dialog = page.getByRole('dialog', { name: 'Ads Check đã có phiên bản mới' })
+  const dialog = page.getByRole('dialog', { name: 'Toolmeta đã có phiên bản mới' })
   await dialog.getByRole('radio', { name: /Phiên bản mới/ }).click()
   await dialog.getByRole('button', { name: 'Xác nhận' }).click()
 }
@@ -22,7 +22,7 @@ test('asks how the new device should use a login session', async ({ page }) => {
   await expect(dialog).toBeVisible()
   await dialog.getByRole('button', { name: 'Sử dụng phiên đăng nhập thường' }).click()
   await expect(dialog).toBeHidden()
-  await expect(page.getByRole('heading', { name: 'Tải & cài đặt tiện ích để sử dụng Ads Check' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Tải & cài đặt tiện ích để sử dụng Toolmeta' })).toBeVisible()
   await page.goto('/app/account')
   await page.getByRole('tab', { name: 'Bảo mật & phiên' }).click()
   await expect(page.getByRole('heading', { name: 'Phiên đăng nhập thường' })).toBeVisible()
@@ -39,7 +39,7 @@ test('rejects stale extension-ready state without a selected login session', asy
   const dialog = page.getByRole('dialog', { name: 'Đăng nhập trên thiết bị mới' })
   await expect(dialog).toBeVisible()
   await dialog.getByRole('button', { name: 'Đóng' }).click()
-  await expect(page.getByRole('heading', { name: 'Tải & cài đặt tiện ích để sử dụng Ads Check' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Tải & cài đặt tiện ích để sử dụng Toolmeta' })).toBeVisible()
   await expect(page.getByRole('heading', { name: 'Tài khoản quảng cáo' })).toBeHidden()
   await page.getByRole('button', { name: 'Thử lại' }).click()
   await expect(dialog).toBeVisible()
@@ -80,7 +80,7 @@ test('opens the post-extension asset workspace with filters, bulk actions and no
   await expect(page.locator('.ads-pro-asset-panel')).toBeFocused()
 })
 
-test('keeps the simulated extension session across Ads Check routes', async ({ page }) => {
+test('keeps the simulated extension session across Toolmeta routes', async ({ page }) => {
   await page.goto('/app/adscheck-pro/adaccounts')
   await dismissVersionPrompt(page)
   await page.getByRole('dialog', { name: 'Đăng nhập trên thiết bị mới' }).getByRole('button', { name: /Sử dụng phiên đăng nhập PRO/ }).click()
@@ -98,19 +98,19 @@ test('keeps shell version and language choices across routes', async ({ page, is
   if (isMobile) {
     await page.getByRole('button', { name: 'Mở menu' }).click()
     const drawer = page.getByRole('dialog', { name: 'Menu di động' })
-    await drawer.getByRole('button', { name: 'Ads Check', exact: true }).click()
-    await drawer.getByRole('button', { name: 'Ads Check V6' }).click()
+    await drawer.getByRole('button', { name: 'Toolmeta', exact: true }).click()
+    await drawer.getByRole('button', { name: 'Toolmeta V6' }).click()
     await drawer.getByRole('button', { name: 'Tiếng Việt' }).click()
     await drawer.getByRole('button', { name: 'English' }).click()
   } else {
     await page.getByRole('button', { name: 'Đổi phiên bản' }).click()
-    await page.getByRole('menuitemradio', { name: 'Ads Check V6' }).click()
+    await page.getByRole('menuitemradio', { name: 'Toolmeta V6' }).click()
     await page.getByRole('button', { name: /Ngôn ngữ:/ }).click()
     await page.getByRole('menuitemradio', { name: 'English' }).click()
   }
   await page.goto('/app/notification')
-  const shellStatus = page.getByRole('status').filter({ hasText: 'Đang dùng Ads Check' })
-  await expect(shellStatus).toContainText('Ads Check V6')
+  const shellStatus = page.getByRole('status').filter({ hasText: 'Đang dùng Toolmeta' })
+  await expect(shellStatus).toContainText('Toolmeta V6')
   await expect(shellStatus).toContainText('English')
   await page.goto('/app/account')
   await expect(page.locator('.ads-account-information dd').filter({ hasText: 'English' })).toBeVisible()
@@ -118,11 +118,11 @@ test('keeps shell version and language choices across routes', async ({ page, is
 
 test('supports Extended Payment settings and preview controls', async ({ page, isMobile }) => {
   await page.goto('/app/extended-payment')
-  await expect(page).toHaveTitle('Extended Payment · Ads Check')
+  await expect(page).toHaveTitle('Extended Payment · Toolmeta')
   await expect(page.getByRole('heading', { name: 'Extended Payment' })).toBeVisible()
   const bubbleSwitch = page.getByRole('switch', { name: 'Bật tắt Bubble dữ liệu' })
   await expect(bubbleSwitch).toBeChecked()
-  const promoClose = page.getByRole('button', { name: 'Đóng giới thiệu Ads Check V8' })
+  const promoClose = page.getByRole('button', { name: 'Đóng giới thiệu Toolmeta V8' })
   if (!isMobile && await promoClose.isVisible()) await promoClose.click()
   await page.getByRole('button', { name: 'Thanh Action' }).click()
   await expect(page.getByRole('button', { name: 'Thanh Action' })).toHaveAttribute('aria-pressed', 'true')
@@ -150,9 +150,9 @@ test('supports Extended Payment settings and preview controls', async ({ page, i
 
 test('supports purchase, Priority, package management and transaction history', async ({ page, isMobile }) => {
   await page.goto('/app/billing/payment')
-  await expect(page).toHaveTitle('Thanh toán & gói cước · Ads Check')
+  await expect(page).toHaveTitle('Thanh toán & gói cước · Toolmeta')
   await expect(page.getByRole('tab', { name: 'Mua gói' })).toHaveAttribute('aria-selected', 'true')
-  const promoClose = page.getByRole('button', { name: 'Đóng giới thiệu Ads Check V8' })
+  const promoClose = page.getByRole('button', { name: 'Đóng giới thiệu Toolmeta V8' })
   if (!isMobile && await promoClose.isVisible()) await promoClose.click()
   await page.getByRole('tab', { name: 'Mua gói' }).focus()
   await page.keyboard.press('ArrowRight')
@@ -200,7 +200,7 @@ test('recreates the notification center filters and empty state', async ({ page 
 test('provides an account management destination instead of a holding screen', async ({ page, context }) => {
   await context.grantPermissions(['clipboard-read', 'clipboard-write'])
   await page.goto('/app/account')
-  await expect(page.getByRole('heading', { name: 'Tài khoản Adscheck' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Tài khoản Toolmeta' })).toBeVisible()
   await expect(page.getByText('tai-khoan@••••')).toBeVisible()
   await expect(page.getByText('Số dư khả dụng')).toBeVisible()
   await page.getByRole('tab', { name: 'Bảo mật & phiên' }).click()

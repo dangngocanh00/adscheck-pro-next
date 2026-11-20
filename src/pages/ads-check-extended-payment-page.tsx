@@ -12,10 +12,12 @@ import {
 import { ExtendedPaymentPreview } from '@/features/ads-check/ads-check-extended-payment-preview'
 import { ExtendedPaymentSettingsPanel } from '@/features/ads-check/ads-check-extended-payment-settings'
 import { AdsCheckProductShell } from '@/features/ads-check/ads-check-product-shell'
+import { useToolmetaSession } from '@/features/ads-check/toolmeta-session'
 
 export const AdsCheckExtendedPaymentPage: FC = () => {
   useAppLanguage();
-  const initialSettings = useMemo(readExtendedPaymentSettings, [])
+  const { email, openAuth } = useToolmetaSession()
+  const initialSettings = useMemo(() => email ? readExtendedPaymentSettings() : defaultExtendedPaymentSettings, [email])
   const [bubbleEnabled, setBubbleEnabled] = useState(initialSettings.bubbleEnabled)
   const [surface, setSurface] = useState<ExtendedPaymentSurface>(initialSettings.surface)
   const [language, setLanguage] = useState(initialSettings.language)
@@ -67,6 +69,7 @@ export const AdsCheckExtendedPaymentPage: FC = () => {
   }, [])
 
   const saveConfiguration = useCallback(() => {
+    if (!email) { openAuth(); return }
     try {
       window.localStorage.setItem(extendedPaymentStorageKey, currentSnapshot)
       savedSnapshotRef.current = currentSnapshot
@@ -74,7 +77,7 @@ export const AdsCheckExtendedPaymentPage: FC = () => {
     } catch {
       setSavedMessage(m("ui.8910ba559a"))
     }
-  }, [currentSnapshot])
+  }, [currentSnapshot, email, openAuth])
 
   return (
     <AdsCheckProductShell activeNavigation="extended-payment">
@@ -105,6 +108,7 @@ export const AdsCheckExtendedPaymentPage: FC = () => {
             onSave={saveConfiguration}
           />
           <ExtendedPaymentPreview
+            showDemoValues={Boolean(email)}
             bubbleEnabled={bubbleEnabled}
             surface={surface}
             language={language}

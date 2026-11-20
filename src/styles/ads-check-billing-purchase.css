@@ -121,7 +121,7 @@
    match this element's own measured width) is now what paints this panel's
    surface/rounded corners; an opaque background here would hide it. See
    ads-check-billing-workspace-surface.ts. */
-.ads-purchase-builder { min-width: 0; min-height: 0; padding: 86px 18px 28px; position: relative; display: grid; align-content: start; gap: 16px; overflow: auto; border: 0; border-radius: 16px; background: transparent; scrollbar-width: thin; scrollbar-color: #b8cdbd transparent; }
+.ads-purchase-builder { min-width: 0; min-height: 0; padding: 86px 18px 28px; position: relative; display: grid; align-content: start; gap: 16px; overflow: auto; border: 0; border-radius: 16px; background: transparent; }
 /* Preserve the existing header space, but keep it outside the scrollport.
    The remaining grid track is bounded by the workspace, not the content. */
 .ads-purchase-header-region,
@@ -149,8 +149,6 @@
     overflow-y: auto;
     overflow-x: hidden;
     overscroll-behavior-y: contain;
-    scrollbar-width: thin;
-    scrollbar-color: #b8cdbd transparent;
   }
 }
 .ads-purchase-progress { height: 45px; position: absolute; z-index: 6; right: 20px; top: 4px; display: flex; align-items: center; gap: 10px; color: #65716a; font-size: 11px; }
@@ -417,7 +415,7 @@
 
 .ads-purchase-builder-status { min-height: 16px; color: #5b7761; font-size: 10px; }
 
-.ads-purchase-summary { min-width: 0; min-height: 0; height: 100%; padding: 0 22px 24px; overflow: auto; border: 1px solid #cadacc; border-radius: 16px; background: var(--cv-brand-subtle, #F8FAF7); scrollbar-width: thin; scrollbar-color: #b8cdbd transparent; }
+.ads-purchase-summary { min-width: 0; min-height: 0; height: 100%; padding: 0 22px 24px; overflow: auto; border: 1px solid #cadacc; border-radius: 16px; background: var(--cv-brand-subtle, #F8FAF7); }
 .ads-purchase-summary > header { height: 64px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid var(--purchase-line); }
 .ads-purchase-summary > header svg { color: var(--cv-purchase-accent, #287151); }
 .ads-purchase-summary > header h2 { margin: 0; font-size: 16px; }
@@ -795,7 +793,7 @@
 .ads-billing-session-bulk button:hover:not(:disabled) { background: var(--cv-brand-soft, #F1FFDC); }
 .ads-billing-session-bulk button:disabled { opacity: .5; cursor: not-allowed; }
 
-.ads-billing-session-list { flex: 1; min-height: 0; margin-top: 8px; padding-right: 2px; display: grid; align-content: start; gap: 5px; overflow-y: auto; scrollbar-width: thin; scrollbar-color: #b8cdbd transparent; }
+.ads-billing-session-list { flex: 1; min-height: 0; margin-top: 8px; padding-right: 2px; display: grid; align-content: start; gap: 5px; overflow-y: auto; }
 .ads-billing-session-list article { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 10px; min-height: 42px; padding: 7px 10px; border: 1px solid #edf1ee; border-radius: 9px; background: #fff; }
 .ads-billing-session-list article.is-current { border-color: var(--cv-brand-border, rgba(40, 113, 81, .18)); background: var(--cv-brand-icon-badge-bg, #E9F9EF); }
 .ads-billing-session-list article.is-revoked { opacity: .45; }

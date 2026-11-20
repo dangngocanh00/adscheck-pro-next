@@ -1,0 +1,31 @@
+.toolmeta-account-settings {
+  display: grid;
+  flex: none;
+  gap: 11px;
+  padding: 13px;
+  border: 1px solid var(--cv-brand-border);
+  border-radius: 12px;
+  background: var(--cv-workspace-bg-1);
+  color: var(--toolmeta-lime-ink);
+  font-size: var(--font-size-control);
+}
+
+.toolmeta-account-settings-field { display: grid; gap: 5px; }
+.toolmeta-account-settings-field label { font-weight: 600; }
+.toolmeta-account-settings-label { display: flex; justify-content: space-between; align-items: baseline; gap: 6px; }
+.toolmeta-account-settings-label small { color: #69766e; font-size: var(--font-size-caption); }
+.toolmeta-account-settings-label small.is-active { color: var(--cv-brand-primary); font-weight: 650; }
+.toolmeta-account-license-expiry { margin: 0; color: #566a5d; font-size: var(--font-size-caption); }
+.toolmeta-account-license-expiry time { font-weight: 650; }
+.toolmeta-account-settings :is(input, select) { width: 100%; min-width: 0; height: 36px; padding: 0 9px; border: 1px solid var(--cv-brand-border); border-radius: 8px; background: #fff; color: inherit; }
+.toolmeta-account-settings input[readonly] { background: var(--cv-brand-subtle); }
+.toolmeta-account-key-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6px; }
+.toolmeta-account-key-input { position: relative; }
+.toolmeta-account-key-input input { padding-right: 34px; }
+.ads-account-body .toolmeta-account-key-input button { position: absolute; inset: 0 2px 0 auto; min-height: 0; padding: 0 7px; border: 0; background: transparent; }
+.toolmeta-account-settings-actions { display: flex; flex-wrap: wrap; gap: 6px; }
+.ads-account-body .toolmeta-account-settings-actions button { padding-inline: 9px; border-radius: 8px; }
+.ads-account-body .toolmeta-account-settings-actions .is-danger { border-color: #df918c; background: #fff6f5; color: #a63029; }
+.toolmeta-account-delete { display: grid; gap: 7px; padding: 8px; border: 1px solid #efc4c1; border-radius: 8px; background: #fff6f5; }
+.toolmeta-account-delete p, .toolmeta-account-settings-notice { margin: 0; }
+.toolmeta-account-settings-notice { color: var(--cv-brand-primary-hover); }
